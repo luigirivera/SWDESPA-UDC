@@ -1037,12 +1037,14 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 
 		@Override
 		public void windowClosed(WindowEvent arg0) {
-			view.toggleDoctorList(true);
+			
 			
 		}
 
 		@Override
-		public void windowClosing(WindowEvent arg0) {}
+		public void windowClosing(WindowEvent arg0) {
+			view.toggleDoctorList(false);
+		}
 
 		@Override
 		public void windowDeactivated(WindowEvent arg0) {}
@@ -1094,6 +1096,7 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 	
 	private void toggleDoctorList(boolean toggle) {
 		view.getDoctorListFrame().setVisible(toggle);
+		view.getDoctors().setSelected(toggle);
 	}
 	
 	private void clearCreatePanel() {
