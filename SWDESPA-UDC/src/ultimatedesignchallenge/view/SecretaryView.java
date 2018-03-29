@@ -62,6 +62,7 @@ import designchallenge2.view.ItemStringFormatter;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
 //NOTE: Fix generateWeekAgendaTable thanks - Louie
+//TODO: Recurring Events because idk how that works - Louie
 
 
 public class SecretaryView extends JFrame implements CalendarObserver {
