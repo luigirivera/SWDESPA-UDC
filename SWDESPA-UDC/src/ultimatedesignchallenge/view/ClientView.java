@@ -26,7 +26,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -54,18 +53,12 @@ import designchallenge1.HTMLEventMarkerFormatter;
 import designchallenge2.item.CalendarEvent;
 import designchallenge2.item.CalendarItem;
 import designchallenge2.item.CalendarTask;
-import designchallenge2.item.LegacyEventConverter;
 import designchallenge2.view.AgendaHTMLItemStringFormatter;
 import designchallenge2.view.CalendarObserver;
 import designchallenge2.view.DayHTMLItemStringFormatter;
 import designchallenge2.view.ItemStringFormatter;
 
-//NOTE: Remove comment at refreshTileEvents thanks - Louie
-//NOTE: Fix generateWeekAgendaTable thanks - Louie
-//TODO: Recurring Events because idk how that works - Louie
-
-
-public class SecretaryView extends JFrame implements CalendarObserver {
+public class ClientView extends JFrame implements CalendarObserver{
 	/**** Day Components ****/
 	private int yearBound, monthBound, dayBound, yearToday, monthToday;
 	private String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
@@ -88,7 +81,7 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 
 	/**** Added during the project ****/
 	private int taskCount, dayToday;
-	private SecretaryView view;
+	private ClientView view;
 	private JComboBox<LocalTime> startTime, endTime;
 	private JComboBox<String> viewType, doctorsCBList;
 	private CellDataHolder validCells;
@@ -104,14 +97,9 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 	private DefaultListModel<String> modelDoctorList;
 	private List<CalendarItem> monthItems;
 	private List<CalendarItem> dayItems;
-
-//	Stuff from DC2
-//	private CalendarModel model;
-//	private CalendarController controller;
-//	private ItemGetFlags flags;
 	
-	public SecretaryView() {
-		super("Central Calendar Census");
+	public ClientView(){
+		super("Client Calendar");
 		
 //		this.model = model;
 //		this.controller = controller;
@@ -1584,3 +1572,7 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 	}
 
 }
+
+}
+
+
