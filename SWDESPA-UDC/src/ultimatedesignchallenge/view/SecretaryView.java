@@ -98,7 +98,7 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 	private DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable;
 	private JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList;
 	private JPopupMenu dayMenu;
-	private JMenuItem delete, notifyDoctor;
+	private JMenuItem delete, notifyDoctor, notifyClient;
 	private JFrame doctorListFrame;
 	private JList<String> doctorList;
 	private DefaultListModel<String> modelDoctorList;
@@ -192,6 +192,7 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		dayMenu = new JPopupMenu();
 		delete = new JMenuItem("Delete");
 		notifyDoctor = new JMenuItem("Notify Doctor");
+		notifyClient = new JMenuItem("Notify Client");
 		
 		modelCalendarTable = new DefaultTableModel() {
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -251,6 +252,7 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		weekPanel.setLayout(null);
 		
 		dayMenu.add(notifyDoctor);
+		dayMenu.add(notifyClient);
 		dayMenu.add(delete);
 				
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
@@ -714,6 +716,7 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		view.addViewTypeListener(new calendarViewCBListener());
 		view.addTodayButtonListener(new todayButtonListener());
 		view.addnotifyDoctorListener(new notifyDoctorListener());
+		view.addnotifyClientListener(new notifyClientListener());
 		view.addDeleteItemListener(new deleteItemListener());
 		view.addDoctorListWindowListener(new doctorListWindowListener());
 		view.addDoctorToggleButtonListener(new toggleDoctorListListener());
@@ -1111,6 +1114,21 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		}
 	}
 	
+	class notifyClientListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JTable invoker = (JTable)dayMenu.getInvoker();
+			CalendarTask task;
+			if(invoker.getValueAt(invoker.getSelectedRow(), 1) instanceof CalendarTask) {
+				task = (CalendarTask)invoker.getValueAt(invoker.getSelectedRow(), 1);
+				controller.notifyDoctor(task, !task.isDone());
+				view.update();
+				System.out.println("Gets here");
+			}
+		}
+	}
+	
+	
 	class deleteItemListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -1181,6 +1199,10 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 	
 	public void addnotifyDoctorListener(ActionListener e) {
 		notifyDoctor.addActionListener(e);
+	}
+	
+	public void addnotifyClientListener(ActionListener e){
+		notifyClient.addActionListener(e);
 	}
 	
 	public void addDeleteItemListener(ActionListener e) {
