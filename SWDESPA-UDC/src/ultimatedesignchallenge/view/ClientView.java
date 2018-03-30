@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -65,15 +66,15 @@ public class ClientView extends JFrame implements CalendarObserver{
 			"October", "November", "December" };
 
 	/**** Swing Components ****/
-	private JLabel monthLabel, titleLabel, dayLabel, createTOLabelTime;
-	private JTextField startDate;
+	private JLabel monthLabel, titleLabel, dayLabel, createTOLabelTime, login;
+	private JTextField startDate, loginUser;
 	
 	private JButton btnPrev, btnNext, create, today, save, discard;
 	private JToggleButton calendar, agenda, doctors;
 	private JRadioButton recurringAppRB;
 	private Container pane;
 	private JScrollPane scrollCalendarTable;
-	private JPanel calendarPanel, topPanel, createPanel, mainCalendarPanel, weekPanel, doctorListPanel;
+	private JPanel calendarPanel, topPanel, createPanel, mainCalendarPanel, weekPanel, doctorListPanel, loginPanel;
 
 	/**** Calendar Table Components ***/
 	private JTable calendarTable;
@@ -82,6 +83,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 	/**** Added during the project ****/
 	private int taskCount, dayToday;
 	private ClientView view;
+	private JPasswordField loginPass;
 	private JComboBox<LocalTime> startTime, endTime;
 	private JComboBox<String> viewType, doctorsCBList;
 	private CellDataHolder validCells;
@@ -91,7 +93,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 	private JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList;
 	private JPopupMenu dayMenu;
 	private JMenuItem delete;
-	private JFrame doctorListFrame;
+	private JFrame doctorListFrame, loginFrame;
 	private JList<String> doctorList;
 	private DefaultListModel<String> modelDoctorList;
 	private List<CalendarItem> monthItems;
@@ -140,13 +142,18 @@ public class ClientView extends JFrame implements CalendarObserver{
 	
 	private void instantiate() {
 		doctorListFrame = new JFrame("Clinic Doctors");
+		loginFrame = new JFrame("Login");
 		
+		loginPanel = new JPanel();
 		doctorListPanel = new JPanel();
 		calendarPanel = new JPanel();
 		topPanel = new JPanel();
 		createPanel = new JPanel();
 		mainCalendarPanel = new JPanel();
 		weekPanel = new JPanel();
+		
+		loginUser = new JTextField();
+		loginPass = new JPasswordField();
 		
 		modelDoctorList = new DefaultListModel<String>();
 		doctorList = new JList<String>(modelDoctorList);
@@ -155,6 +162,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 		dayLabel = new JLabel("");
 		titleLabel = new JLabel("Client <num>");
 		createTOLabelTime = new JLabel("to");
+		login = new JLabel("Client Login");
 		
 		btnPrev = new JButton("<");
 		btnNext = new JButton(">");
@@ -228,6 +236,11 @@ public class ClientView extends JFrame implements CalendarObserver{
 		doctorListFrame.setSize(420, 625);
 		doctorListFrame.setLayout(null);
 		
+		loginFrame.setSize(520, 225);
+		loginFrame.setLayout(null);
+		
+		loginFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
 		doctorListPanel.setLayout(null);
 		calendarPanel.setLayout(null);
 		topPanel.setLayout(null);
@@ -238,6 +251,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 		dayMenu.add(delete);
 				
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
+		login.setFont(new Font("Arial", Font.BOLD, 25));
 		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
 		createTOLabelTime.setFont(new Font("Arial", Font.BOLD, 15));
@@ -303,6 +317,12 @@ public class ClientView extends JFrame implements CalendarObserver{
 		doctorListFrame.add(doctorListPanel);
 		doctorListPanel.add(scrollDoctorList);
 		
+		loginFrame.add(loginPanel);
+		loginPanel.add(login);
+		loginPanel.add(loginUser);
+		loginPanel.add(loginPass);
+		loginFrame.setVisible(true);
+		
 		scrollAgendaTable.setVisible(false);
 		scrollWeekAgendaTable.setVisible(false);
 		
@@ -342,6 +362,11 @@ public class ClientView extends JFrame implements CalendarObserver{
 		
 		doctorListPanel.setBounds(0, 0, doctorListFrame.getWidth(), doctorListFrame.getHeight());
 		scrollDoctorList.setBounds(doctorListPanel.getBounds());
+		
+		loginPanel.setBounds(0, 0, loginFrame.getWidth(), loginFrame.getHeight());
+		login.setBounds(190, 20, 250, 50);
+		loginUser.setBounds(140, login.getY()+60, 250, 30);
+		loginPass.setBounds(140, loginUser.getY()+30, 250, 30);
 		
 	}
 	
