@@ -90,7 +90,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 	private DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable;
 	private JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList;
 	private JPopupMenu dayMenu;
-	private JMenuItem delete, markTask;
+	private JMenuItem delete;
 	private JFrame doctorListFrame;
 	private JList<String> doctorList;
 	private DefaultListModel<String> modelDoctorList;
@@ -177,7 +177,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		
 		dayMenu = new JPopupMenu();
 		delete = new JMenuItem("Delete");
-		markTask = new JMenuItem("Notify Client");
 		
 		modelCalendarTable = new DefaultTableModel() {
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -235,8 +234,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 		createPanel.setLayout(null);
 		mainCalendarPanel.setLayout(null);
 		weekPanel.setLayout(null);
-		
-		dayMenu.add(markTask);
+
 		dayMenu.add(delete);
 				
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
@@ -694,7 +692,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		view.addAgendaTableListener(new agendaTableMouseListener());
 		view.addViewTypeListener(new calendarViewCBListener());
 		view.addTodayButtonListener(new todayButtonListener());
-		view.addMarkTaskListener(new markTaskListener());
 		view.addDeleteItemListener(new deleteItemListener());
 		view.addDoctorListWindowListener(new doctorListWindowListener());
 		view.addDoctorToggleButtonListener(new toggleDoctorListListener());
@@ -734,21 +731,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = view.getDayTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
-			{
-				//if(not yet marked as done)
-					//enable mark as done and disable mark as undone
-				//else
-					//enable mark as undone and disable mark as done
-				
-				if(modelDayTable.getValueAt(row, 1) instanceof CalendarTask) {
-					markTask.setEnabled(true);
-					view.toggleMarkTaskText((CalendarTask)modelDayTable.getValueAt(row, 1));
-				}
-				else
-					markTask.setEnabled(false);
-				
 				view.getDayMenu().show(view.getDayTable(), arg0.getX(), arg0.getY()); 
-			}
 			
 		}
 
@@ -769,22 +752,8 @@ public class ClientView extends JFrame implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = view.getAgendaTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-			{
-				//if(not yet marked as done)
-					//enable mark as done and disable mark as undone
-				//else
-					//enable mark as undone and disable mark as done
-				
-				if(modelAgendaTable.getValueAt(row, 1) instanceof CalendarTask) {
-					markTask.setEnabled(true);
-					view.toggleMarkTaskText((CalendarTask)modelAgendaTable.getValueAt(row, 1));
-				}
-				else
-					markTask.setEnabled(false);
-				
 				view.getDayMenu().show(view.getAgendaTable(), arg0.getX(), arg0.getY()); 
-			}
-			
+				
 		}
 
 		@Override
@@ -828,13 +797,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}
 		
-	}
-	
-	public void toggleMarkTaskText(CalendarTask task) {
-		if(task.isDone())
-			markTask.setText("Unmark Task");
-		else
-			markTask.setText("Mark Task");
 	}
 	
 	class createbtnListener implements ActionListener{
@@ -1065,6 +1027,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 		view.getCreateTOLabelTime().setVisible(true);
 		view.getEndTime().setVisible(true);
 		view.getEndTime().setEnabled(true);
+		view.getDoctorsCBList().setSelectedIndex(0);
 
 		view.getStartDate().setBounds(10, 80, 120, 40);
 		view.getStartTime().setBounds(10, 120, 120, 40);
@@ -1161,10 +1124,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 	
 	public void addTodayButtonListener(ActionListener e) {
 		today.addActionListener(e);
-	}
-	
-	public void addMarkTaskListener(ActionListener e) {
-		markTask.addActionListener(e);
 	}
 	
 	public void addDeleteItemListener(ActionListener e) {
@@ -1352,6 +1311,14 @@ public class ClientView extends JFrame implements CalendarObserver{
 	public JComboBox<LocalTime> getStartTime() {
 		return startTime;
 	}
+	
+	public JComboBox<String> getDoctorsCBList() {
+		return doctorsCBList;
+	}
+
+	public void setDoctorsCBList(JComboBox<String> doctorsCBList) {
+		this.doctorsCBList = doctorsCBList;
+	}
 
 	public void setStartTime(JComboBox<LocalTime> startTime) {
 		this.startTime = startTime;
@@ -1379,6 +1346,14 @@ public class ClientView extends JFrame implements CalendarObserver{
 
 	public void setAgenda(JToggleButton agenda) {
 		this.agenda = agenda;
+	}
+
+	public JPopupMenu getDayMenu() {
+		return dayMenu;
+	}
+
+	public void setDayMenu(JPopupMenu dayMenu) {
+		this.dayMenu = dayMenu;
 	}
 
 	public JScrollPane getScrollCalendarTable() {

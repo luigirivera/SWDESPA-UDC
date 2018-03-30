@@ -83,15 +83,15 @@ public class DoctorView extends JFrame implements CalendarObserver{
 	private int taskCount, dayToday;
 	private DoctorView view;
 	private JComboBox<LocalTime> startTime, endTime;
-	private JComboBox<String> viewType, doctorsCBList;
+	private JComboBox<String> viewType;
 	private CellDataHolder validCells;
-	private final String createPlaceholderName = "Client Name";
+	private final String createPlaceholderName = "Client/Appointment Name";
 	private final String createPlaceholderStartDate = "Date";
 	private JTable dayTable, agendaTable, weekTable, weekAgendaTable;
 	private DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable;
 	private JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList;
 	private JPopupMenu dayMenu;
-	private JMenuItem delete, markTask;
+	private JMenuItem delete;
 	private List<CalendarItem> monthItems;
 	private List<CalendarItem> dayItems;
 
@@ -169,12 +169,10 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		startTime = new JComboBox<LocalTime>();
 		endTime = new JComboBox<LocalTime>();
 		viewType = new JComboBox<String>();
-		doctorsCBList = new JComboBox<String>();
 		startDate = new JTextField();
 		
 		dayMenu = new JPopupMenu();
 		delete = new JMenuItem("Delete");
-		markTask = new JMenuItem("Notify Client");
 		
 		modelCalendarTable = new DefaultTableModel() {
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -228,7 +226,6 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		mainCalendarPanel.setLayout(null);
 		weekPanel.setLayout(null);
 		
-		dayMenu.add(markTask);
 		dayMenu.add(delete);
 				
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
@@ -282,7 +279,6 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		createPanel.add(recurringAppRB);
 		createPanel.add(save);
 		createPanel.add(discard);
-		createPanel.add(doctorsCBList);
 		createPanel.add(createTOLabelTime);
 		
 		createPanel.setVisible(false);
@@ -320,7 +316,6 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		startDate.setBounds(10, 120, 120, 40);
 		startTime.setBounds(10, 160, 120, 40);
 		createTOLabelTime.setBounds(140, 160, 20, 40);
-		doctorsCBList.setBounds(160, 120, 120, 40);
 		endTime.setBounds(160, 160, 120, 40);
 		save.setBounds(300, 120, 90, 40);
 		discard.setBounds(300, 160, 90, 40);
@@ -683,7 +678,6 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		view.addAgendaTableListener(new agendaTableMouseListener());
 		view.addViewTypeListener(new calendarViewCBListener());
 		view.addTodayButtonListener(new todayButtonListener());
-		view.addMarkTaskListener(new markTaskListener());
 		view.addDeleteItemListener(new deleteItemListener());
 	}
 	
@@ -721,21 +715,7 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = view.getDayTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
-			{
-				//if(not yet marked as done)
-					//enable mark as done and disable mark as undone
-				//else
-					//enable mark as undone and disable mark as done
-				
-				if(modelDayTable.getValueAt(row, 1) instanceof CalendarTask) {
-					markTask.setEnabled(true);
-					view.toggleMarkTaskText((CalendarTask)modelDayTable.getValueAt(row, 1));
-				}
-				else
-					markTask.setEnabled(false);
-				
 				view.getDayMenu().show(view.getDayTable(), arg0.getX(), arg0.getY()); 
-			}
 			
 		}
 
@@ -756,21 +736,7 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = view.getAgendaTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-			{
-				//if(not yet marked as done)
-					//enable mark as done and disable mark as undone
-				//else
-					//enable mark as undone and disable mark as done
-				
-				if(modelAgendaTable.getValueAt(row, 1) instanceof CalendarTask) {
-					markTask.setEnabled(true);
-					view.toggleMarkTaskText((CalendarTask)modelAgendaTable.getValueAt(row, 1));
-				}
-				else
-					markTask.setEnabled(false);
-				
 				view.getDayMenu().show(view.getAgendaTable(), arg0.getX(), arg0.getY()); 
-			}
 			
 		}
 
@@ -815,13 +781,6 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}
 		
-	}
-	
-	public void toggleMarkTaskText(CalendarTask task) {
-		if(task.isDone())
-			markTask.setText("Unmark Task");
-		else
-			markTask.setText("Mark Task");
 	}
 	
 	class createbtnListener implements ActionListener{
@@ -1050,20 +1009,6 @@ public class DoctorView extends JFrame implements CalendarObserver{
 		}
 	}
 	
-	class markTaskListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JTable invoker = (JTable)dayMenu.getInvoker();
-			CalendarTask task;
-			if(invoker.getValueAt(invoker.getSelectedRow(), 1) instanceof CalendarTask) {
-				task = (CalendarTask)invoker.getValueAt(invoker.getSelectedRow(), 1);
-				controller.markTask(task, !task.isDone());
-				view.update();
-				System.out.println("Gets here");
-			}
-		}
-	}
-	
 	class deleteItemListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -1130,10 +1075,6 @@ public class DoctorView extends JFrame implements CalendarObserver{
 	
 	public void addTodayButtonListener(ActionListener e) {
 		today.addActionListener(e);
-	}
-	
-	public void addMarkTaskListener(ActionListener e) {
-		markTask.addActionListener(e);
 	}
 	
 	public void addDeleteItemListener(ActionListener e) {
@@ -1204,6 +1145,14 @@ public class DoctorView extends JFrame implements CalendarObserver{
 
 	public JLabel getDayLabel() {
 		return dayLabel;
+	}
+
+	public JPopupMenu getDayMenu() {
+		return dayMenu;
+	}
+
+	public void setDayMenu(JPopupMenu dayMenu) {
+		this.dayMenu = dayMenu;
 	}
 
 	public void setDayLabel(JLabel dayLabel) {
