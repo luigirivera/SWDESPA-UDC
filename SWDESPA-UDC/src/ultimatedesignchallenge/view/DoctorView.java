@@ -26,7 +26,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -54,18 +53,12 @@ import designchallenge1.HTMLEventMarkerFormatter;
 import designchallenge2.item.CalendarEvent;
 import designchallenge2.item.CalendarItem;
 import designchallenge2.item.CalendarTask;
-import designchallenge2.item.LegacyEventConverter;
 import designchallenge2.view.AgendaHTMLItemStringFormatter;
 import designchallenge2.view.CalendarObserver;
 import designchallenge2.view.DayHTMLItemStringFormatter;
 import designchallenge2.view.ItemStringFormatter;
 
-//NOTE: Remove comment at refreshTileEvents thanks - Louie
-//NOTE: Fix generateWeekAgendaTable thanks - Louie
-//TODO: Recurring Events because idk how that works - Louie
-
-
-public class SecretaryView extends JFrame implements CalendarObserver {
+public class DoctorView extends JFrame implements CalendarObserver{
 	/**** Day Components ****/
 	private int yearBound, monthBound, dayBound, yearToday, monthToday;
 	private String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
@@ -76,11 +69,11 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 	private JTextField createName, startDate;
 	
 	private JButton btnPrev, btnNext, create, today, save, discard;
-	private JToggleButton calendar, agenda, doctors;
+	private JToggleButton calendar, agenda;
 	private JRadioButton recurringAppRB;
 	private Container pane;
 	private JScrollPane scrollCalendarTable;
-	private JPanel calendarPanel, topPanel, createPanel, mainCalendarPanel, weekPanel, doctorListPanel;
+	private JPanel calendarPanel, topPanel, createPanel, mainCalendarPanel, weekPanel;
 
 	/**** Calendar Table Components ***/
 	private JTable calendarTable;
@@ -88,7 +81,7 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 
 	/**** Added during the project ****/
 	private int taskCount, dayToday;
-	private SecretaryView view;
+	private DoctorView view;
 	private JComboBox<LocalTime> startTime, endTime;
 	private JComboBox<String> viewType, doctorsCBList;
 	private CellDataHolder validCells;
@@ -99,9 +92,6 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 	private JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList;
 	private JPopupMenu dayMenu;
 	private JMenuItem delete, markTask;
-	private JFrame doctorListFrame;
-	private JList<String> doctorList;
-	private DefaultListModel<String> modelDoctorList;
 	private List<CalendarItem> monthItems;
 	private List<CalendarItem> dayItems;
 
@@ -110,8 +100,8 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 //	private CalendarController controller;
 //	private ItemGetFlags flags;
 	
-	public SecretaryView() {
-		super("Central Calendar Census");
+	public DoctorView() {
+		super("Doctor Calendar");
 		
 //		this.model = model;
 //		this.controller = controller;
@@ -152,21 +142,15 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 	}
 	
 	private void instantiate() {
-		doctorListFrame = new JFrame("Clinic Doctors");
-		
-		doctorListPanel = new JPanel();
 		calendarPanel = new JPanel();
 		topPanel = new JPanel();
 		createPanel = new JPanel();
 		mainCalendarPanel = new JPanel();
 		weekPanel = new JPanel();
 		
-		modelDoctorList = new DefaultListModel<String>();
-		doctorList = new JList<String>(modelDoctorList);
-		
 		monthLabel = new JLabel("January");
 		dayLabel = new JLabel("");
-		titleLabel = new JLabel("Clinic Secretary");
+		titleLabel = new JLabel("Doctor <num>");
 		createTOLabelTime = new JLabel("to");
 		
 		btnPrev = new JButton("<");
@@ -176,7 +160,6 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		save = new JButton("Save");
 		discard = new JButton("Discard");
 		
-		doctors = new JToggleButton("Doctors");
 		calendar = new JToggleButton("Calendar");
 		agenda = new JToggleButton("Agenda");
 		
@@ -234,16 +217,11 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		scrollAgendaTable = new JScrollPane(agendaTable);
 		scrollWeekTable = new JScrollPane(weekTable);
 		scrollWeekAgendaTable = new JScrollPane(weekAgendaTable);
-		scrollDoctorList = new JScrollPane(doctorList);
 	}
 	
 	private void init() {
 		topPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		
-		doctorListFrame.setSize(420, 625);
-		doctorListFrame.setLayout(null);
-		
-		doctorListPanel.setLayout(null);
+
 		calendarPanel.setLayout(null);
 		topPanel.setLayout(null);
 		createPanel.setLayout(null);
@@ -286,7 +264,6 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		calendarPanel.add(btnNext);
 		calendarPanel.add(scrollCalendarTable);
 		calendarPanel.add(create);
-		calendarPanel.add(doctors);
 		calendarPanel.add(recurringAppRB);
 		
 		add(topPanel);
@@ -319,9 +296,6 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		weekPanel.add(scrollWeekAgendaTable);
 		weekPanel.setVisible(false);
 		
-		doctorListFrame.add(doctorListPanel);
-		doctorListPanel.add(scrollDoctorList);
-		
 		scrollAgendaTable.setVisible(false);
 		scrollWeekAgendaTable.setVisible(false);
 		
@@ -339,7 +313,6 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		btnPrev.setBounds(180, 60, 40, 30);
 		btnNext.setBounds(220, 60, 40, 30);
 		scrollCalendarTable.setBounds(10, 100, 250, 390);
-		doctors.setBounds(10, 500, 250,50);
 		
 		createPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		createName.setBounds(10, 30, 400, 40);
@@ -359,9 +332,6 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		weekPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		scrollWeekTable.setBounds(20, 20, weekPanel.getWidth()-30, weekPanel.getHeight()-50);
 		scrollWeekAgendaTable.setBounds(20, 20, mainCalendarPanel.getWidth()-50, mainCalendarPanel.getHeight()-50);
-		
-		doctorListPanel.setBounds(0, 0, doctorListFrame.getWidth(), doctorListFrame.getHeight());
-		scrollDoctorList.setBounds(doctorListPanel.getBounds());
 		
 	}
 	
@@ -715,8 +685,6 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		view.addTodayButtonListener(new todayButtonListener());
 		view.addMarkTaskListener(new markTaskListener());
 		view.addDeleteItemListener(new deleteItemListener());
-		view.addDoctorListWindowListener(new doctorListWindowListener());
-		view.addDoctorToggleButtonListener(new toggleDoctorListListener());
 	}
 	
 	// ------------LISTENERS------------//
@@ -1018,49 +986,6 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		}
 		
 	}
-	
-	class toggleDoctorListListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			if(view.getDoctors().isSelected())
-				view.toggleDoctorList(true);
-			else
-				view.toggleDoctorList(false);
-			
-		}
-		
-	}
-	
-	class doctorListWindowListener implements WindowListener{
-
-		@Override
-		public void windowActivated(WindowEvent arg0) {}
-
-		@Override
-		public void windowClosed(WindowEvent arg0) {
-			
-			
-		}
-
-		@Override
-		public void windowClosing(WindowEvent arg0) {
-			view.toggleDoctorList(false);
-		}
-
-		@Override
-		public void windowDeactivated(WindowEvent arg0) {}
-
-		@Override
-		public void windowDeiconified(WindowEvent arg0) {}
-
-		@Override
-		public void windowIconified(WindowEvent arg0) {}
-
-		@Override
-		public void windowOpened(WindowEvent arg0) {}
-		
-	}
 	private void toggleViewType(boolean toggle) {
 		view.getWeekPanel().setVisible(toggle);
 		view.getMainCalendarPanel().setVisible(!toggle);
@@ -1088,17 +1013,11 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		view.getCalendar().setEnabled(!toggle);
 		view.getAgenda().setEnabled(!toggle);
 		view.getViewType().setEnabled(!toggle);
-		view.getDoctors().setEnabled(!toggle);
 		view.today.setEnabled(!toggle);
 		view.getCreate().setEnabled(!toggle);
 		view.getCreatePanel().setVisible(toggle);
 		view.getCreatePanel().setEnabled(toggle);
 		view.clearCreatePanel();
-	}
-	
-	private void toggleDoctorList(boolean toggle) {
-		view.getDoctorListFrame().setVisible(toggle);
-		view.getDoctors().setSelected(toggle);
 	}
 	
 	private void clearCreatePanel() {
@@ -1225,50 +1144,10 @@ public class SecretaryView extends JFrame implements CalendarObserver {
 		viewType.addActionListener(e);
 	}
 	
-	public void addDoctorListWindowListener(WindowListener e) {
-		doctorListFrame.addWindowListener(e);;
-	}
-	
-	public void addDoctorToggleButtonListener(ActionListener e) {
-		doctors.addActionListener(e);
-	}
-	
 	// ------------GETTERS AND SETTERS------------//
 	
 	public JScrollPane getScrollDayTable() {
 		return scrollDayTable;
-	}
-
-	public JPanel getDoctorListPanel() {
-		return doctorListPanel;
-	}
-
-	public void setDoctorListPanel(JPanel doctorListPanel) {
-		this.doctorListPanel = doctorListPanel;
-	}
-
-	public JFrame getDoctorListFrame() {
-		return doctorListFrame;
-	}
-
-	public void setDoctorListFrame(JFrame doctorListFrame) {
-		this.doctorListFrame = doctorListFrame;
-	}
-
-	public JList<String> getDoctorList() {
-		return doctorList;
-	}
-
-	public void setDoctorList(JList<String> doctorList) {
-		this.doctorList = doctorList;
-	}
-
-	public JToggleButton getDoctors() {
-		return doctors;
-	}
-
-	public void setDoctors(JToggleButton doctors) {
-		this.doctors = doctors;
 	}
 
 	public JComboBox<String> getViewType() {

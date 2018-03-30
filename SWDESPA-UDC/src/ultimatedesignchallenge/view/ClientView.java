@@ -65,8 +65,8 @@ public class ClientView extends JFrame implements CalendarObserver{
 			"October", "November", "December" };
 
 	/**** Swing Components ****/
-	private JLabel monthLabel, titleLabel, dayLabel, createTOLabelDate, createTOLabelTime;
-	private JTextField createName, startDate;
+	private JLabel monthLabel, titleLabel, dayLabel, createTOLabelTime;
+	private JTextField startDate;
 	
 	private JButton btnPrev, btnNext, create, today, save, discard;
 	private JToggleButton calendar, agenda, doctors;
@@ -85,7 +85,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 	private JComboBox<LocalTime> startTime, endTime;
 	private JComboBox<String> viewType, doctorsCBList;
 	private CellDataHolder validCells;
-	private final String createPlaceholderName = "Client Name";
 	private final String createPlaceholderStartDate = "Date";
 	private JTable dayTable, agendaTable, weekTable, weekAgendaTable;
 	private DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable;
@@ -154,8 +153,7 @@ public class ClientView extends JFrame implements CalendarObserver{
 		
 		monthLabel = new JLabel("January");
 		dayLabel = new JLabel("");
-		titleLabel = new JLabel("Clinic Secretary");
-		createTOLabelDate = new JLabel("to");
+		titleLabel = new JLabel("Client <num>");
 		createTOLabelTime = new JLabel("to");
 		
 		btnPrev = new JButton("<");
@@ -171,7 +169,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		
 		recurringAppRB = new JRadioButton("Recurring Appointment");
 		
-		createName = new JTextField();
 		startTime = new JComboBox<LocalTime>();
 		endTime = new JComboBox<LocalTime>();
 		viewType = new JComboBox<String>();
@@ -245,13 +242,11 @@ public class ClientView extends JFrame implements CalendarObserver{
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-		createTOLabelDate.setFont(new Font("Arial", Font.BOLD, 15));
 		createTOLabelTime.setFont(new Font("Arial", Font.BOLD, 15));
 		
 		startDate.setHorizontalAlignment(JTextField.CENTER);
 		
 		startDate.setText(createPlaceholderStartDate);
-		createName.setText(createPlaceholderName);
 		
 		LocalTime tmpTime = LocalTime.of(0, 0);
 		for(int i=0 ; i<48 ; i++) {
@@ -265,7 +260,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		
 		
 		startDate.setForeground(Color.GRAY);
-		createName.setForeground(Color.GRAY);
 		
 		btnPrev.setMargin(new Insets(0,0,0,0));
 		btnNext.setMargin(new Insets(0,0,0,0));
@@ -288,7 +282,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		topPanel.add(viewType);
 		
 		add(createPanel);
-		createPanel.add(createName);
 		createPanel.add(startDate);
 		createPanel.add(startTime);
 		createPanel.add(endTime);
@@ -332,15 +325,14 @@ public class ClientView extends JFrame implements CalendarObserver{
 		doctors.setBounds(10, 500, 250,50);
 		
 		createPanel.setBounds(270, 70, this.getWidth() - 270, 610);
-		createName.setBounds(10, 30, 400, 40);
-		recurringAppRB.setBounds(40, 70, 200, 50);
-		startDate.setBounds(10, 120, 120, 40);
-		startTime.setBounds(10, 160, 120, 40);
-		createTOLabelTime.setBounds(140, 160, 20, 40);
-		doctorsCBList.setBounds(160, 120, 120, 40);
-		endTime.setBounds(160, 160, 120, 40);
-		save.setBounds(300, 120, 90, 40);
-		discard.setBounds(300, 160, 90, 40);
+		recurringAppRB.setBounds(40, 30, 200, 50);
+		startDate.setBounds(10, 80, 120, 40);
+		startTime.setBounds(10, 120, 120, 40);
+		createTOLabelTime.setBounds(140, 120, 20, 40);
+		doctorsCBList.setBounds(160, 80, 120, 40);
+		endTime.setBounds(160, 120, 120, 40);
+		save.setBounds(300, 80, 90, 40);
+		discard.setBounds(300, 120, 90, 40);
 		
 		mainCalendarPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		scrollDayTable.setBounds(20, 20, mainCalendarPanel.getWidth()-50, mainCalendarPanel.getHeight()-50);
@@ -697,7 +689,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		view.addCreateDiscardButtonListener(new discardCreateBtnListener());
 		view.addCalendarToggleButtonListener(new dayToggleBtnListener());
 		view.addAgendaToggleButtonListener(new agendaToggleBtnListener());
-		view.addCreateNameListener(new createNameFocusListener(), new createNameKeyListener());
 		view.addCreateStartDateListener(new createStartDateFocusListener(), new createStartDateKeyListener());
 		view.addDayTableListener(new dayTableMouseListener());
 		view.addAgendaTableListener(new agendaTableMouseListener());
@@ -961,30 +952,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		
 	}
 	
-	class createNameFocusListener implements FocusListener{
-
-		@Override
-		public void focusGained(FocusEvent arg0) {
-			if(view.getCreateName().getText().equals(createPlaceholderName))
-			{
-				view.getCreateName().setText("");
-				view.getCreateName().setForeground(Color.BLACK);
-			}
-			
-		}
-
-		@Override
-		public void focusLost(FocusEvent arg0) {
-			if(view.getCreateName().getText().equals(""))
-			{
-				view.getCreateName().setText(createPlaceholderName);
-				view.getCreateName().setForeground(Color.GRAY);
-			}
-			
-		}
-		
-	}
-	
 	class createStartDateFocusListener implements FocusListener{
 
 		@Override
@@ -1092,20 +1059,17 @@ public class ClientView extends JFrame implements CalendarObserver{
 	}
 	
 	private void clearCreatePanel() {
-		view.getCreateName().setText(createPlaceholderName);
-		view.getCreateName().setForeground(Color.GRAY);
 		view.getStartDate().setText(createPlaceholderStartDate);
 		view.getStartDate().setForeground(Color.GRAY);
 		view.getRecurringAppRB().setSelected(false);
-		view.getCreateTOLabelDate().setVisible(true);
 		view.getCreateTOLabelTime().setVisible(true);
 		view.getEndTime().setVisible(true);
 		view.getEndTime().setEnabled(true);
 
-		view.getStartDate().setBounds(10, 120, 120, 40);
-		view.getStartTime().setBounds(10, 160, 120, 40);
-		view.getSave().setBounds(300, 120, 90, 40);
-		view.getDiscard().setBounds(300, 160, 90, 40);
+		view.getStartDate().setBounds(10, 80, 120, 40);
+		view.getStartTime().setBounds(10, 120, 120, 40);
+		view.getSave().setBounds(300, 80, 90, 40);
+		view.getDiscard().setBounds(300, 120, 90, 40);
 	}
 	
 	class todayButtonListener implements ActionListener {
@@ -1180,11 +1144,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 	
 	public void addAgendaToggleButtonListener(ActionListener e) {
 		agenda.addActionListener(e);
-	}
-	
-	public void addCreateNameListener(FocusListener f, KeyListener k) {
-		createName.addFocusListener(f);
-		createName.addKeyListener(k);
 	}
 
 	public void addCreateStartDateListener(FocusListener f, KeyListener k) {
@@ -1298,14 +1257,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		return dayTable;
 	}
 
-	public JLabel getCreateTOLabelDate() {
-		return createTOLabelDate;
-	}
-
-	public void setCreateTOLabelDate(JLabel createTOLabelDate) {
-		this.createTOLabelDate = createTOLabelDate;
-	}
-
 	public JLabel getCreateTOLabelTime() {
 		return createTOLabelTime;
 	}
@@ -1328,14 +1279,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 
 	public void setDayLabel(JLabel dayLabel) {
 		this.dayLabel = dayLabel;
-	}
-
-	public JTextField getCreateName() {
-		return createName;
-	}
-
-	public void setCreateName(JTextField createName) {
-		this.createName = createName;
 	}
 
 	public JTextField getStartDate() {
@@ -1570,8 +1513,6 @@ public class ClientView extends JFrame implements CalendarObserver{
 		}
 
 	}
-
-}
 
 }
 
