@@ -65,6 +65,7 @@ import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
 //NOTE: Fix generateWeekAgendaTable thanks - Louie
 //TODO: Recurring Events because idk how that works - Louie
+//TODO: Make login() method for logging in - Louiw
 
 public abstract class CalendarFramework extends JFrame implements CalendarObserver{
 	/**** Day Components ****/
@@ -92,10 +93,12 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	
 	protected JPasswordField loginPass;
 	protected JComboBox<LocalTime> startTime, endTime;
-	protected JComboBox<String> viewType, doctorsCBList;
+	protected JComboBox<String> viewType, doctorsCBList, recurringCBList;
 	protected CellDataHolder validCells;
 	protected final String createPlaceholderName = "Client/Appointment Name";
 	protected final String createPlaceholderStartDate = "Date";
+	protected final String loginPlaceholderUser = "Username";
+	protected final String loginPlaceholderPass = "Password";
 	protected JTable dayTable, agendaTable, weekTable, weekAgendaTable;
 	protected DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable;
 	protected JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList;
@@ -185,6 +188,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		startTime = new JComboBox<LocalTime>();
 		endTime = new JComboBox<LocalTime>();
 		viewType = new JComboBox<String>();
+		recurringCBList = new JComboBox<String>();
 		startDate = new JTextField();
 		
 		dayMenu = new JPopupMenu();
@@ -240,6 +244,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		loginFrame.setSize(520, 225);
 		loginFrame.setLayout(null);
+		loginFrame.setResizable(false);
 		
 		loginFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -258,9 +263,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
 		createTOLabelTime.setFont(new Font("Arial", Font.BOLD, 15));
 		
-		startDate.setHorizontalAlignment(JTextField.CENTER);
 		
-		startDate.setText(createPlaceholderStartDate);
 		
 		LocalTime tmpTime = LocalTime.of(0, 0);
 		for(int i=0 ; i<48 ; i++) {
@@ -275,9 +278,15 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		btnPrev.setMargin(new Insets(0,0,0,0));
 		btnNext.setMargin(new Insets(0,0,0,0));
 		
-
+		startDate.setHorizontalAlignment(JTextField.CENTER);
+		startDate.setText(createPlaceholderStartDate);
+		
+		loginUser.setText(loginPlaceholderUser);
+		loginPass.setText(loginPlaceholderPass);
 		
 		startDate.setForeground(Color.GRAY);
+		loginUser.setForeground(Color.GRAY);
+		loginPass.setForeground(Color.GRAY);
 		
 		add(calendarPanel);
 		calendarPanel.add(monthLabel);
@@ -303,6 +312,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		createPanel.add(save);
 		createPanel.add(discard);
 		createPanel.add(createTOLabelTime);
+		createPanel.add(recurringCBList);
 		createPanel.setVisible(false);
 		
 		add(mainCalendarPanel);
@@ -339,7 +349,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		scrollCalendarTable.setBounds(10, 100, 250, 390);
 		
 		createPanel.setBounds(270, 70, this.getWidth() - 270, 610);
-		recurringAppRB.setBounds(40, 70, 200, 50);
+		recurringAppRB.setBounds(10, 70, 140, 50);
+		recurringCBList.setBounds(160, 70, 120, 40);
 		startDate.setBounds(10, 120, 120, 40);
 		startTime.setBounds(10, 160, 120, 40);
 		createTOLabelTime.setBounds(140, 160, 20, 40);
@@ -359,11 +370,15 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		login.setBounds(190, 20, 250, 50);
 		loginUser.setBounds(140, login.getY()+60, 250, 30);
 		loginPass.setBounds(140, loginUser.getY()+30, 250, 30);
+		
+		toggleRecurringCBList(false);
 	}
 	
 	protected void doctorListInst() {
 		doctorListFrame = new JFrame("Clinic Doctors");
-		doctorListPanel = new JPanel();	
+		doctorListPanel = new JPanel();
+		
+		doctorListFrame.setResizable(false);
 		
 		doctors = new JToggleButton("Doctors");	
 		doctorsCBList = new JComboBox<String>();
@@ -729,6 +744,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		addViewTypeListener(new calendarViewCBListener());
 		addTodayButtonListener(new todayButtonListener());
 		addDeleteItemListener(new deleteItemListener());
+		addLoginListener(new loginKeyListener(), new loginUserFocusListener(), new loginPassFocusListener());
+		addRecurringRBListener(new recurringRBListener());
 
 		try {
 			addDoctorToggleButtonListener(new toggleDoctorListListener());
@@ -1080,12 +1097,28 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		getCreateTOLabelTime().setVisible(true);
 		getEndTime().setVisible(true);
 		getEndTime().setEnabled(true);
-		getDoctorsCBList().setSelectedIndex(0);
 
-		getStartDate().setBounds(10, 80, 120, 40);
-		getStartTime().setBounds(10, 120, 120, 40);
-		getSave().setBounds(300, 80, 90, 40);
-		getDiscard().setBounds(300, 120, 90, 40);
+		if(getDoctorsCBList().getItemCount()>0)
+			getDoctorsCBList().setSelectedIndex(0);
+	}
+	
+	class recurringRBListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			toggleRecurringCBList(recurringAppRB.isSelected());
+			
+		}
+		
+	}
+	
+	private void toggleRecurringCBList(boolean toggle)
+	{
+		recurringCBList.setVisible(toggle);
+		recurringCBList.setEnabled(toggle);
+		
+		if(recurringCBList.getItemCount()>0)
+			recurringCBList.setSelectedIndex(0);
 	}
 	
 	class todayButtonListener implements ActionListener {
@@ -1129,6 +1162,70 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}
 	}
 	
+	class loginKeyListener implements KeyListener{
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				login();
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {}
+		
+	}
+	
+	class loginUserFocusListener implements FocusListener{
+
+		@Override
+		public void focusGained(FocusEvent arg0) {
+			if(getLoginUser().getText().equals(loginPlaceholderUser))
+			{
+				getLoginUser().setText("");
+				getLoginUser().setForeground(Color.BLACK);
+			}
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent arg0) {
+			if(getLoginUser().getText().equals(""))
+			{
+				getLoginUser().setText(loginPlaceholderUser);
+				getLoginUser().setForeground(Color.GRAY);
+			}
+			
+		}
+		
+	}
+	
+	class loginPassFocusListener implements FocusListener{
+
+		@Override
+		public void focusGained(FocusEvent arg0) {
+			if(String.valueOf(getLoginPass().getPassword()).equals(loginPlaceholderPass))
+			{
+				getLoginPass().setText("");
+				getLoginPass().setForeground(Color.BLACK);
+			}
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent arg0) {
+			if(String.valueOf(getLoginPass().getPassword()).equals(""))
+			{
+				getLoginPass().setText(loginPlaceholderPass);
+				getLoginPass().setForeground(Color.GRAY);
+			}
+			
+		}
+	}
+	
 	// ------------LISTENER SETTERS------------//
 	public void addbtnNextListener(ActionListener e) {
 		btnNext.addActionListener(e);
@@ -1136,6 +1233,13 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	
 	public void addbtnPrevListener(ActionListener e) {
 		btnPrev.addActionListener(e);
+	}
+	
+	public void addLoginListener(KeyListener e, FocusListener focusU, FocusListener focusPass) {
+		loginUser.addKeyListener(e);
+		loginPass.addKeyListener(e);
+		loginUser.addFocusListener(focusU);
+		loginPass.addFocusListener(focusPass);
 	}
 	
 	public void addcalendarListener(MouseListener e) {
@@ -1165,6 +1269,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	public void addCreateStartDateListener(FocusListener f, KeyListener k) {
 		startDate.addFocusListener(f);
 		startDate.addKeyListener(k);
+	}
+	
+	public void addRecurringRBListener(ActionListener e) {
+		recurringAppRB.addActionListener(e);
 	}
 	
 	public void addDayTableListener(MouseListener e) {
@@ -1208,6 +1316,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	public void setViewType(JComboBox<String> viewType) {
 		this.viewType = viewType;
 	}
+	
 
 	public int getYearToday() {
 		return yearToday;
