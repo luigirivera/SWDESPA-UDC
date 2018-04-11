@@ -102,11 +102,11 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected JTable dayTable, agendaTable, weekTable, weekAgendaTable;
 	protected DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable;
 	protected JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList;
-	protected JPopupMenu dayMenu;
+	protected JPopupMenu dayMenu, calendarView;
 	protected JFrame loginFrame, doctorListFrame;
 	protected JList<String> doctorList;
 	protected DefaultListModel<String> modelDoctorList;
-	protected JMenuItem delete, notifyDoctor, notifyClient;
+	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, cancelAllCV, cancelCV;
 	protected List<CalendarItem> monthItems;
 	protected List<CalendarItem> dayItems;
 
@@ -192,7 +192,11 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		startDate = new JTextField();
 		
 		dayMenu = new JPopupMenu();
-		delete = new JMenuItem("Delete");
+		calendarView = new JPopupMenu();
+		cancel = new JMenuItem("Cancel");
+		cancelCV = new JMenuItem("Cancel");
+		cancelAllCV = new JMenuItem("Cancel All Meetings");
+		cancelAll = new JMenuItem("Cancel All Meetings");
 		
 		modelCalendarTable = new DefaultTableModel() {
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -255,7 +259,11 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		mainCalendarPanel.setLayout(null);
 		weekPanel.setLayout(null);
 		
-		dayMenu.add(delete);
+		dayMenu.add(cancel);
+		dayMenu.add(cancelAll);
+		
+		calendarView.add(cancelCV);
+		calendarView.add(cancelAllCV);
 		
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		login.setFont(new Font("Arial", Font.BOLD, 25));
@@ -419,7 +427,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}
 		
 		weekTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		weekTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weekTable.getTableHeader().setReorderingAllowed(false);
 		weekTable.getTableHeader().setResizingAllowed(false);
 		
@@ -454,7 +461,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableCellRenderer());//luis
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(scrollDayTable.getWidth() - dayTable.getColumnModel().getColumn(0).getWidth() - 45);
 		dayTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		dayTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		dayTable.getTableHeader().setReorderingAllowed(false);
 		dayTable.getTableHeader().setResizingAllowed(false);
 		
@@ -489,7 +495,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		agendaTable.getColumnModel().getColumn(1).setPreferredWidth(scrollDayTable.getWidth() - dayTable.getColumnModel().getColumn(0).getWidth()-95);
 		agendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		agendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		agendaTable.getTableHeader().setReorderingAllowed(false);
 		agendaTable.getTableHeader().setResizingAllowed(false);
 		agendaTable.setTableHeader(null);
@@ -521,7 +526,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		weekAgendaTable.getColumnModel().getColumn(1).setPreferredWidth(scrollWeekTable.getWidth() - weekTable.getColumnModel().getColumn(0).getWidth()-95);
 		weekAgendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		weekAgendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weekAgendaTable.getTableHeader().setReorderingAllowed(false);
 		weekAgendaTable.getTableHeader().setResizingAllowed(false);
 		weekAgendaTable.setTableHeader(null);
@@ -624,7 +628,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	}
 	
 	public void refreshHeader() {
-		getDayLabel().setText(getMonths()[getMonthToday()] + " " + dayToday + ", " + getYearToday());
+		dayLabel.setText(months[monthToday] + " " + dayToday + ", " + yearToday);
 	}
 	
 	public void refreshDay() {
@@ -730,26 +734,38 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	}
 	
 	protected void initListeners() {
-		addbtnNextListener(new btnNext_Action());
-		addbtnPrevListener(new btnPrev_Action());
-		addcalendarListener(new calendarTableMouseListener());
-		addCreateButtonListener(new createbtnListener());
-		addCreateSaveButtonListener(new saveCreateBtnListener());
-		addCreateDiscardButtonListener(new discardCreateBtnListener());
-		addCalendarToggleButtonListener(new dayToggleBtnListener());
-		addAgendaToggleButtonListener(new agendaToggleBtnListener());
-		addCreateStartDateListener(new createStartDateFocusListener(), new createStartDateKeyListener());
-		addDayTableListener(new dayTableMouseListener());
-		addAgendaTableListener(new agendaTableMouseListener());
-		addViewTypeListener(new calendarViewCBListener());
-		addTodayButtonListener(new todayButtonListener());
-		addDeleteItemListener(new deleteItemListener());
-		addLoginListener(new loginKeyListener(), new loginUserFocusListener(), new loginPassFocusListener());
-		addRecurringRBListener(new recurringRBListener());
+		btnNext.addActionListener(new btnNext_Action());
+		btnPrev.addActionListener(new btnPrev_Action());
+		calendarTable.addMouseListener(new calendarTableMouseListener());
+		
+		create.addActionListener(new createbtnListener());
+		save.addActionListener(new saveCreateBtnListener());
+		discard.addActionListener(new discardCreateBtnListener());
+		recurringAppRB.addActionListener(new recurringRBListener());
+		startDate.addFocusListener(new createStartDateFocusListener());
+		startDate.addKeyListener(new createStartDateKeyListener());
+		
+		calendar.addActionListener(new dayToggleBtnListener());
+		agenda.addActionListener(new agendaToggleBtnListener());
+		viewType.addActionListener(new calendarViewCBListener());
+		today.addActionListener(new todayButtonListener());
+		
+		dayTable.addMouseListener(new dayTableMouseListener());
+		agendaTable.addMouseListener(new agendaTableMouseListener());
+		
+		cancel.addActionListener(new deleteItemListener());
+		
+		loginUser.addKeyListener(new loginKeyListener());
+		loginPass.addKeyListener(new loginKeyListener());
+		loginUser.addFocusListener(new loginUserFocusListener());
+		loginPass.addFocusListener(new loginPassFocusListener());
+		
+		weekTable.addMouseListener(new weekTableMouseListener());
+		weekAgendaTable.addMouseListener(new weekAgendaTableMouseListener());
 
 		try {
-			addDoctorToggleButtonListener(new toggleDoctorListListener());
-			addDoctorListWindowListener(new doctorListWindowListener());
+			doctorListFrame.addWindowListener(new doctorListWindowListener());
+			doctors.addActionListener(new toggleDoctorListListener());
 		}catch(Exception e) {}
 	}
 	
@@ -768,26 +784,26 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	
 	class btnPrev_Action implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (getMonthToday() == 0) {
-				setMonthToday(11);
-				setYearToday(getYearToday() - 1);
+			if (monthToday == 0) {
+				monthToday = 11;
+				yearToday -= 1;
 			} else {
-				setMonthToday(getMonthToday()-1);
+				monthToday -= 1;
 			}
-			refreshCalendar(getMonthToday(), getYearToday());
+			refreshCalendar(monthToday, yearToday);
 			update();
 		}
 	}
 
 	class btnNext_Action implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (getMonthToday() == 11) {
-				setMonthToday(0);
-				setYearToday(getYearToday() + 1);
+			if (monthToday == 11) {
+				monthToday = 0;
+				yearToday += 1;
 			} else {
-				setMonthToday(getMonthToday()+1);
+				monthToday += 1;
 			}
-			refreshCalendar(getMonthToday(), getYearToday());
+			refreshCalendar(monthToday, yearToday);
 			update();
 		}
 	}
@@ -796,9 +812,53 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int row = getDayTable().getSelectedRow();
+			int row = dayTable.getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
-				getDayMenu().show(getDayTable(), arg0.getX(), arg0.getY()); 
+				dayMenu.show(dayTable, arg0.getX(), arg0.getY()); 
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+	}
+	
+	class weekTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = weekTable.getSelectedRow();
+			int col = weekTable.getSelectedColumn();
+			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
+				dayMenu.show(weekTable, arg0.getX(), arg0.getY()); 
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+	}
+	
+	class weekAgendaTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = weekTable.getSelectedRow();
+			int col = weekTable.getSelectedColumn();
+			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
+				dayMenu.show(weekAgendaTable, arg0.getX(), arg0.getY()); 
 			
 		}
 
@@ -817,9 +877,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int row = getAgendaTable().getSelectedRow();
+			int row = agendaTable.getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-				getDayMenu().show(getAgendaTable(), arg0.getX(), arg0.getY()); 
+				dayMenu.show(agendaTable, arg0.getX(), arg0.getY()); 
 				
 		}
 
@@ -838,18 +898,18 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent evt) {
-			int col = getCalendarTable().getSelectedColumn();
-			int row = getCalendarTable().getSelectedRow();
-			
-			try {
-				int day = getValidCells().getDayAtCell(row, col);
-				// TODO: show the day/agenda for that day
-				dayToday = day;
-				update();
+				int col = calendarTable.getSelectedColumn();
+				int row = calendarTable.getSelectedRow();
 				
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
+				try {
+					int day = getValidCells().getDayAtCell(row, col);
+					// TODO: show the day/agenda for that day
+					dayToday = day;
+					update();
+					
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				}
 		}
 
 		@Override
@@ -862,7 +922,13 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		public void mousePressed(MouseEvent arg0) {}
 
 		@Override
-		public void mouseReleased(MouseEvent arg0) {}
+		public void mouseReleased(MouseEvent e) {
+			if(SwingUtilities.isRightMouseButton(e))
+			{
+				System.out.println("here");
+				calendarView.show(calendarTable, e.getX(), e.getY());
+			}
+		}
 		
 	}
 	
@@ -972,7 +1038,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(getViewType().getSelectedItem().equals("Week"))
+			if(viewType.getSelectedItem().equals("Week"))
 				toggleViewType(true);
 			else
 				toggleViewType(false);
@@ -985,20 +1051,20 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void focusGained(FocusEvent arg0) {
-			if(getStartDate().getText().equals(createPlaceholderStartDate))
+			if(startDate.getText().equals(createPlaceholderStartDate))
 			{
-				getStartDate().setText("");
-				getStartDate().setForeground(Color.BLACK);
+				startDate.setText("");
+				startDate.setForeground(Color.BLACK);
 			}
 			
 		}
 
 		@Override
 		public void focusLost(FocusEvent arg0) {
-			if(getStartDate().getText().equals(""))
+			if(startDate.getText().equals(""))
 			{
-				getStartDate().setText(createPlaceholderStartDate);
-				getStartDate().setForeground(Color.GRAY);
+				startDate.setText(createPlaceholderStartDate);
+				startDate.setForeground(Color.GRAY);
 			}
 			
 		}
@@ -1009,7 +1075,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(getDoctors().isSelected())
+			if(doctors.isSelected())
 				toggleDoctorList(true);
 			else
 				toggleDoctorList(false);
@@ -1048,58 +1114,58 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 	}
 	private void toggleViewType(boolean toggle) {
-		getWeekPanel().setVisible(toggle);
-		getMainCalendarPanel().setVisible(!toggle);
+		weekPanel.setVisible(toggle);
+		mainCalendarPanel.setVisible(!toggle);
 	}
 	
 	private void toggleAgendaView(boolean toggle) {
-		getAgenda().setSelected(toggle);
-		getScrollAgendaTable().setVisible(toggle);
-		getScrollAgendaTable().setEnabled(toggle);
-		getScrollWeekAgendaTable().setVisible(toggle);
-		getScrollWeekAgendaTable().setVisible(toggle);
+		agenda.setSelected(toggle);
+		scrollAgendaTable.setVisible(toggle);
+		scrollAgendaTable.setEnabled(toggle);
+		scrollWeekAgendaTable.setVisible(toggle);
+		scrollWeekAgendaTable.setVisible(toggle);
 	}
 	
 	private void toggleDayView(boolean toggle) {
-		getCalendar().setSelected(toggle);
-		getScrollDayTable().setVisible(toggle);
-		getScrollDayTable().setEnabled(toggle);
-		getScrollWeekTable().setVisible(toggle);
-		getScrollWeekTable().setEnabled(toggle);
+		calendar.setSelected(toggle);
+		scrollDayTable.setVisible(toggle);
+		scrollDayTable.setEnabled(toggle);
+		scrollWeekTable.setVisible(toggle);
+		scrollWeekTable.setEnabled(toggle);
 	}
 	
 	private void toggleCreateView(boolean toggle) {
 		toggleDayView(!toggle);
 		toggleAgendaView(false);
-		getCalendar().setEnabled(!toggle);
-		getAgenda().setEnabled(!toggle);
-		getViewType().setEnabled(!toggle);
+		calendar.setEnabled(!toggle);
+		agenda.setEnabled(!toggle);
+		viewType.setEnabled(!toggle);
 		today.setEnabled(!toggle);
-		getCreate().setEnabled(!toggle);
-		getCreatePanel().setVisible(toggle);
-		getCreatePanel().setEnabled(toggle);
+		create.setEnabled(!toggle);
+		createPanel.setVisible(toggle);
+		createPanel.setEnabled(toggle);
 		clearCreatePanel();
 		
 		try {
-			getDoctors().setEnabled(!toggle);
+			doctors.setEnabled(!toggle);
 		}catch(Exception e) {}
 	}
 	
 	private void toggleDoctorList(boolean toggle) {
-		getDoctorListFrame().setVisible(toggle);
-		getDoctors().setSelected(toggle);
+		doctorListFrame.setVisible(toggle);
+		doctors.setSelected(toggle);
 	}
 	
 	private void clearCreatePanel() {
-		getStartDate().setText(createPlaceholderStartDate);
-		getStartDate().setForeground(Color.GRAY);
-		getRecurringAppRB().setSelected(false);
-		getCreateTOLabelTime().setVisible(true);
-		getEndTime().setVisible(true);
-		getEndTime().setEnabled(true);
+		startDate.setText(createPlaceholderStartDate);
+		startDate.setForeground(Color.GRAY);
+		recurringAppRB.setSelected(false);
+		createTOLabelTime.setVisible(true);
+		endTime.setVisible(true);
+		endTime.setEnabled(true);
 
-		if(getDoctorsCBList().getItemCount()>0)
-			getDoctorsCBList().setSelectedIndex(0);
+		if(doctorsCBList.getItemCount()>0)
+			doctorsCBList.setSelectedIndex(0);
 	}
 	
 	class recurringRBListener implements ActionListener{
@@ -1183,20 +1249,20 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void focusGained(FocusEvent arg0) {
-			if(getLoginUser().getText().equals(loginPlaceholderUser))
+			if(loginUser.getText().equals(loginPlaceholderUser))
 			{
-				getLoginUser().setText("");
-				getLoginUser().setForeground(Color.BLACK);
+				loginUser.setText("");
+				loginUser.setForeground(Color.BLACK);
 			}
 			
 		}
 
 		@Override
 		public void focusLost(FocusEvent arg0) {
-			if(getLoginUser().getText().equals(""))
+			if(loginUser.getText().equals(""))
 			{
-				getLoginUser().setText(loginPlaceholderUser);
-				getLoginUser().setForeground(Color.GRAY);
+				loginUser.setText(loginPlaceholderUser);
+				loginUser.setForeground(Color.GRAY);
 			}
 			
 		}
@@ -1207,543 +1273,23 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void focusGained(FocusEvent arg0) {
-			if(String.valueOf(getLoginPass().getPassword()).equals(loginPlaceholderPass))
+			if(String.valueOf(loginPass.getPassword()).equals(loginPlaceholderPass))
 			{
-				getLoginPass().setText("");
-				getLoginPass().setForeground(Color.BLACK);
+				loginPass.setText("");
+				loginPass.setForeground(Color.BLACK);
 			}
 			
 		}
 
 		@Override
 		public void focusLost(FocusEvent arg0) {
-			if(String.valueOf(getLoginPass().getPassword()).equals(""))
+			if(String.valueOf(loginPass.getPassword()).equals(""))
 			{
-				getLoginPass().setText(loginPlaceholderPass);
-				getLoginPass().setForeground(Color.GRAY);
+				loginPass.setText(loginPlaceholderPass);
+				loginPass.setForeground(Color.GRAY);
 			}
 			
 		}
-	}
-	
-	// ------------LISTENER SETTERS------------//
-	public void addbtnNextListener(ActionListener e) {
-		btnNext.addActionListener(e);
-	}
-	
-	public void addbtnPrevListener(ActionListener e) {
-		btnPrev.addActionListener(e);
-	}
-	
-	public void addLoginListener(KeyListener e, FocusListener focusU, FocusListener focusPass) {
-		loginUser.addKeyListener(e);
-		loginPass.addKeyListener(e);
-		loginUser.addFocusListener(focusU);
-		loginPass.addFocusListener(focusPass);
-	}
-	
-	public void addcalendarListener(MouseListener e) {
-		calendarTable.addMouseListener(e);
-	}
-	
-	public void addCreateButtonListener(ActionListener e) {
-		create.addActionListener(e);
-	}
-	
-	public void addCreateSaveButtonListener(ActionListener e) {
-		save.addActionListener(e);
-	}
-	
-	public void addCreateDiscardButtonListener(ActionListener e) {
-		discard.addActionListener(e);
-	}
-	
-	public void addCalendarToggleButtonListener(ActionListener e) {
-		calendar.addActionListener(e);
-	}
-	
-	public void addAgendaToggleButtonListener(ActionListener e) {
-		agenda.addActionListener(e);
-	}
-
-	public void addCreateStartDateListener(FocusListener f, KeyListener k) {
-		startDate.addFocusListener(f);
-		startDate.addKeyListener(k);
-	}
-	
-	public void addRecurringRBListener(ActionListener e) {
-		recurringAppRB.addActionListener(e);
-	}
-	
-	public void addDayTableListener(MouseListener e) {
-		dayTable.addMouseListener(e);
-	}
-	
-	public void addAgendaTableListener(MouseListener e) {
-		agendaTable.addMouseListener(e);
-	}
-	
-	public void addTodayButtonListener(ActionListener e) {
-		today.addActionListener(e);
-	}
-	
-	public void addDeleteItemListener(ActionListener e) {
-		delete.addActionListener(e);
-	}
-	
-	public void addViewTypeListener(ActionListener e) {
-		viewType.addActionListener(e);
-	}
-	
-	public void addDoctorListWindowListener(WindowListener e) {
-		doctorListFrame.addWindowListener(e);;
-	}
-	
-	public void addDoctorToggleButtonListener(ActionListener e) {
-		doctors.addActionListener(e);
-	}
-	
-	// ------------GETTERS AND SETTERS------------//
-	
-	public JScrollPane getScrollDayTable() {
-		return scrollDayTable;
-	}
-
-	public JComboBox<String> getViewType() {
-		return viewType;
-	}
-
-	public void setViewType(JComboBox<String> viewType) {
-		this.viewType = viewType;
-	}
-	
-
-	public int getYearToday() {
-		return yearToday;
-	}
-
-	public void setYearToday(int yearToday) {
-		this.yearToday = yearToday;
-	}
-
-	public int getMonthToday() {
-		return monthToday;
-	}
-
-	public void setMonthToday(int monthToday) {
-		this.monthToday = monthToday;
-	}
-
-	public int getDayToday() {
-		return dayToday;
-	}
-
-	public void setDayToday(int dayToday) {
-		this.dayToday = dayToday;
-	}
-
-	public JTable getDayTable() {
-		return dayTable;
-	}
-
-	public JLabel getCreateTOLabelTime() {
-		return createTOLabelTime;
-	}
-
-	public void setCreateTOLabelTime(JLabel createTOLabelTime) {
-		this.createTOLabelTime = createTOLabelTime;
-	}
-
-	public JButton getCreate() {
-		return create;
-	}
-
-	public void setCreate(JButton create) {
-		this.create = create;
-	}
-
-	public JLabel getDayLabel() {
-		return dayLabel;
-	}
-
-	public JPopupMenu getDayMenu() {
-		return dayMenu;
-	}
-
-	public void setDayMenu(JPopupMenu dayMenu) {
-		this.dayMenu = dayMenu;
-	}
-
-	public void setDayLabel(JLabel dayLabel) {
-		this.dayLabel = dayLabel;
-	}
-
-	public JTextField getCreateName() {
-		return createName;
-	}
-
-	public void setCreateName(JTextField createName) {
-		this.createName = createName;
-	}
-
-	public JTextField getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(JTextField startDate) {
-		this.startDate = startDate;
-	}
-
-	public JButton getSave() {
-		return save;
-	}
-
-	public JPanel getMainCalendarPanel() {
-		return mainCalendarPanel;
-	}
-
-	public void setMainCalendarPanel(JPanel mainCalendarPanel) {
-		this.mainCalendarPanel = mainCalendarPanel;
-	}
-
-	public void setSave(JButton save) {
-		this.save = save;
-	}
-
-	public JButton getDiscard() {
-		return discard;
-	}
-
-	public void setDiscard(JButton discard) {
-		this.discard = discard;
-	}
-
-	public JRadioButton getRecurringAppRB() {
-		return recurringAppRB;
-	}
-
-	public void setRecurringAppRB(JRadioButton recurringAppRB) {
-		this.recurringAppRB = recurringAppRB;
-	}
-
-	public JPanel getCreatePanel() {
-		return createPanel;
-	}
-
-	public JTable getCalendarTable() {
-		return calendarTable;
-	}
-
-	public void setCalendarTable(JTable calendarTable) {
-		this.calendarTable = calendarTable;
-	}
-
-	public JTable getAgendaTable() {
-		return agendaTable;
-	}
-
-	public void setAgendaTable(JTable agendaTable) {
-		this.agendaTable = agendaTable;
-	}
-
-	public void setDayTable(JTable dayTable) {
-		this.dayTable = dayTable;
-	}
-
-	public void setCreatePanel(JPanel createPanel) {
-		this.createPanel = createPanel;
-	}
-
-	public JComboBox<LocalTime> getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(JComboBox<LocalTime> startTime) {
-		this.startTime = startTime;
-	}
-
-	public JComboBox<LocalTime> getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(JComboBox<LocalTime> endTime) {
-		this.endTime = endTime;
-	}
-
-	public JToggleButton getCalendar() {
-		return calendar;
-	}
-
-	public void setCalendar(JToggleButton calendar) {
-		this.calendar = calendar;
-	}
-
-	public JToggleButton getAgenda() {
-		return agenda;
-	}
-
-	public void setAgenda(JToggleButton agenda) {
-		this.agenda = agenda;
-	}
-
-	public JScrollPane getScrollCalendarTable() {
-		return scrollCalendarTable;
-	}
-
-	public void setScrollCalendarTable(JScrollPane scrollCalendarTable) {
-		this.scrollCalendarTable = scrollCalendarTable;
-	}
-
-	public JPanel getWeekPanel() {
-		return weekPanel;
-	}
-
-	public void setWeekPanel(JPanel weekPanel) {
-		this.weekPanel = weekPanel;
-	}
-
-	public JTable getWeekTable() {
-		return weekTable;
-	}
-
-	public JScrollPane getScrollWeekAgendaTable() {
-		return scrollWeekAgendaTable;
-	}
-
-	public void setScrollWeekAgendaTable(JScrollPane scrollWeekAgendaTable) {
-		this.scrollWeekAgendaTable = scrollWeekAgendaTable;
-	}
-
-	public void setWeekTable(JTable weekTable) {
-		this.weekTable = weekTable;
-	}
-
-	public void setScrollDayTable(JScrollPane scrollDayTable) {
-		this.scrollDayTable = scrollDayTable;
-	}
-
-	public JScrollPane getScrollAgendaTable() {
-		return scrollAgendaTable;
-	}
-
-	public void setScrollAgendaTable(JScrollPane scrollAgendaTable) {
-		this.scrollAgendaTable = scrollAgendaTable;
-	}
-
-	public JScrollPane getScrollWeekTable() {
-		return scrollWeekTable;
-	}
-
-	public String[] getMonths() {
-		return months;
-	}
-
-	public void setMonths(String[] months) {
-		this.months = months;
-	}
-
-	public void setScrollWeekTable(JScrollPane scrollWeekTable) {
-		this.scrollWeekTable = scrollWeekTable;
-	}
-	
-	public int getMonthBound() {
-		return monthBound;
-	}
-
-	public void setMonthBound(int monthBound) {
-		this.monthBound = monthBound;
-	}
-
-	public JLabel getLogin() {
-		return login;
-	}
-
-	public void setLogin(JLabel login) {
-		this.login = login;
-	}
-
-	public JTextField getLoginUser() {
-		return loginUser;
-	}
-
-	public void setLoginUser(JTextField loginUser) {
-		this.loginUser = loginUser;
-	}
-
-	public JButton getBtnPrev() {
-		return btnPrev;
-	}
-
-	public void setBtnPrev(JButton btnPrev) {
-		this.btnPrev = btnPrev;
-	}
-
-	public JButton getBtnNext() {
-		return btnNext;
-	}
-
-	public void setBtnNext(JButton btnNext) {
-		this.btnNext = btnNext;
-	}
-
-	public JToggleButton getDoctors() {
-		return doctors;
-	}
-
-	public void setDoctors(JToggleButton doctors) {
-		this.doctors = doctors;
-	}
-
-	public JPanel getCalendarPanel() {
-		return calendarPanel;
-	}
-
-	public void setCalendarPanel(JPanel calendarPanel) {
-		this.calendarPanel = calendarPanel;
-	}
-
-	public JPanel getLoginPanel() {
-		return loginPanel;
-	}
-
-	public void setLoginPanel(JPanel loginPanel) {
-		this.loginPanel = loginPanel;
-	}
-
-	public JPanel getDoctorListPanel() {
-		return doctorListPanel;
-	}
-
-	public void setDoctorListPanel(JPanel doctorListPanel) {
-		this.doctorListPanel = doctorListPanel;
-	}
-
-	public DefaultTableModel getModelCalendarTable() {
-		return modelCalendarTable;
-	}
-
-	public void setModelCalendarTable(DefaultTableModel modelCalendarTable) {
-		this.modelCalendarTable = modelCalendarTable;
-	}
-
-	public JPasswordField getLoginPass() {
-		return loginPass;
-	}
-
-	public void setLoginPass(JPasswordField loginPass) {
-		this.loginPass = loginPass;
-	}
-
-	public JComboBox<String> getDoctorsCBList() {
-		return doctorsCBList;
-	}
-
-	public void setDoctorsCBList(JComboBox<String> doctorsCBList) {
-		this.doctorsCBList = doctorsCBList;
-	}
-
-	public JTable getWeekAgendaTable() {
-		return weekAgendaTable;
-	}
-
-	public void setWeekAgendaTable(JTable weekAgendaTable) {
-		this.weekAgendaTable = weekAgendaTable;
-	}
-
-	public DefaultTableModel getModelDayTable() {
-		return modelDayTable;
-	}
-
-	public void setModelDayTable(DefaultTableModel modelDayTable) {
-		this.modelDayTable = modelDayTable;
-	}
-
-	public DefaultTableModel getModelAgendaTable() {
-		return modelAgendaTable;
-	}
-
-	public void setModelAgendaTable(DefaultTableModel modelAgendaTable) {
-		this.modelAgendaTable = modelAgendaTable;
-	}
-
-	public DefaultTableModel getModelWeekTable() {
-		return modelWeekTable;
-	}
-
-	public void setModelWeekTable(DefaultTableModel modelWeekTable) {
-		this.modelWeekTable = modelWeekTable;
-	}
-
-	public DefaultTableModel getModelWeekAgendaTable() {
-		return modelWeekAgendaTable;
-	}
-
-	public void setModelWeekAgendaTable(DefaultTableModel modelWeekAgendaTable) {
-		this.modelWeekAgendaTable = modelWeekAgendaTable;
-	}
-
-	public JScrollPane getScrollDoctorList() {
-		return scrollDoctorList;
-	}
-
-	public void setScrollDoctorList(JScrollPane scrollDoctorList) {
-		this.scrollDoctorList = scrollDoctorList;
-	}
-
-	public JFrame getLoginFrame() {
-		return loginFrame;
-	}
-
-	public void setLoginFrame(JFrame loginFrame) {
-		this.loginFrame = loginFrame;
-	}
-
-	public JFrame getDoctorListFrame() {
-		return doctorListFrame;
-	}
-
-	public void setDoctorListFrame(JFrame doctorListFrame) {
-		this.doctorListFrame = doctorListFrame;
-	}
-
-	public JList<String> getDoctorList() {
-		return doctorList;
-	}
-
-	public void setDoctorList(JList<String> doctorList) {
-		this.doctorList = doctorList;
-	}
-
-	public DefaultListModel<String> getModelDoctorList() {
-		return modelDoctorList;
-	}
-
-	public void setModelDoctorList(DefaultListModel<String> modelDoctorList) {
-		this.modelDoctorList = modelDoctorList;
-	}
-
-	public JMenuItem getDelete() {
-		return delete;
-	}
-
-	public void setDelete(JMenuItem delete) {
-		this.delete = delete;
-	}
-
-	public JMenuItem getNotifyDoctor() {
-		return notifyDoctor;
-	}
-
-	public void setNotifyDoctor(JMenuItem notifyDoctor) {
-		this.notifyDoctor = notifyDoctor;
-	}
-
-	public JMenuItem getNotifyClient() {
-		return notifyClient;
-	}
-
-	public void setNotifyClient(JMenuItem notifyClient) {
-		this.notifyClient = notifyClient;
 	}
 	// ------------CELL DATA------------//
 
