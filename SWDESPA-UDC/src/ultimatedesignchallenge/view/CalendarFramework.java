@@ -82,7 +82,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected JRadioButton recurringAppRB;
 	protected Container pane;
 	protected JScrollPane scrollCalendarTable;
-	protected JPanel calendarPanel, topPanel, createPanel, mainCalendarPanel, weekPanel, loginPanel, doctorListPanel;
+	protected JPanel calendarPanel, topPanel, createPanel, dayPanel, weekPanel, loginPanel, doctorListPanel, monthPanel;
 
 	/**** Calendar Table Components ***/
 	protected JTable calendarTable;
@@ -99,14 +99,14 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected final String createPlaceholderStartDate = "Date";
 	protected final String loginPlaceholderUser = "Username";
 	protected final String loginPlaceholderPass = "Password";
-	protected JTable dayTable, agendaTable, weekTable, weekAgendaTable;
-	protected DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable;
-	protected JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList;
-	protected JPopupMenu dayMenu, calendarView;
+	protected JTable dayTable, agendaTable, weekTable, weekAgendaTable, monthTable, monthAgendaTable;
+	protected DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable, modelMonthTable, modelMonthAgendaTable;
+	protected JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList, scrollMonthTable, scrollMonthAgendaTable;
+	protected JPopupMenu popup;
 	protected JFrame loginFrame, doctorListFrame;
 	protected JList<String> doctorList;
 	protected DefaultListModel<String> modelDoctorList;
-	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, cancelAllCV, cancelCV;
+	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll;
 	protected List<CalendarItem> monthItems;
 	protected List<CalendarItem> dayItems;
 
@@ -139,11 +139,13 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		commonInstantiate(loginLabel, topLabel);
 		commonInit();
-		generateCalendar();
+		generateCalendar(calendarTable, modelCalendarTable);
+		generateCalendar(monthTable, modelMonthTable);
 		generateDayTable();
 		generateWeekTable();
-		generateAgendaTable();
-		generateWeekAgendaTable();
+		generateAgendaTable(agendaTable, modelAgendaTable, scrollAgendaTable);
+		generateAgendaTable(weekAgendaTable, modelWeekAgendaTable, scrollWeekAgendaTable);
+		generateAgendaTable(monthAgendaTable, modelMonthAgendaTable, scrollMonthAgendaTable);
 		
 		setResizable(false);
 		setVisible(true);	
@@ -161,8 +163,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		calendarPanel = new JPanel();
 		topPanel = new JPanel();
 		createPanel = new JPanel();
-		mainCalendarPanel = new JPanel();
+		dayPanel = new JPanel();
 		weekPanel = new JPanel();
+		monthPanel = new JPanel();
 		
 		loginUser = new JTextField();
 		loginPass = new JPasswordField();
@@ -191,11 +194,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		recurringCBList = new JComboBox<String>();
 		startDate = new JTextField();
 		
-		dayMenu = new JPopupMenu();
-		calendarView = new JPopupMenu();
+		popup = new JPopupMenu();
 		cancel = new JMenuItem("Cancel");
-		cancelCV = new JMenuItem("Cancel");
-		cancelAllCV = new JMenuItem("Cancel All Meetings");
 		cancelAll = new JMenuItem("Cancel All Meetings");
 		
 		modelCalendarTable = new DefaultTableModel() {
@@ -228,18 +228,35 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			}
 		};
 		
+		modelMonthTable = new DefaultTableModel() {
+			public boolean isCellEditable(int rowIndex, int mColIndex) {
+				return false;
+			}
+		};
+		
+		modelMonthAgendaTable = new DefaultTableModel() {
+			public boolean isCellEditable(int rowIndex, int mColIndex) {
+				return false;
+			}
+		};
+		
 		validCells = new CellDataHolder();
+		
 		calendarTable = new JTable(modelCalendarTable);
 		dayTable = new JTable(modelDayTable);
 		agendaTable = new JTable(modelAgendaTable);
 		weekTable = new JTable(modelWeekTable);
 		weekAgendaTable = new JTable(modelWeekAgendaTable);
+		monthTable = new JTable(modelMonthTable);
+		monthAgendaTable = new JTable(modelMonthAgendaTable);
+		
 		scrollCalendarTable = new JScrollPane(calendarTable);
 		scrollDayTable = new JScrollPane(dayTable);
 		scrollAgendaTable = new JScrollPane(agendaTable);
 		scrollWeekTable = new JScrollPane(weekTable);
 		scrollWeekAgendaTable = new JScrollPane(weekAgendaTable);
-		
+		scrollMonthTable = new JScrollPane(monthTable);
+		scrollMonthAgendaTable = new JScrollPane(monthAgendaTable);
 		
 	}
 	
@@ -256,14 +273,12 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		calendarPanel.setLayout(null);
 		topPanel.setLayout(null);
 		createPanel.setLayout(null);
-		mainCalendarPanel.setLayout(null);
+		dayPanel.setLayout(null);
 		weekPanel.setLayout(null);
+		monthPanel.setLayout(null);
 		
-		dayMenu.add(cancel);
-		dayMenu.add(cancelAll);
-		
-		calendarView.add(cancelCV);
-		calendarView.add(cancelAllCV);
+		popup.add(cancel);
+		popup.add(cancelAll);
 		
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		login.setFont(new Font("Arial", Font.BOLD, 25));
@@ -282,6 +297,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		viewType.addItem("Day");
 		viewType.addItem("Week");
+		viewType.addItem("Month");
 		
 		btnPrev.setMargin(new Insets(0,0,0,0));
 		btnNext.setMargin(new Insets(0,0,0,0));
@@ -323,14 +339,19 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		createPanel.add(recurringCBList);
 		createPanel.setVisible(false);
 		
-		add(mainCalendarPanel);
-		mainCalendarPanel.add(scrollDayTable);
-		mainCalendarPanel.add(scrollAgendaTable);
+		add(dayPanel);
+		dayPanel.add(scrollDayTable);
+		dayPanel.add(scrollAgendaTable);
 		
 		add(weekPanel);
 		weekPanel.add(scrollWeekTable);
 		weekPanel.add(scrollWeekAgendaTable);
 		weekPanel.setVisible(false);
+		
+		add(monthPanel);
+		monthPanel.add(scrollMonthTable);
+		monthPanel.add(scrollMonthAgendaTable);
+		monthPanel.setVisible(false);
 		
 		loginFrame.add(loginPanel);
 		loginPanel.add(login);
@@ -340,6 +361,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		scrollAgendaTable.setVisible(false);
 		scrollWeekAgendaTable.setVisible(false);
+		scrollMonthAgendaTable.setVisible(false);
+		scrollWeekTable.setVisible(false);
+		scrollMonthTable.setVisible(false);
+		
 		
 		topPanel.setBounds(0,0,this.getWidth(), 70);
 		titleLabel.setBounds(10, 10, 250, 50);
@@ -366,13 +391,17 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		save.setBounds(300, 120, 90, 40);
 		discard.setBounds(300, 160, 90, 40);
 		
-		mainCalendarPanel.setBounds(270, 70, this.getWidth() - 270, 610);
-		scrollDayTable.setBounds(20, 20, mainCalendarPanel.getWidth()-50, mainCalendarPanel.getHeight()-50);
-		scrollAgendaTable.setBounds(20, 20, mainCalendarPanel.getWidth()-50, mainCalendarPanel.getHeight()-50);
+		dayPanel.setBounds(270, 70, this.getWidth() - 270, 610);
+		scrollDayTable.setBounds(20, 20, dayPanel.getWidth()-50, dayPanel.getHeight()-50);
+		scrollAgendaTable.setBounds(20, 20, dayPanel.getWidth()-50, dayPanel.getHeight()-50);
 		
 		weekPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		scrollWeekTable.setBounds(20, 20, weekPanel.getWidth()-30, weekPanel.getHeight()-50);
-		scrollWeekAgendaTable.setBounds(20, 20, mainCalendarPanel.getWidth()-50, mainCalendarPanel.getHeight()-50);
+		scrollWeekAgendaTable.setBounds(20, 20, weekPanel.getWidth()-50, weekPanel.getHeight()-50);
+		
+		monthPanel.setBounds(270, 70, this.getWidth() - 270, 610);
+		scrollMonthTable.setBounds(20, 20, monthPanel.getWidth(), monthPanel.getHeight());
+		scrollMonthAgendaTable.setBounds(20, 20, weekPanel.getWidth()-50, weekPanel.getHeight()-50);
 
 		loginPanel.setBounds(0, 0, loginFrame.getWidth(), loginFrame.getHeight());
 		login.setBounds(190, 20, 250, 50);
@@ -477,70 +506,39 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				
 	}
 	
-	private void generateAgendaTable() {
+	private void generateAgendaTable(JTable table, DefaultTableModel tableModel, JScrollPane scrollPane) {
 		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
 		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
 		rightRender.setOpaque(false);
 		
-		modelAgendaTable.setColumnCount(2);
+		tableModel.setColumnCount(2);
 		
-		agendaTable.setRowHeight(50);
-		agendaTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
-		agendaTable.getColumnModel().getColumn(0).setPreferredWidth(150);
-		
-		AgendaTableCellRenderer itemRender = new AgendaTableCellRenderer();
-		itemRender.setOpaque(false);
-		agendaTable.getColumnModel().getColumn(1).setCellRenderer(itemRender);
-		
-		
-		agendaTable.getColumnModel().getColumn(1).setPreferredWidth(scrollDayTable.getWidth() - dayTable.getColumnModel().getColumn(0).getWidth()-95);
-		agendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		agendaTable.getTableHeader().setReorderingAllowed(false);
-		agendaTable.getTableHeader().setResizingAllowed(false);
-		agendaTable.setTableHeader(null);
-		
-		agendaTable.setOpaque(false);
-		scrollAgendaTable.setOpaque(false);
-		scrollAgendaTable.getViewport().setOpaque(false);
-		scrollAgendaTable.setBorder(BorderFactory.createEmptyBorder());
-		agendaTable.setBorder(BorderFactory.createEmptyBorder());
-		agendaTable.setShowGrid(false);
-
-		((DefaultTableCellRenderer)agendaTable.getDefaultRenderer(Object.class)).setOpaque(false);
-	}
-	
-	private void generateWeekAgendaTable() {
-		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
-		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
-		rightRender.setOpaque(false);
-		
-		modelWeekAgendaTable.setColumnCount(2);
-		weekAgendaTable.setRowHeight(50);
-		weekAgendaTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
-		weekAgendaTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+		table.setRowHeight(50);
+		table.getColumnModel().getColumn(0).setCellRenderer(rightRender);
+		table.getColumnModel().getColumn(0).setPreferredWidth(150);
 		
 		AgendaTableCellRenderer itemRender = new AgendaTableCellRenderer();
 		itemRender.setOpaque(false);
-		weekAgendaTable.getColumnModel().getColumn(1).setCellRenderer(itemRender);
+		table.getColumnModel().getColumn(1).setCellRenderer(itemRender);
 		
 		
-		weekAgendaTable.getColumnModel().getColumn(1).setPreferredWidth(scrollWeekTable.getWidth() - weekTable.getColumnModel().getColumn(0).getWidth()-95);
-		weekAgendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		weekAgendaTable.getTableHeader().setReorderingAllowed(false);
-		weekAgendaTable.getTableHeader().setResizingAllowed(false);
-		weekAgendaTable.setTableHeader(null);
+		table.getColumnModel().getColumn(1).setPreferredWidth(table.getWidth() - table.getColumnModel().getColumn(0).getWidth()-95);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.getTableHeader().setReorderingAllowed(false);
+		table.getTableHeader().setResizingAllowed(false);
+		table.setTableHeader(null);
 		
-		weekAgendaTable.setOpaque(false);
-		scrollWeekAgendaTable.setOpaque(false);
-		scrollWeekAgendaTable.getViewport().setOpaque(false);
-		scrollWeekAgendaTable.setBorder(BorderFactory.createEmptyBorder());
-		weekAgendaTable.setBorder(BorderFactory.createEmptyBorder());
-		weekAgendaTable.setShowGrid(false);
+		table.setOpaque(false);
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		table.setBorder(BorderFactory.createEmptyBorder());
+		table.setShowGrid(false);
 
-		((DefaultTableCellRenderer)weekAgendaTable.getDefaultRenderer(Object.class)).setOpaque(false);
+		((DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)).setOpaque(false);
 	}
 	
-	private void generateCalendar() {
+	private void generateCalendar(JTable table, DefaultTableModel tableModel) {
 		GregorianCalendar cal = new GregorianCalendar();
 		dayBound = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		monthBound = cal.get(GregorianCalendar.MONTH);
@@ -548,30 +546,47 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		monthToday = monthBound;
 		yearToday = yearBound;
 		dayToday = dayBound; //added in dc2
-
-		String[] headers = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" }; // All headers
-		for (int i = 0; i < 7; i++) {
-			modelCalendarTable.addColumn(headers[i]);
-		}
-
-		calendarTable.getParent().setBackground(calendarTable.getBackground()); // Set background
-
-		calendarTable.getTableHeader().setResizingAllowed(false);
-		calendarTable.getTableHeader().setReorderingAllowed(false);
-
-		calendarTable.setColumnSelectionAllowed(true);
-		calendarTable.setRowSelectionAllowed(true);
-		calendarTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		calendarTable.setRowHeight(60);
-		modelCalendarTable.setColumnCount(7);
-		modelCalendarTable.setRowCount(6);
 		
-		refreshCalendar(monthBound, yearBound); // Refresh calendar
+		if(table == calendarTable)
+		{
+			String[] headers = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" }; // All headers
+			table.setRowHeight(60);
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
+			
+			for (int i = 0; i < 7; i++) {
+				tableModel.addColumn(headers[i]);
+			}
+		}
+		else
+		{
+			String[] headers = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" }; // All headers
+			table.setRowHeight(90);
+			
+			for (int i = 0; i < 7; i++) {
+				tableModel.addColumn(headers[i]);
+			}
+		}
+		table.getParent().setBackground(table.getBackground()); // Set background
+
+		table.getTableHeader().setResizingAllowed(false);
+		table.getTableHeader().setReorderingAllowed(false);
+
+		table.setColumnSelectionAllowed(true);
+		table.setRowSelectionAllowed(true);
+
+		tableModel.setColumnCount(7);
+		tableModel.setRowCount(6);
+		
+		refreshCalendar(monthBound, yearBound, tableModel); // Refresh calendar
+		
+
+		
+		
+
 	
 	}
 	
-	public void refreshCalendar(int month, int year) {
+	public void refreshCalendar(int month, int year, DefaultTableModel tableModel) {
 		int nod, som, i, j;
 
 		btnPrev.setEnabled(true);
@@ -586,7 +601,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		for (i = 0; i < 6; i++)
 			for (j = 0; j < 7; j++)
-				modelCalendarTable.setValueAt(null, i, j);
+				tableModel.setValueAt(null, i, j);
 
 		GregorianCalendar cal = new GregorianCalendar(year, month, 1);
 		nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
@@ -598,7 +613,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		for (i = 1; i <= nod; i++) {
 			int row = new Integer((i + som - 2) / 7);
 			int column = (i + som - 2) % 7;
-			modelCalendarTable.setValueAt(i, row, column);
+			tableModel.setValueAt(i, row, column);
 			// Added lines below
 			validCells.getList().add(new CellData(i, row, column));
 			try {
@@ -609,10 +624,12 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}
 
 		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
+		monthTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
 	}
 	
 	public void refreshCurrentPage() {
-		this.refreshCalendar(monthToday, yearToday);
+		this.refreshCalendar(monthToday, yearToday, modelCalendarTable);
+		this.refreshCalendar(monthToday, yearToday, modelMonthTable);
 		this.refreshHeader();
 		this.refreshDay();
 		this.refreshAgenda();
@@ -752,6 +769,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		dayTable.addMouseListener(new dayTableMouseListener());
 		agendaTable.addMouseListener(new agendaTableMouseListener());
+		weekTable.addMouseListener(new weekTableMouseListener());
+		weekAgendaTable.addMouseListener(new weekAgendaTableMouseListener());
+		monthTable.addMouseListener(new monthTableMouseListener());
+		monthAgendaTable.addMouseListener(new monthAgendaTableMouseListener());
 		
 		cancel.addActionListener(new deleteItemListener());
 		
@@ -760,8 +781,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		loginUser.addFocusListener(new loginUserFocusListener());
 		loginPass.addFocusListener(new loginPassFocusListener());
 		
-		weekTable.addMouseListener(new weekTableMouseListener());
-		weekAgendaTable.addMouseListener(new weekAgendaTableMouseListener());
+		
 
 		try {
 			doctorListFrame.addWindowListener(new doctorListWindowListener());
@@ -790,7 +810,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			} else {
 				monthToday -= 1;
 			}
-			refreshCalendar(monthToday, yearToday);
+			refreshCalendar(monthToday, yearToday, modelCalendarTable);
 			update();
 		}
 	}
@@ -803,7 +823,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			} else {
 				monthToday += 1;
 			}
-			refreshCalendar(monthToday, yearToday);
+			refreshCalendar(monthToday, yearToday, modelCalendarTable);
 			update();
 		}
 	}
@@ -814,7 +834,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		public void mouseClicked(MouseEvent arg0) {
 			int row = dayTable.getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
-				dayMenu.show(dayTable, arg0.getX(), arg0.getY()); 
+				popup.show(dayTable, arg0.getX(), arg0.getY()); 
 			
 		}
 
@@ -835,8 +855,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		public void mouseClicked(MouseEvent arg0) {
 			int row = weekTable.getSelectedRow();
 			int col = weekTable.getSelectedColumn();
-			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
-				dayMenu.show(weekTable, arg0.getX(), arg0.getY()); 
+			if(SwingUtilities.isRightMouseButton(arg0) && modelWeekTable.getValueAt(row, 1) instanceof CalendarItem)
+				popup.show(weekTable, arg0.getX(), arg0.getY()); 
 			
 		}
 
@@ -856,9 +876,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			int row = weekTable.getSelectedRow();
-			int col = weekTable.getSelectedColumn();
-			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
-				dayMenu.show(weekAgendaTable, arg0.getX(), arg0.getY()); 
+			if(SwingUtilities.isRightMouseButton(arg0) && modelWeekAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
+				popup.show(weekAgendaTable, arg0.getX(), arg0.getY()); 
 			
 		}
 
@@ -873,13 +892,58 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 	}
 	
+	class monthTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = monthTable.getSelectedRow();
+			int col = monthTable.getSelectedColumn();
+			if(SwingUtilities.isRightMouseButton(arg0) && modelMonthTable.getValueAt(row, 1) instanceof CalendarItem)
+				popup.show(monthTable, arg0.getX(), arg0.getY()); 
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+	}
+	
+	class monthAgendaTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = weekTable.getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0) && modelMonthAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
+				popup.show(monthAgendaTable, arg0.getX(), arg0.getY()); 
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+	}
+	
+	
+	
 	class agendaTableMouseListener implements MouseListener{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			int row = agendaTable.getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-				dayMenu.show(agendaTable, arg0.getX(), arg0.getY()); 
+				popup.show(agendaTable, arg0.getX(), arg0.getY()); 
 				
 		}
 
@@ -922,13 +986,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		public void mousePressed(MouseEvent arg0) {}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			if(SwingUtilities.isRightMouseButton(e))
-			{
-				System.out.println("here");
-				calendarView.show(calendarTable, e.getX(), e.getY());
-			}
-		}
+		public void mouseReleased(MouseEvent e) {}
 		
 	}
 	
@@ -1039,9 +1097,23 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(viewType.getSelectedItem().equals("Week"))
-				toggleViewType(true);
+			{
+				weekPanel.setVisible(true);
+				dayPanel.setVisible(false);
+				monthPanel.setVisible(false);
+			}
+			else if(viewType.getSelectedItem().equals("Month"))
+			{
+				weekPanel.setVisible(false);
+				dayPanel.setVisible(false);
+				monthPanel.setVisible(true);
+			}
 			else
-				toggleViewType(false);
+			{
+				weekPanel.setVisible(false);
+				dayPanel.setVisible(true);
+				monthPanel.setVisible(false);
+			}
 			
 		}
 		
@@ -1113,17 +1185,15 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		public void windowOpened(WindowEvent arg0) {}
 		
 	}
-	private void toggleViewType(boolean toggle) {
-		weekPanel.setVisible(toggle);
-		mainCalendarPanel.setVisible(!toggle);
-	}
 	
 	private void toggleAgendaView(boolean toggle) {
 		agenda.setSelected(toggle);
 		scrollAgendaTable.setVisible(toggle);
 		scrollAgendaTable.setEnabled(toggle);
 		scrollWeekAgendaTable.setVisible(toggle);
-		scrollWeekAgendaTable.setVisible(toggle);
+		scrollWeekAgendaTable.setEnabled(toggle);
+		scrollMonthAgendaTable.setVisible(toggle);
+		scrollMonthAgendaTable.setEnabled(toggle);
 	}
 	
 	private void toggleDayView(boolean toggle) {
@@ -1132,6 +1202,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		scrollDayTable.setEnabled(toggle);
 		scrollWeekTable.setVisible(toggle);
 		scrollWeekTable.setEnabled(toggle);
+		scrollMonthTable.setVisible(toggle);
+		scrollMonthTable.setEnabled(toggle);
 	}
 	
 	private void toggleCreateView(boolean toggle) {
@@ -1204,7 +1276,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	class markTaskListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JTable invoker = (JTable)dayMenu.getInvoker();
+			JTable invoker = (JTable)popup.getInvoker();
 			CalendarTask task;
 			if(invoker.getValueAt(invoker.getSelectedRow(), 1) instanceof CalendarTask) {
 				task = (CalendarTask)invoker.getValueAt(invoker.getSelectedRow(), 1);
@@ -1218,7 +1290,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	class deleteItemListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JTable invoker = (JTable)dayMenu.getInvoker();
+			JTable invoker = (JTable)popup.getInvoker();
 			CalendarItem item;
 			if(invoker.getValueAt(invoker.getSelectedRow(), 1) instanceof CalendarItem) {
 				item = (CalendarItem)invoker.getValueAt(invoker.getSelectedRow(), 1);
