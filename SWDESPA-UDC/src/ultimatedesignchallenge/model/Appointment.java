@@ -1,6 +1,6 @@
 package ultimatedesignchallenge.model;
 
-public class Appointment extends Timeslot {
+public class Appointment extends Slot {
 	private int APPOINTMENTid;
 	private int DOCTORid;
 	private int CLIENTid;
