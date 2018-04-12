@@ -1,5 +1,11 @@
 package ultimatedesignchallenge.services;
 
-public class AppointmentService {
+import java.util.List;
 
+public class AppointmentService {
+	
+	public List<Appointment> getAll()
+	{
+		
+	}
 }
