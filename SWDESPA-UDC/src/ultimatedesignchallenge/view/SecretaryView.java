@@ -72,7 +72,7 @@ public class SecretaryView extends CalendarFramework{
 		this.view = this;
 		
 		instantiate();
-		constructorGen("Secretary Login", "Clinic Secretary");
+		constructorGen("Clinic Secretary");
 		doctorListInst();
 		init();
 		initListeners();
@@ -86,8 +86,8 @@ public class SecretaryView extends CalendarFramework{
 	}
 	
 	private void init() {
-		dayMenu.add(notifyDoctor);
-		dayMenu.add(notifyClient);
+		popup.add(notifyDoctor);
+		popup.add(notifyClient);
 		
 		createName.setText(createPlaceholderName);
 		createName.setForeground(Color.GRAY);

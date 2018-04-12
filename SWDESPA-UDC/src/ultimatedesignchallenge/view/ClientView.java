@@ -69,7 +69,7 @@ public class ClientView extends CalendarFramework{
 //		this.controller = controller;
 		this.view = this;
 		
-		constructorGen("Client Login", "Client");
+		constructorGen("Client");
 		doctorListInst();
 		initListeners();
 		

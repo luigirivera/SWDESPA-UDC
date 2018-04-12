@@ -70,7 +70,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		this.view = this;
 		
 		instantiate();
-		constructorGen("Doctor Login", "Doctor");
+		constructorGen("Doctor");
 		init();
 		initListeners();
 	}

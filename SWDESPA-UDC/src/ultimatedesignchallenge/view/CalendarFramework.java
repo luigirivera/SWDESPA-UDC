@@ -74,8 +74,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			"October", "November", "December" };
 
 	/**** Swing Components ****/
-	protected JLabel monthLabel, titleLabel, dayLabel, createTOLabelTime, login;
-	protected JTextField createName, startDate, loginUser;
+	protected JLabel monthLabel, titleLabel, dayLabel, createTOLabelTime;
+	protected JTextField createName, startDate;
 	
 	protected JButton btnPrev, btnNext, create, today, save, discard;
 	protected JToggleButton calendar, agenda, doctors;
@@ -90,20 +90,16 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 	/**** Added during the project ****/
 	protected int taskCount, dayToday;
-	
-	protected JPasswordField loginPass;
 	protected JComboBox<LocalTime> startTime, endTime;
 	protected JComboBox<String> viewType, doctorsCBList, recurringCBList;
 	protected CellDataHolder validCells;
 	protected final String createPlaceholderName = "Client/Appointment Name";
 	protected final String createPlaceholderStartDate = "Date";
-	protected final String loginPlaceholderUser = "Username";
-	protected final String loginPlaceholderPass = "Password";
 	protected JTable dayTable, agendaTable, weekTable, weekAgendaTable, monthTable, monthAgendaTable;
 	protected DefaultTableModel modelDayTable, modelAgendaTable, modelWeekTable, modelWeekAgendaTable, modelMonthTable, modelMonthAgendaTable;
 	protected JScrollPane scrollDayTable, scrollAgendaTable, scrollWeekTable, scrollWeekAgendaTable, scrollDoctorList, scrollMonthTable, scrollMonthAgendaTable;
 	protected JPopupMenu popup;
-	protected JFrame loginFrame, doctorListFrame;
+	protected JFrame doctorListFrame;
 	protected JList<String> doctorList;
 	protected DefaultListModel<String> modelDoctorList;
 	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll;
@@ -119,7 +115,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		super(name);
 	}
 	
-	protected void constructorGen(String loginLabel, String topLabel) {
+	protected void constructorGen(String topLabel) {
 //		this.monthItems = new ArrayList<CalendarItem>();
 //		this.dayItems = new ArrayList<CalendarItem>();
 //		
@@ -137,7 +133,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		setSize(950, 700);
 		
 		
-		commonInstantiate(loginLabel, topLabel);
+		commonInstantiate(topLabel);
 		commonInit();
 		generateCalendar(calendarTable, modelCalendarTable);
 		generateCalendar(monthTable, modelMonthTable);
@@ -156,9 +152,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		this.toggleDayView(true);
 	}
 	
-	private void commonInstantiate(String loginLabel, String topLabel) {
-		loginFrame = new JFrame("Login");
-		
+	private void commonInstantiate(String topLabel) {		
 		loginPanel = new JPanel();
 		calendarPanel = new JPanel();
 		topPanel = new JPanel();
@@ -167,14 +161,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		weekPanel = new JPanel();
 		monthPanel = new JPanel();
 		
-		loginUser = new JTextField();
-		loginPass = new JPasswordField();
-		
 		monthLabel = new JLabel("January");
 		dayLabel = new JLabel("");
 		createTOLabelTime = new JLabel("to");
 		titleLabel = new JLabel(topLabel);
-		login = new JLabel(loginLabel);
 		
 		btnPrev = new JButton("<");
 		btnNext = new JButton(">");
@@ -263,11 +253,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	private void commonInit() {
 		topPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
-		loginFrame.setSize(520, 225);
-		loginFrame.setLayout(null);
-		loginFrame.setResizable(false);
-		
-		loginFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
 		
 		loginPanel.setLayout(null);
 		calendarPanel.setLayout(null);
@@ -281,7 +267,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		popup.add(cancelAll);
 		
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
-		login.setFont(new Font("Arial", Font.BOLD, 25));
 		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
 		createTOLabelTime.setFont(new Font("Arial", Font.BOLD, 15));
@@ -305,12 +290,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		startDate.setHorizontalAlignment(JTextField.CENTER);
 		startDate.setText(createPlaceholderStartDate);
 		
-		loginUser.setText(loginPlaceholderUser);
-		loginPass.setText(loginPlaceholderPass);
+
 		
 		startDate.setForeground(Color.GRAY);
-		loginUser.setForeground(Color.GRAY);
-		loginPass.setForeground(Color.GRAY);
+
 		
 		add(calendarPanel);
 		calendarPanel.add(monthLabel);
@@ -352,12 +335,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		monthPanel.add(scrollMonthTable);
 		monthPanel.add(scrollMonthAgendaTable);
 		monthPanel.setVisible(false);
-		
-		loginFrame.add(loginPanel);
-		loginPanel.add(login);
-		loginPanel.add(loginUser);
-		loginPanel.add(loginPass);
-		loginFrame.setVisible(true);
 		
 		scrollAgendaTable.setVisible(false);
 		scrollWeekAgendaTable.setVisible(false);
@@ -402,11 +379,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		monthPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		scrollMonthTable.setBounds(20, 20, monthPanel.getWidth(), monthPanel.getHeight());
 		scrollMonthAgendaTable.setBounds(20, 20, weekPanel.getWidth()-50, weekPanel.getHeight()-50);
-
-		loginPanel.setBounds(0, 0, loginFrame.getWidth(), loginFrame.getHeight());
-		login.setBounds(190, 20, 250, 50);
-		loginUser.setBounds(140, login.getY()+60, 250, 30);
-		loginPass.setBounds(140, loginUser.getY()+30, 250, 30);
 		
 		toggleRecurringCBList(false);
 	}
@@ -776,13 +748,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		cancel.addActionListener(new deleteItemListener());
 		
-		loginUser.addKeyListener(new loginKeyListener());
-		loginPass.addKeyListener(new loginKeyListener());
-		loginUser.addFocusListener(new loginUserFocusListener());
-		loginPass.addFocusListener(new loginPassFocusListener());
-		
-		
-
 		try {
 			doctorListFrame.addWindowListener(new doctorListWindowListener());
 			doctors.addActionListener(new toggleDoctorListListener());
@@ -1300,69 +1265,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}
 	}
 	
-	class loginKeyListener implements KeyListener{
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				login();
-			
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {}
-		
-	}
 	
-	class loginUserFocusListener implements FocusListener{
-
-		@Override
-		public void focusGained(FocusEvent arg0) {
-			if(loginUser.getText().equals(loginPlaceholderUser))
-			{
-				loginUser.setText("");
-				loginUser.setForeground(Color.BLACK);
-			}
-			
-		}
-
-		@Override
-		public void focusLost(FocusEvent arg0) {
-			if(loginUser.getText().equals(""))
-			{
-				loginUser.setText(loginPlaceholderUser);
-				loginUser.setForeground(Color.GRAY);
-			}
-			
-		}
-		
-	}
-	
-	class loginPassFocusListener implements FocusListener{
-
-		@Override
-		public void focusGained(FocusEvent arg0) {
-			if(String.valueOf(loginPass.getPassword()).equals(loginPlaceholderPass))
-			{
-				loginPass.setText("");
-				loginPass.setForeground(Color.BLACK);
-			}
-			
-		}
-
-		@Override
-		public void focusLost(FocusEvent arg0) {
-			if(String.valueOf(loginPass.getPassword()).equals(""))
-			{
-				loginPass.setText(loginPlaceholderPass);
-				loginPass.setForeground(Color.GRAY);
-			}
-			
-		}
-	}
 	// ------------CELL DATA------------//
 
 	class CellData {
