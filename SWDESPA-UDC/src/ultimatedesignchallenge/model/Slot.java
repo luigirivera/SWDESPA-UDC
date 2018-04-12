@@ -1,5 +1,4 @@
 package ultimatedesignchallenge.model;
 
-public class Free extends Timeslot {
-
+public class Slot {
 }
