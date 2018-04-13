@@ -10,6 +10,7 @@ public class SlotBuilder {
 		for(int i = 0; i < intervals; i++) {
 			slot.addInterval(new AvailableInterval(temp, incrementTime(temp), "doctor1")); //change name later
 			temp = incrementTime(temp);
+			System.out.println(temp);
 		}
 		
 		return slot;
@@ -28,7 +29,7 @@ public class SlotBuilder {
 		return slot;
 	}
 	
-	public SlotC buildDoc2Availabe(String startTime, String endTime) { //change if needed (slotC because its the slot in controller)
+	public SlotC buildDoc2Available(String startTime, String endTime) { //change if needed (slotC because its the slot in controller)
 		SlotC slot = new SlotC();
 		
 		int intervals = timeToInterval(startTime, endTime);

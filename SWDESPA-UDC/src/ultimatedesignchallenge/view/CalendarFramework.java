@@ -60,6 +60,8 @@ import designchallenge2.item.CalendarTask;
 import designchallenge2.view.AgendaHTMLItemStringFormatter;
 import designchallenge2.view.DayHTMLItemStringFormatter;
 import designchallenge2.view.ItemStringFormatter;
+import ultimatedesignchallenge.controller.SlotBuilder;
+import ultimatedesignchallenge.controller.SlotC;
 import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
@@ -1030,7 +1032,12 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			//saveCreation(); we dont know what this is so we commented it out
+			SlotBuilder builder = new SlotBuilder();
+			SlotC slot = builder.buildDoc1Available(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString());
+			// to do: add created slot to database, set appointment ID based on appointment name
 			
+			//if(recurringAppRB.isSelected())
+				// to do: also set recurringID 
 		}
 	}
 	
