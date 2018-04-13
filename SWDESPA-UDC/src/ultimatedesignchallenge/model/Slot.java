@@ -16,6 +16,7 @@ public class Slot {
 	public static final String COL_END = "end";
 	public static final String COL_APPOINTMENTID = "APPOINTMENTid";
 	public static final String COL_RECURRINGID = "RECURRINGid";
+	
 	public int getSLOTid() {
 		return SLOTid;
 	}
