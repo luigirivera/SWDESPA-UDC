@@ -14,7 +14,7 @@ public class Appointment {
 	private List<Slot> slots;
 
 	public static final String TABLE = "APPOINTMENT";
-	public static final String COL_APPOINTEMENTID = "APPOINTMENTid";
+	public static final String COL_APPOINTMENTID = "APPOINTMENTid";
 	public static final String COL_DOCTORID = "DOCTORid";
 	public static final String COL_CLIENTID = "CLIENTid";
 	public static final String COL_RECURRINGID = "RECURRINGid";
