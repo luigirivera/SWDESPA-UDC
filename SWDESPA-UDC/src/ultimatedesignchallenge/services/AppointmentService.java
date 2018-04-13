@@ -12,7 +12,7 @@ import ultimatedesignchallenge.model.Appointment;
 
 public class AppointmentService {
 	
-	public List<Appointment> getAll()
+	public List<Appointment> getAllAppointments()
 	{
 		List<Appointment> appointments = new ArrayList<Appointment>();
 		
