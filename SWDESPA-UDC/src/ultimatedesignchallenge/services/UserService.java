@@ -15,7 +15,7 @@ import ultimatedesignchallenge.model.Client;
 
 public class UserService {
 	
-	public List<User> getAll()
+	public List<User> getAllSlots()
 	{
 		List<User> users = new ArrayList<User>();
 		
