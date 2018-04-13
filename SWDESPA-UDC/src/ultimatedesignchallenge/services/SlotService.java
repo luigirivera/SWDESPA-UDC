@@ -1,9 +1,11 @@
 package ultimatedesignchallenge.services;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,35 @@ public class SlotService {
 		return slots;
 	}
 	
+	public List<Slot> getOn(LocalDate date) {
+		List<Slot> slots = new ArrayList<Slot>();
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Slot.TABLE
+				+ " WHERE DATE(" + Slot.COL_START + ") = ?"
+				+ " ORDER BY " + Slot.COL_START;
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setDate(1, Date.valueOf(date));
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				slots.add(toSlot(rs));
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[SLOT] SELECT SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[SLOT] SELECT FAILED");
+			e.printStackTrace();
+		}
+		
+		return slots;
+	}
+	
 	private Slot toSlot(ResultSet rs) throws SQLException{
 		Slot slot = new Slot();
 		
@@ -49,5 +80,8 @@ public class SlotService {
 		return slot;
 	}
 	
-	
+	public static void main(String[] args) {
+		SlotService ss = new SlotService();
+		System.out.println(ss.getOn(LocalDate.of(2018, 4, 14)));
+	}
 }

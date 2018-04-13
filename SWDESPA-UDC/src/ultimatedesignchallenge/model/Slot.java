@@ -45,4 +45,8 @@ public class Slot {
 		this.end = end;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%d %s to %s", id, start.toString(), end.toString());
+	}
 }
