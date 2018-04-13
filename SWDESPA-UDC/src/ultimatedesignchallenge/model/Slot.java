@@ -1,14 +1,18 @@
 package ultimatedesignchallenge.model;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Slot {
 	
-	private int SLOTid;
+	/*private int SLOTid;
 	private java.sql.Date start;
 	private java.sql.Date end;
 	private int APPOINTMENTid;
-	private int RECURRINGid;
+	private int RECURRINGid;*/
+	
+	private int id;
+	private LocalDateTime start;
+	private LocalDateTime end;
 	
 	public static final String TABLE = "SLOT";
 	public static final String COL_SLOTID = "SLOTid";
@@ -16,37 +20,27 @@ public class Slot {
 	public static final String COL_END = "end";
 	public static final String COL_APPOINTMENTID = "APPOINTMENTid";
 	public static final String COL_RECURRINGID = "RECURRINGid";
-	
-	public int getSLOTid() {
-		return SLOTid;
+	public int getId() {
+		return id;
 	}
-	public void setSLOTid(int sLOTid) {
-		SLOTid = sLOTid;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public java.sql.Date getStart() {
+	public LocalDateTime getStart() {
 		return start;
 	}
-	public void setStart(java.sql.Date start) {
+	public void setStart(LocalDateTime start) {
 		this.start = start;
 	}
-	public java.sql.Date getEnd() {
+	public LocalDateTime getEnd() {
 		return end;
 	}
-	public void setEnd(java.sql.Date end) {
+	public void setEnd(LocalDateTime end) {
 		this.end = end;
 	}
-	public int getAPPOINTMENTid() {
-		return APPOINTMENTid;
-	}
-	public void setAPPOINTMENTid(int aPPOINTMENTid) {
-		APPOINTMENTid = aPPOINTMENTid;
-	}
-	public int getRECURRINGid() {
-		return RECURRINGid;
-	}
-	public void setRECURRINGid(int rECURRINGid) {
-		RECURRINGid = rECURRINGid;
-	}
+	
+	
+	
 	
 	
 	
