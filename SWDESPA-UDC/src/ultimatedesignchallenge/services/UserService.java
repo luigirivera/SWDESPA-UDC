@@ -54,6 +54,34 @@ public class UserService {
 		return user;
 	}
 	
+	public User getUser(String username, String password) {
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		User user = new User();
+		
+		System.out.println(username + "  " +password);
+		
+		String query = "SELECT * FROM " + User.TABLE + " WHERE " + User.COL_USERNAME + " = ? AND " + User.COL_PASSWORD + " = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setString(1, username);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next())
+				user = toUser(rs);
+
+		}catch(SQLException e) {
+			System.out.println("[USER] SELECT FAILED");
+			e.printStackTrace();
+		}
+		
+		return user;
+	}
+	
 	public boolean ifGuest(int id)
 	{
 		boolean result = false;
@@ -70,6 +98,9 @@ public class UserService {
 			
 			while(rs.next())
 				result = true;
+			
+			ps.close();
+			rs.close();
 				
 			System.out.println("[USER] CHECK GUEST SUCCESS");	
 		}catch(SQLException e) {
@@ -85,7 +116,7 @@ public class UserService {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "SELECT * FROM " + User.TABLE + " WHERE " + User.COL_USERID + " IN (SELECT " + Doctor.COL_USERID + " FROM " + Doctor.TABLE + " WHERE" + Doctor.COL_USERID + "= ?)";
+		String query = "SELECT * FROM " + User.TABLE + " WHERE " + User.COL_USERID + " IN (SELECT " + Doctor.COL_USERID + " FROM " + Doctor.TABLE + " WHERE " + Doctor.COL_USERID + "= ?)";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
@@ -95,6 +126,9 @@ public class UserService {
 			
 			while(rs.next())
 				result = true;
+			
+			ps.close();
+			rs.close();
 			
 			System.out.println("[USER] CHECK DOCTOR SUCCESS");	
 		}catch(SQLException e) {
@@ -110,7 +144,7 @@ public class UserService {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "SELECT * FROM " + Secretary.TABLE + " WHERE " + Secretary.COL_USERID + " IN (SELECT " + Secretary.COL_USERID + " FROM " + Secretary.TABLE + " WHERE" + Secretary.COL_USERID + "= ?)";
+		String query = "SELECT * FROM " + Secretary.TABLE + " WHERE " + Secretary.COL_USERID + " IN (SELECT " + Secretary.COL_USERID + " FROM " + Secretary.TABLE + " WHERE " + Secretary.COL_USERID + "= ?)";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
@@ -120,6 +154,9 @@ public class UserService {
 			
 			while(rs.next())
 				result = true;
+			
+			ps.close();
+			rs.close();
 			
 			System.out.println("[USER] CHECK SECRETARY SUCCESS");	
 		}catch(SQLException e) {
@@ -135,7 +172,7 @@ public class UserService {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "SELECT * FROM " + Client.TABLE + " WHERE " + Client.COL_USERID + " IN (SELECT " + Client.COL_USERID + " FROM " + Client.TABLE + " WHERE" + Client.COL_USERID + "= ?)";
+		String query = "SELECT * FROM " + Client.TABLE + " WHERE " + Client.COL_USERID + " IN (SELECT " + Client.COL_USERID + " FROM " + Client.TABLE + " WHERE " + Client.COL_USERID + "= ?)";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
@@ -145,6 +182,9 @@ public class UserService {
 			
 			while(rs.next())
 				result = true;
+			
+			ps.close();
+			rs.close();
 			
 			System.out.println("[USER] CHECK CLIENT SUCCESS");	
 		}catch(SQLException e) {

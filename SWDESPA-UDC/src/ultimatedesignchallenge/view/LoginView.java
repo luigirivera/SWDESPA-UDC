@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import ultimatedesignchallenge.controller.UserController; //temp
+
 public class LoginView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
@@ -83,12 +85,14 @@ public class LoginView extends JFrame {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-				new ClientView();
-				new DoctorView();
-				new SecretaryView();
-			}
 				
-			
+				UserController checker = new UserController(); //this is just temporary, shouldn't instantiate here(just here for testing)
+				checker.checkLogin(loginUser.getText(), loginPass.getText());
+				
+//				new ClientView();
+//				new DoctorView();
+//				new SecretaryView();
+			}
 		}
 
 		@Override
