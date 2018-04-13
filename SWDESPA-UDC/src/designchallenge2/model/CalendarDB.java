@@ -20,18 +20,15 @@ public class CalendarDB {
 		if (connection == null) {
 			try {
 				Class.forName(DRIVER_NAME);
-				Connection connection = DriverManager.getConnection(URL + DATABASE + "?autoReconnect=true&useSSL=false",
+				connection = DriverManager.getConnection(URL + DATABASE + "?autoReconnect=true&useSSL=false",
 						USERNAME, PASSWORD);
 				System.out.println("[MYSQL] Connection successful");
-				return connection;
 			} catch (SQLException e) {
 				System.out.println("[MYSQL] Connection failed!");
 				e.printStackTrace();
-				return null;
 			} catch (ClassNotFoundException e) {
 				System.out.println("[MYSQL] Connection failed!");
 				e.printStackTrace();
-				return null;
 			}
 		}
 		
