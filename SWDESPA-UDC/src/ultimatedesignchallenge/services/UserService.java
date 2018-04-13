@@ -9,6 +9,9 @@ import java.util.List;
 
 import designchallenge2.model.CalendarDB;
 import ultimatedesignchallenge.model.User;
+import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.Secretary;
+import ultimatedesignchallenge.model.Client;
 
 public class UserService {
 	
@@ -71,6 +74,81 @@ public class UserService {
 			System.out.println("[USER] CHECK GUEST SUCCESS");	
 		}catch(SQLException e) {
 			System.out.println("[USER] CHECK GUEST FAILED");
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public boolean ifDoctor(int id) { // assuming this id is userid
+		boolean result = false;
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + User.TABLE + " WHERE " + User.COL_USERID + " IN (SELECT " + Doctor.COL_USERID + " FROM " + Doctor.TABLE + " WHERE" + Doctor.COL_USERID + "= ?)";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				result = true;
+			
+			System.out.println("[USER] CHECK DOCTOR SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[USER] CHECK DOCTOR FAILED");
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public boolean ifSecretary(int id) { // assuming this id is userid
+		boolean result = false;
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Secretary.TABLE + " WHERE " + Secretary.COL_USERID + " IN (SELECT " + Secretary.COL_USERID + " FROM " + Secretary.TABLE + " WHERE" + Secretary.COL_USERID + "= ?)";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				result = true;
+			
+			System.out.println("[USER] CHECK SECRETARY SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[USER] CHECK SECRETARY FAILED");
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public boolean ifClient(int id) { // assuming this id is userid
+		boolean result = false;
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Client.TABLE + " WHERE " + Client.COL_USERID + " IN (SELECT " + Client.COL_USERID + " FROM " + Client.TABLE + " WHERE" + Client.COL_USERID + "= ?)";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				result = true;
+			
+			System.out.println("[USER] CHECK CLIENT SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[USER] CHECK CLIENT FAILED");
 			e.printStackTrace();
 		}
 		
