@@ -1,7 +1,7 @@
 package ultimatedesignchallenge.model;
 
 public class User {
-	protected final int id;
+	protected int id;
 	protected String username;
 	protected String firstname;
 	protected String lastname;
@@ -12,13 +12,13 @@ public class User {
 	public static final String COL_PASSWORD = "password";
 	public static final String COL_FIRSTNAME = "firstname";
 	public static final String COL_LASTNAME = "lastname";
-	
-	public User(int id) {
-		this.id = id;
-	}
 
 	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUsername() {

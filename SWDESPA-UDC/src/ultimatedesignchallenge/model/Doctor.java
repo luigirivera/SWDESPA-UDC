@@ -10,10 +10,6 @@ public class Doctor extends User {
 	public static final String COL_DOCTORID = "DOCTORid";
 	public static final String COL_COLOR = "color";
 
-	public Doctor(int id) {
-		super(id);
-	}
-
 	public String getColor() {
 		return color;
 	}
