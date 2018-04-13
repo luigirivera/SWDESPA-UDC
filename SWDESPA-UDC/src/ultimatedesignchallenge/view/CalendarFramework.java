@@ -176,7 +176,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		calendar = new JToggleButton("Calendar");
 		agenda = new JToggleButton("Agenda");
 		
-		recurringAppRB = new JRadioButton("Recurring Appointment");
+		recurringAppRB = new JRadioButton("Recurring");
 		
 		startTime = new JComboBox<LocalTime>();
 		endTime = new JComboBox<LocalTime>();
@@ -359,7 +359,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		scrollCalendarTable.setBounds(10, 100, 250, 390);
 		
 		createPanel.setBounds(270, 70, this.getWidth() - 270, 610);
-		recurringAppRB.setBounds(10, 70, 140, 50);
+		recurringAppRB.setBounds(10, 70, 150, 50);
 		recurringCBList.setBounds(160, 70, 120, 40);
 		startDate.setBounds(10, 120, 120, 40);
 		startTime.setBounds(10, 160, 120, 40);
