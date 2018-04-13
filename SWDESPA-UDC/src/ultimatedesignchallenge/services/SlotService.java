@@ -11,7 +11,7 @@ import designchallenge2.model.CalendarDB;
 import ultimatedesignchallenge.model.Slot;
 
 public class SlotService {
-
+	
 	public List<Slot> getAll()
 	{
 		List<Slot> slots = new ArrayList<Slot>();
@@ -42,11 +42,9 @@ public class SlotService {
 	private Slot toSlot(ResultSet rs) throws SQLException{
 		Slot slot = new Slot();
 		
-		slot.setSLOTid(rs.getInt(Slot.COL_SLOTID));
-		slot.setStart(rs.getDate(Slot.COL_START));
-		slot.setEnd(rs.getDate(Slot.COL_END));
-		slot.setAPPOINTMENTid(rs.getInt(Slot.COL_APPOINTMENTID));
-		slot.setRECURRINGid(rs.getInt(Slot.COL_RECURRINGID));
+		slot.setId(rs.getInt(Slot.COL_SLOTID));
+		slot.setStart(rs.getTimestamp(Slot.COL_START).toLocalDateTime());
+		slot.setEnd(rs.getTimestamp(Slot.COL_END).toLocalDateTime());
 		
 		return slot;
 	}

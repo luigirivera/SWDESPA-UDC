@@ -1,10 +1,10 @@
 package ultimatedesignchallenge.model;
 
 public class User {
-	private final int id;
-	private String username;
-	private String firstname;
-	private String lastname;
+	protected final int id;
+	protected String username;
+	protected String firstname;
+	protected String lastname;
 
 	public static final String TABLE = "USER";
 	public static final String COL_USERID = "USERid";
