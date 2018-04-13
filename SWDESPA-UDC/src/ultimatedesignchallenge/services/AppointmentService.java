@@ -42,7 +42,7 @@ public class AppointmentService {
 	private Appointment toAppointment(ResultSet rs) throws SQLException {
 		Appointment appointment = new Appointment();
 		
-		appointment.setAPPOINTMENTid(rs.getInt(Appointment.COL_APPOINTEMENTID));
+		appointment.setId(rs.getInt(Appointment.COL_APPOINTMENTID));
 		appointment.setDOCTORid(rs.getInt(Appointment.COL_DOCTORID));
 		appointment.setCLIENTid(rs.getInt(Appointment.COL_CLIENTID));
 		appointment.setRECURRINGid(rs.getInt(Appointment.COL_RECURRINGID));
@@ -76,7 +76,7 @@ public class AppointmentService {
 	{
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "DELETE FROM " + Appointment.TABLE + " WHERE " + Appointment.COL_APPOINTEMENTID + " = ?";
+		String query = "DELETE FROM " + Appointment.TABLE + " WHERE " + Appointment.COL_APPOINTMENTID + " = ?";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
