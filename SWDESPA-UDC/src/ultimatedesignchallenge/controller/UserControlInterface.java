@@ -1,7 +1,5 @@
 package ultimatedesignchallenge.controller;
 
-import ultimatedesignchallenge.model.User;
-
 public interface UserControlInterface {
 	public boolean isGuest(int userID);
 	public boolean isDoctor(int userID);
