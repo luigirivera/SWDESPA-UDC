@@ -101,7 +101,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected JFrame doctorListFrame;
 	protected JList<String> doctorList;
 	protected DefaultListModel<String> modelDoctorList;
-	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll;
+	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, update;
 	protected List<CalendarItem> monthItems;
 	protected List<CalendarItem> dayItems;
 
@@ -186,6 +186,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		popup = new JPopupMenu();
 		cancel = new JMenuItem("Cancel");
 		cancelAll = new JMenuItem("Cancel All Meetings");
+		update = new JMenuItem("Update");
 		
 		modelCalendarTable = new DefaultTableModel() {
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -262,6 +263,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		weekPanel.setLayout(null);
 		monthPanel.setLayout(null);
 		
+		popup.add(update);
 		popup.add(cancel);
 		popup.add(cancelAll);
 		
