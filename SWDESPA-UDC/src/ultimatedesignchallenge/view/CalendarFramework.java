@@ -65,7 +65,6 @@ import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
 //NOTE: Fix generateWeekAgendaTable thanks - Louie
 //TODO: Recurring Events because idk how that works - Louie
-//TODO: Make login() method for logging in - Louiw
 
 public abstract class CalendarFramework extends JFrame implements CalendarObserver{
 	/**** Day Components ****/

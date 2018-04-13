@@ -61,6 +61,8 @@ public class UserService {
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next())
