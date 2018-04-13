@@ -45,9 +45,8 @@ public class UserService {
 	private User toUser(ResultSet rs) throws SQLException {
 		User user = new User();
 		
-		user.setUSERid(rs.getInt(User.COL_USERID));
+		user.setId(rs.getInt(User.COL_USERID));
 		user.setUsername(rs.getString(User.COL_USERNAME));
-		user.setPassword(rs.getString(User.COL_PASSWORD));
 		user.setFirstname(rs.getString(User.COL_FIRSTNAME));
 		user.setLastname(rs.getString(User.COL_LASTNAME));
 		
