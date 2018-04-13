@@ -66,7 +66,8 @@ import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
 //NOTE: Fix generateWeekAgendaTable thanks - Louie
 //TODO: Recurring Events because idk how that works - Louie
 
-public abstract class CalendarFramework extends JFrame implements CalendarObserver{
+public class CalendarFramework extends JFrame implements CalendarObserver{
+	private static final long serialVersionUID = 1L;
 	/**** Day Components ****/
 	protected int yearBound, monthBound, dayBound, yearToday, monthToday;
 	protected String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
