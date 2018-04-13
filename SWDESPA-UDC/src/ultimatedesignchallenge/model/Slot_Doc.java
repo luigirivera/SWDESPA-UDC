@@ -1,31 +1,17 @@
 package ultimatedesignchallenge.model;
 
-public class Slot_Doc {
+public class Slot_Doc extends Slot{
 	public static final String TABLE = "SLOT_DOC";
 	public static final String COL_SLOTID = "SLOTid";
 	public static final String COL_DOCTORID = "DOCTORid";
 	
-	private String DocSlotID;
-	private String DocID;
-	
-	public void setDocSlotID(String SlotID) {
-		
-		DocSlotID = SlotID;
+	private String DOCTORid;
+
+	public String getDOCTORid() {
+		return DOCTORid;
 	}
-	
-	public String getDocSlotID() {
-		
-		return DocSlotID;
+
+	public void setDOCTORid(String dOCTORid) {
+		DOCTORid = dOCTORid;
 	}
-	
-	public void setDocID(String DocID) {
-		
-		this.DocID = DocID;
-	}
-	
-	public String getDocID() {
-		
-		return DocID;
-	}
-	
 }
