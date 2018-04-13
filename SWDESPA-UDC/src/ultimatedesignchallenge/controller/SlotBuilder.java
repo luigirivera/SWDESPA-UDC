@@ -2,7 +2,7 @@ package ultimatedesignchallenge.controller;
 
 public class SlotBuilder {
 
-	public SlotC buildDoc1Availabe(String startTime, String endTime) { //change if needed (slotC because its the slot in controller)
+	public SlotC buildDoc1Available(String startTime, String endTime) { //change if needed (slotC because its the slot in controller)
 		SlotC slot = new SlotC();
 		
 		int intervals = timeToInterval(startTime, endTime);
@@ -74,6 +74,7 @@ public class SlotBuilder {
 		
 		int endHour = Integer.parseInt(end.split(":")[0]);
 		int endMin = Integer.parseInt(end.split(":")[1]);
+		String result = null;
 		
 		if(endMin == 30) {
 			endMin = 0;
@@ -81,7 +82,10 @@ public class SlotBuilder {
 		}else
 			endMin += 30;
 		
-		String result = endHour + ":" + endMin;
+		if(endMin == 0)
+			result = endHour + ":00";
+		else
+			result = endHour + ":" +endMin;
 		
 		return result;
 	}

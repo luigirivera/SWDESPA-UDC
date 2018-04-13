@@ -402,7 +402,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		calendarPanel.add(doctors);
 		createPanel.add(doctorsCBList);
 		doctors.setBounds(10, 500, 250,50);
-		doctorsCBList.setBounds(160, 120, 120, 40);	
+		doctorsCBList.setBounds(160, 120, 120, 40);
 		doctorListPanel.setBounds(0, 0, doctorListFrame.getWidth(), doctorListFrame.getHeight());
 		scrollDoctorList.setBounds(doctorListPanel.getBounds());
 	}
@@ -1029,7 +1029,8 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			saveCreation();
+			//saveCreation(); we dont know what this is so we commented it out
+			
 		}
 	}
 	
