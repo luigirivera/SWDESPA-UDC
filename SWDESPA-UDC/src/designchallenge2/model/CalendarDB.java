@@ -8,8 +8,8 @@ public class CalendarDB {
 	private static String DRIVER_NAME = "com.mysql.jdbc.Driver";
 	private static String URL = "jdbc:mysql://127.0.0.1:3306/";
 	private static String USERNAME = "root";
-	private static String PASSWORD = "5646";
-	private static String DATABASE = "swdespa_db";
+	private static String PASSWORD = "agentblue";
+	private static String DATABASE = "UDC";
 
 	private static Connection connection = null;
 
