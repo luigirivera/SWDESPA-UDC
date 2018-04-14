@@ -11,8 +11,17 @@ import designchallenge2.model.CalendarDB;
 import ultimatedesignchallenge.model.Appointment;
 
 public class AppointmentService {
+	private ClientService csv;
+	private DoctorService dsv;
+	private SlotService ssv;
 	
-	public List<Appointment> getAllAppointments()
+	public AppointmentService() {
+		this.csv = new ClientService();
+		this.dsv = new DoctorService();
+		this.ssv = new SlotService();
+	}
+	
+	public List<Appointment> getAll()
 	{
 		List<Appointment> appointments = new ArrayList<Appointment>();
 		
@@ -43,9 +52,9 @@ public class AppointmentService {
 		Appointment appointment = new Appointment();
 		
 		appointment.setId(rs.getInt(Appointment.COL_APPOINTMENTID));
-		appointment.setDOCTORid(rs.getInt(Appointment.COL_DOCTORID));
-		appointment.setCLIENTid(rs.getInt(Appointment.COL_CLIENTID));
-		appointment.setRECURRINGid(rs.getInt(Appointment.COL_RECURRINGID));
+		appointment.setDoctor(dsv.getDoctor(rs.getInt(Appointment.COL_DOCTORID)));
+		appointment.setClient(csv.getClient(rs.getInt(Appointment.COL_CLIENTID)));
+		appointment.setSlots(ssv.getTaken(appointment));
 		
 		return appointment;
 	}
