@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import designchallenge2.model.CalendarDB;
 import ultimatedesignchallenge.model.Appointment;
+import ultimatedesignchallenge.model.Slot;
 
 public class AppointmentService {
 	private ClientService csv;
@@ -63,16 +65,40 @@ public class AppointmentService {
 	{
 		Connection cnt = CalendarDB.getConnection();
 		String query = "INSERT INTO " + Appointment.TABLE + " VALUES(?,?,?,?)";
+		String query2 = "SELECT LAST_INSERT_ID() FROM " + Appointment.TABLE;
+		String query3 = "UPDATE " + Slot.TABLE
+				+ " SET " + Slot.COL_APPOINTMENTID + " = ?"
+				+ " WHERE " + Slot.COL_SLOTID + " = ?"
+				+ " AND " + Slot.COL_APPOINTMENTID + " IS NULL";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
 			
-			ps.setInt(1, appointment.getAPPOINTMENTid());
-			ps.setInt(2, appointment.getDOCTORid());
-			ps.setInt(3, appointment.getCLIENTid());
-			ps.setInt(4, appointment.getRECURRINGid());
+			ps.setNull(1, Types.NULL);
+			ps.setInt(2, appointment.getDoctor().getDoctorId());
+			ps.setInt(3, appointment.getClient().getClientId());
+			
+			ps.executeUpdate();
 			
 			ps.close();
+			
+			ps = cnt.prepareStatement(query2);
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				appointment.setId(rs.getInt(1));
+			}
+			
+			ps.close();
+			
+			for (Slot slot : appointment.getSlots()) {
+				ps = cnt.prepareStatement(query3);
+				
+				ps.setInt(1, appointment.getId());
+				ps.setInt(2, slot.getId());
+				
+				ps.close();
+			}
 			
 			System.out.println("[APPOINTMENT] ADD SUCCESS");
 		}catch(SQLException e) {
