@@ -42,6 +42,11 @@ public class AvailableInterval implements SlotC{
 		return null;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return String.format("Dr: %s Client: idk\n"
+				+ "%s to %s", doctor.getLastname(),
+				startTime.toString(), endTime.toString());
+	}
 	
 }
