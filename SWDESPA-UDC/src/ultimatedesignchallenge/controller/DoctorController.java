@@ -12,7 +12,8 @@ public class DoctorController {
 	}
 	
 	public boolean createFree(LocalDateTime start, LocalDateTime end) {
-		
+		SlotBuilder builder = new SlotBuilder();
+		SlotC slot = builder.buildDoctorAvailable(start, end);
 		return false; //change this
 	}
 }
