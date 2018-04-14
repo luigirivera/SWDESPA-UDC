@@ -111,7 +111,8 @@ public class AppointmentService {
 	{
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "DELETE FROM " + Appointment.TABLE + " WHERE " + Appointment.COL_APPOINTMENTID + " = ?";
+		String query = "DELETE FROM " + Appointment.TABLE
+				+ " WHERE " + Appointment.COL_APPOINTMENTID + " = ?";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
