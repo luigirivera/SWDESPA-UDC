@@ -13,13 +13,13 @@ public class UserController {
 		model = service.getUser(username, password);
 
 		if(service.ifDoctor(model.getId())) {
-			new DoctorView();
+			new DoctorView(model);
 		}
 		else if(service.ifSecretary(model.getId())){
-			new SecretaryView();
+			new SecretaryView(model);
 		}
 		else if(service.ifClient(model.getId())) {
-			new ClientView();
+			new ClientView(model);
 		}
 	}
 }

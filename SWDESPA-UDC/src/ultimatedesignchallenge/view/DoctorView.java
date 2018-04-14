@@ -58,16 +58,21 @@ import designchallenge2.view.AgendaHTMLItemStringFormatter;
 import designchallenge2.view.CalendarObserver;
 import designchallenge2.view.DayHTMLItemStringFormatter;
 import designchallenge2.view.ItemStringFormatter;
+import ultimatedesignchallenge.controller.SlotBuilder;
+import ultimatedesignchallenge.controller.SlotC;
+import ultimatedesignchallenge.model.User;
+import ultimatedesignchallenge.view.DoctorView.saveCreateBtnListener;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
-	private DoctorView view;
+	private static final long serialVersionUID = 1L;
+	private User model;
 	
-	public DoctorView() {
-		super("Doctor Calendar");
+	public DoctorView(User model) {
+		super("Doctor Calendar - " + model.getFirstname());
 		
 //		this.model = model;
 //		this.controller = controller;
-		this.view = this;
+		this.model = model;
 		
 		instantiate();
 		constructorGen("Doctor");
@@ -77,15 +82,26 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	
 	private void instantiate() {
 		
-		createName = new JTextField();		
+		
 	}
 	
 	private void init() {
-		createName.setText(createPlaceholderName);
-		createName.setForeground(Color.GRAY);
-
-		createPanel.add(createName);
-		createName.setBounds(10, 30, 400, 40);
-	
+		save.addActionListener(new saveCreateBtnListener());
 	}
+	
+	class saveCreateBtnListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			//saveCreation(); we dont know what this is so we commented it out
+			SlotBuilder builder = new SlotBuilder();
+			SlotC slot = builder.buildDoc1Available(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString());
+			// to do: add created slot to database, set appointment ID based on appointment name
+			
+			//if(recurringAppRB.isSelected())
+				// to do: also set recurringID 
+		}
+	}
+	
+
+
 }
