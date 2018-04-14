@@ -1,6 +1,6 @@
 package ultimatedesignchallenge.model;
 
-public class User {
+public abstract class User {
 	protected int id;
 	protected String username;
 	protected String firstname;

@@ -9,6 +9,8 @@ import java.util.List;
 
 import designchallenge2.model.CalendarDB;
 import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.Secretary;
+import ultimatedesignchallenge.model.User;
 
 public class DoctorService {
 	
@@ -18,7 +20,8 @@ public class DoctorService {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "SELECT * FROM " + Doctor.TABLE;
+		String query = "SELECT * FROM " + Secretary.TABLE + " INNER JOIN" + User.TABLE
+				+ " ON " + User.COL_USERID + " = " + Secretary.COL_USERID;
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
@@ -39,16 +42,76 @@ public class DoctorService {
 		return doctors;
 	}
 	
+	public Doctor getDoctor(int id) {
+		Doctor result = null;
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Doctor.TABLE + " INNER JOIN " + User.TABLE 
+				+ " ON " + User.COL_USERID + " = " + Doctor.COL_USERID
+				+ " WHERE " + Doctor.COL_USERID + " = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next())
+				result = toDoctor(rs);
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[DOCTOR] GET DOCTOR SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[DOCTOR] GET DOCTOR FAILED");
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public Doctor getDoctor(String username, String password) {
+		Doctor result = null;
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Doctor.TABLE + " INNER JOIN " + User.TABLE 
+				+ " ON " + User.COL_USERID + " = " + Doctor.COL_USERID
+				+ " WHERE " + Doctor.COL_USERNAME + " = ?"
+				+ " AND " + Doctor.COL_PASSWORD + " = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setString(1, username);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next())
+				result = toDoctor(rs);
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[DOCTOR] GET DOCTOR SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[DOCTOR] GET DOCTOR FAILED");
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
 	private Doctor toDoctor(ResultSet rs) throws SQLException {
 		Doctor doctor = new Doctor();
 		
-		doctor.setDOCTORid(rs.getInt(Doctor.COL_DOCTORID));
+		doctor.setId(rs.getInt(User.COL_USERID));
 		doctor.setColor(rs.getString(Doctor.COL_COLOR));
-		doctor.setUSERid(rs.getInt(Doctor.COL_USERID));
-		doctor.setUsername(rs.getString(Doctor.COL_USERNAME));
-		doctor.setPassword(rs.getString(Doctor.COL_PASSWORD));
-		doctor.setFirstname(rs.getString(Doctor.COL_FIRSTNAME));
-		doctor.setLastname(rs.getString(Doctor.COL_LASTNAME));
+		doctor.setUsername(rs.getString(User.COL_USERNAME));
+		doctor.setFirstname(rs.getString(User.COL_FIRSTNAME));
+		doctor.setLastname(rs.getString(User.COL_LASTNAME));
 		
 		return doctor;
 	}

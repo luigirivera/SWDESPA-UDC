@@ -82,6 +82,7 @@ public class SlotService {
 	
 	public static void main(String[] args) {
 		SlotService ss = new SlotService();
+		System.out.println(ss.getAll());
 		System.out.println(ss.getOn(LocalDate.of(2018, 4, 14)));
 	}
 }

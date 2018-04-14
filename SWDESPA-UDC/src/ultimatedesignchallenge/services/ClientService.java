@@ -7,8 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.omg.PortableInterceptor.USER_EXCEPTION;
+
 import designchallenge2.model.CalendarDB;
 import ultimatedesignchallenge.model.Client;
+import ultimatedesignchallenge.model.User;
 
 public class ClientService {
 
@@ -18,7 +21,8 @@ public class ClientService {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "SELECT * FROM " + Client.TABLE;
+		String query = "SELECT * FROM " + Client.TABLE + " INNER JOIN " + User.TABLE 
+				+ " ON " + User.COL_USERID + " = " + Client.COL_USERID;
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
@@ -39,15 +43,108 @@ public class ClientService {
 		return clients;
 	}
 	
+	public Client getGuest(int id)
+	{
+		Client result = null;
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Client.TABLE + " INNER JOIN " + User.TABLE 
+				+ " ON " + User.COL_USERID + " = " + Client.COL_USERID
+				+ " WHERE " + User.COL_USERNAME + " IS NULL"
+				+ " AND " + Client.COL_USERID + " = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next())
+				result = toClient(rs);
+			
+			ps.close();
+			rs.close();
+				
+			System.out.println("[CLIENT] GET GUEST SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[CLIENT] GET GUEST FAILED");
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public Client getClient(int id) { // assuming this id is userid
+		Client result = null;
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Client.TABLE + " INNER JOIN " + User.TABLE 
+				+ " ON " + User.COL_USERID + " = " + Client.COL_USERID
+				+ " WHERE " + User.COL_USERNAME + " IS NOT NULL"
+				+ " AND " + User.COL_USERID + " = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next())
+				result = toClient(rs);
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[CLIENT] GET CLIENT SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[CLIENT] GET CLIENT FAILED");
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public Client getClient(String username, String password) {
+		Client result = null;
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Client.TABLE + " INNER JOIN " + User.TABLE 
+				+ " ON " + User.COL_USERID + " = " + Client.COL_USERID
+				+ " WHERE " + User.COL_USERNAME + " = ?"
+				+ " AND " + User.COL_PASSWORD + " = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setString(1, username);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next())
+				result = toClient(rs);
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[CLIENT] GET CLIENT SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[CLIENT] GET CLIENT FAILED");
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
 	private Client toClient(ResultSet rs) throws SQLException{
 		Client client = new Client();
 		
-		client.setCLIENTid(rs.getInt(Client.COL_CLIENTID));
-		client.setUSERid(rs.getInt(Client.COL_USERID));
-		client.setUsername(rs.getString(Client.COL_USERNAME));
-		client.setPassword(rs.getString(Client.COL_PASSWORD));
-		client.setFirstname(rs.getString(Client.COL_FIRSTNAME));
-		client.setLastname(rs.getString(Client.COL_LASTNAME));
+		client.setId(rs.getInt(Client.COL_USERID));
+		client.setUsername(rs.getString(User.COL_USERNAME));
+		client.setFirstname(rs.getString(User.COL_FIRSTNAME));
+		client.setLastname(rs.getString(User.COL_LASTNAME));
 		
 		return client;
 	}
