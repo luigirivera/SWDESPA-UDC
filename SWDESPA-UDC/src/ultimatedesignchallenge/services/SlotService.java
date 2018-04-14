@@ -85,11 +85,6 @@ public class SlotService {
 				+ " AND SLOT_DOC.DOCTORid = ?) = 1"
 				+ " ORDER BY " + Slot.COL_START;
 		
-		/*String query = "SELECT * FROM SLOT WHERE DATE(SLOT.start) = ?" + 
-				" AND SLOT.APPOINTMENTid IS NULL" + 
-				" AND (SELECT COUNT(*) FROM SLOT_DOC WHERE SLOT_DOC.SLOTid = SLOT.SLOTid" + 
-				" AND SLOT_DOC.DOCTORid = ?) = 1";*/
-		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
 			ps.setDate(1, Date.valueOf(date));

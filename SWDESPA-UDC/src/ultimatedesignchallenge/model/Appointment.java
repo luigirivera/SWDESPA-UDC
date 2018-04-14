@@ -14,10 +14,10 @@ public class Appointment {
 	private List<Slot> slots;
 
 	public static final String TABLE = "APPOINTMENT";
-	public static final String COL_APPOINTMENTID = "APPOINTMENTid";
-	public static final String COL_DOCTORID = "DOCTORid";
-	public static final String COL_CLIENTID = "CLIENTid";
-	public static final String COL_RECURRINGID = "RECURRINGid";
+	public static final String COL_APPOINTMENTID = TABLE+".APPOINTMENTid";
+	public static final String COL_DOCTORID = TABLE+".DOCTORid";
+	public static final String COL_CLIENTID = TABLE+".CLIENTid";
+	public static final String COL_RECURRINGID = TABLE+".RECURRINGid";
 
 	public int getId() {
 		return id;

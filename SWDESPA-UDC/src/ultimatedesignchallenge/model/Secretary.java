@@ -4,7 +4,7 @@ public class Secretary extends User {
 	private int secretaryId;
 
 	public static final String TABLE = "SECRETARY";
-	public static final String COL_SECRETARYID = "SECRETARYid";
+	public static final String COL_SECRETARYID = TABLE+".SECRETARYid";
 
 	public int getSecretaryId() {
 		return secretaryId;
