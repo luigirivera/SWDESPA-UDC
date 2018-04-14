@@ -107,12 +107,12 @@ public class DoctorService {
 	private Doctor toDoctor(ResultSet rs) throws SQLException {
 		Doctor doctor = new Doctor();
 		
-		doctor.setId(rs.getInt(User.COL_USERID));
+		doctor.setId(rs.getInt(Doctor.COL_USERID));
 		doctor.setDoctorId(rs.getInt(Doctor.COL_DOCTORID));
 		doctor.setColor(rs.getString(Doctor.COL_COLOR));
-		doctor.setUsername(rs.getString(User.COL_USERNAME));
-		doctor.setFirstname(rs.getString(User.COL_FIRSTNAME));
-		doctor.setLastname(rs.getString(User.COL_LASTNAME));
+		doctor.setUsername(rs.getString(Doctor.COL_USERNAME));
+		doctor.setFirstname(rs.getString(Doctor.COL_FIRSTNAME));
+		doctor.setLastname(rs.getString(Doctor.COL_LASTNAME));
 		
 		return doctor;
 	}

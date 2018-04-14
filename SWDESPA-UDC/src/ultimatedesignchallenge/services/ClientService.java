@@ -141,8 +141,10 @@ public class ClientService {
 	private Client toClient(ResultSet rs) throws SQLException{
 		Client client = new Client();
 		
-		client.setId(rs.getInt(Client.COL_USERID));
+		client.setId(rs.getInt(User.COL_USERID));
+		System.out.println(rs.getInt(User.COL_USERID));
 		client.setClientId(rs.getInt(Client.COL_CLIENTID));
+		System.out.println(rs.getInt(Client.COL_CLIENTID));
 		client.setUsername(rs.getString(User.COL_USERNAME));
 		client.setFirstname(rs.getString(User.COL_FIRSTNAME));
 		client.setLastname(rs.getString(User.COL_LASTNAME));

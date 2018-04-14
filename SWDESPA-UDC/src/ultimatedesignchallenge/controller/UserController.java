@@ -1,6 +1,6 @@
 package ultimatedesignchallenge.controller;
 
-import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.*;
 import ultimatedesignchallenge.model.User;
 import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
@@ -26,16 +26,17 @@ public class UserController {
 
 		System.out.println(username);
 		System.out.println(password);
+		
 		if((model=dsv.getDoctor(username, password))!=null) {
 			new DoctorView((Doctor)model);
 			return true;
 		}
-		else if((model=ssv.getSecretary(username, password))!=null){
-			new SecretaryView(model);
+		if((model=csv.getClient(username, password))!=null) {
+			new ClientView((Client)model);
 			return true;
 		}
-		else if((model=csv.getClient(username, password))!=null) {
-			new ClientView(model);
+		if((model=ssv.getSecretary(username, password))!=null){
+			new SecretaryView((Secretary)model);
 			return true;
 		}
 		return false;
