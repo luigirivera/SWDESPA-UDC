@@ -77,18 +77,18 @@ public class SlotService {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
-		/*String query = "SELECT * FROM " + Slot.TABLE
+		String query = "SELECT * FROM " + Slot.TABLE
 				+ " WHERE DATE(" + Slot.COL_START + ") = ?"
 				+ " AND " + Slot.COL_APPOINTMENTID + " IS NULL"
 				+ " AND (SELECT COUNT(*) FROM SLOT_DOC WHERE"
 				+ " SLOT_DOC.SLOTid = " + Slot.COL_SLOTID
-				+ " AND SLOT_DOC.DOCTORid = 2) = 1"
-				+ " ORDER BY " + Slot.COL_START;*/
+				+ " AND SLOT_DOC.DOCTORid = ?) = 1"
+				+ " ORDER BY " + Slot.COL_START;
 		
-		String query = "SELECT * FROM SLOT WHERE DATE(SLOT.start) = ?" + 
+		/*String query = "SELECT * FROM SLOT WHERE DATE(SLOT.start) = ?" + 
 				" AND SLOT.APPOINTMENTid IS NULL" + 
 				" AND (SELECT COUNT(*) FROM SLOT_DOC WHERE SLOT_DOC.SLOTid = SLOT.SLOTid" + 
-				" AND SLOT_DOC.DOCTORid = ?) = 1";
+				" AND SLOT_DOC.DOCTORid = ?) = 1";*/
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);

@@ -15,11 +15,11 @@ public class Slot {
 	private LocalDateTime end;
 
 	public static final String TABLE = "SLOT";
-	public static final String COL_SLOTID = "SLOTid";
-	public static final String COL_START = "start";
-	public static final String COL_END = "end";
-	public static final String COL_APPOINTMENTID = "APPOINTMENTid";
-	public static final String COL_RECURRINGID = "RECURRINGid";
+	public static final String COL_SLOTID = TABLE+".SLOTid";
+	public static final String COL_START = TABLE+".start";
+	public static final String COL_END = TABLE+".end";
+	public static final String COL_APPOINTMENTID = TABLE+".APPOINTMENTid";
+	public static final String COL_RECURRINGID = TABLE+".RECURRINGid";
 
 	public int getId() {
 		return id;
