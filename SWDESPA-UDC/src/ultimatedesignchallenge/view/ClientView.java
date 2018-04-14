@@ -86,6 +86,16 @@ public class ClientView extends CalendarFramework{
 		save.addActionListener(new saveCreateBtnListener());
 	}
 	
+	
+	
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {

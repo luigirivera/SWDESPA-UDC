@@ -136,6 +136,16 @@ public class SecretaryView extends CalendarFramework{
 		//view.update();
 	}
 	
+	
+	
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
