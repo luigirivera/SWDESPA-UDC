@@ -58,16 +58,17 @@ import designchallenge2.view.AgendaHTMLItemStringFormatter;
 import designchallenge2.view.CalendarObserver;
 import designchallenge2.view.DayHTMLItemStringFormatter;
 import designchallenge2.view.ItemStringFormatter;
+import ultimatedesignchallenge.model.User;
 
 public class ClientView extends CalendarFramework{
-	private ClientView view;
+	private User model;
 	
-	public ClientView(){
-		super("Client Calendar");
+	public ClientView(User model){
+		super("Client Calendar - " + model.getFirstname());
 		
 //		this.model = model;
 //		this.controller = controller;
-		this.view = this;
+		this.model = model;
 		
 		constructorGen("Client");
 		doctorListInst();

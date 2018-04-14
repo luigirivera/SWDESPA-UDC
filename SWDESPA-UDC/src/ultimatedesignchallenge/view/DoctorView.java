@@ -58,16 +58,17 @@ import designchallenge2.view.AgendaHTMLItemStringFormatter;
 import designchallenge2.view.CalendarObserver;
 import designchallenge2.view.DayHTMLItemStringFormatter;
 import designchallenge2.view.ItemStringFormatter;
+import ultimatedesignchallenge.model.User;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
-	private DoctorView view;
+	private User model;
 	
-	public DoctorView() {
-		super("Doctor Calendar");
+	public DoctorView(User model) {
+		super("Doctor Calendar - " + model.getFirstname());
 		
 //		this.model = model;
 //		this.controller = controller;
-		this.view = this;
+		this.model = model;
 		
 		instantiate();
 		constructorGen("Doctor");
