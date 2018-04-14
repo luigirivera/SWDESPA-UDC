@@ -35,7 +35,7 @@ public class AppointmentController implements AppointmentControlInterface {
 	}
 	@Override
 	public List<Appointment> getAllAppointments() {
-		return service.getAllAppointments();
+		return service.getAll();
 	}
 	@Override
 	public List<Appointment> getAllDoctorAppointments(int doctorID) {

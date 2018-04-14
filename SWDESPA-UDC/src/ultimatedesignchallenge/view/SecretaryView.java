@@ -78,7 +78,6 @@ public class SecretaryView extends CalendarFramework{
 		
 		instantiate();
 		constructorGen("Clinic Secretary");
-		doctorListInst();
 		init();
 		initListeners();
 	}
@@ -124,25 +123,25 @@ public class SecretaryView extends CalendarFramework{
 			System.out.println(startDateTime);
 			System.out.println(endDateTime);
 			
-			if(recurringAppRB.isSelected())
+			//if(recurringAppRB.isSelected())
 				//set recurring appointment    controller.addTask(createName.getText(), startDateTime, some stuff to add);
 			
-			else
+			//else
 				//set single appointment       controller.addEvent(createName.getText(), startDateTime, endDateTime);
 		
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		view.toggleCreateView(false);
-		view.update();
+		//view.toggleCreateView(false);
+		//view.update();
 	}
 	
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			//saveCreation(); we dont know what this is so we commented it out
-			SlotBuilder builder = new SlotBuilder();
-			SlotC slot = builder.buildDoc1Available(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString());
+			/*SlotBuilder builder = new SlotBuilder();
+			SlotC slot = builder.buildDoc1Available(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString());*/
 			// to do: add created slot to database, set appointment ID based on appointment name
 			
 			//if(recurringAppRB.isSelected())

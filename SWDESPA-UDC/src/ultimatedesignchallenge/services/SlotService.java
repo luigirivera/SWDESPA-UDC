@@ -22,16 +22,11 @@ import ultimatedesignchallenge.model.Slot;
 
 public class SlotService {
 	
-	private Connection cnt;
-	
-	public SlotService(Connection cnt) {
-		this.cnt = cnt;
-	}
-	
 	public List<Slot> getAll()
 	{
 		List<Slot> slots = new ArrayList<Slot>();
 		
+		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "SELECT * FROM " + Slot.TABLE;
 		
@@ -57,6 +52,7 @@ public class SlotService {
 	public List<Slot> getFree(LocalDate date) {
 		List<Slot> slots = new ArrayList<Slot>();
 		
+		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "SELECT * FROM " + Slot.TABLE
 				+ " WHERE DATE(" + Slot.COL_START + ") = ?"
@@ -86,6 +82,7 @@ public class SlotService {
 	public List<Slot> getFree(Doctor doctor, LocalDate date) {
 		List<Slot> slots = new ArrayList<Slot>();
 		
+		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "SELECT * FROM " + Slot.TABLE
 				+ " WHERE DATE(" + Slot.COL_START + ") = ?"
@@ -119,6 +116,7 @@ public class SlotService {
 	public List<Slot> getTaken(Appointment appointment){
 		List<Slot> slots = new ArrayList<Slot>();
 		
+		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "SELECT * FROM " + Slot.TABLE
 				+ " WHERE " + Slot.COL_APPOINTMENTID
@@ -156,7 +154,9 @@ public class SlotService {
 	}
 	
 	public void addSlotC(Slot slot) {
-			
+		
+		Connection cnt = CalendarDB.getConnection();
+		
 		String query = "INSERT INTO " + Slot.TABLE + " VALUES (?, ?, ?, ?, ?)";
 		
 		try {
@@ -181,7 +181,7 @@ public class SlotService {
 	
 	public static void main(String[] args) {
 		DoctorService ds = new DoctorService();
-		SlotService ss = new SlotService(CalendarDB.getConnection());
+		SlotService ss = new SlotService();
 		SlotBuilder sb = new SlotBuilder();
 		LocalDate dtoday = LocalDate.now();
 		LocalTime start = LocalTime.of(1, 0);
