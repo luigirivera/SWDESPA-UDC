@@ -77,7 +77,6 @@ public class ClientView extends CalendarFramework{
 		this.model = model;
 		
 		constructorGen("Client");
-		doctorListInst();
 		initListeners();
 		init();
 	}
@@ -93,10 +92,10 @@ public class ClientView extends CalendarFramework{
 			SlotBuilder builder = new SlotBuilder();
 			SlotC slot;
 			
-			if(doctorsCBList.getSelectedItem() == "doctor1")
-				slot = builder.buildDoc1Appointment(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString(), model.getFirstname());
+			/*if(doctorsCBList.getSelectedItem() == "doctor1")
+				slot = builder.buildAppointment(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString(), model.getFirstname());
 			else
-				slot = builder.buildDoc2Appointment(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString(), model.getFirstname());
+				slot = builder.buildDoc2Appointment(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString(), model.getFirstname());*/
 			// to do: add created slot to database, set appointment ID based on appointment name
 			
 			//if(recurringAppRB.isSelected())
@@ -104,7 +103,7 @@ public class ClientView extends CalendarFramework{
 		}
 	}
 	
-	private void saveCreation() {
+	/*private void saveCreation() {
 		Appointment appointment = new Appointment();
 		String[] startDate = new String[3];
 		LocalDateTime startDateTime, endDateTime;
@@ -126,19 +125,19 @@ public class ClientView extends CalendarFramework{
 			System.out.println(endDateTime);
 			
 			appointment.setClient((Client)model);
-			appointment.s
+			//appointment.s
 			
 			
 			if(recurringAppRB.isSelected())
 				//set recurring appointment    controller.addTask(createName.getText(), startDateTime, some stuff to add);
 			
-			else
+			//else
 				//set single appointment       controller.addEvent(createName.getText(), startDateTime, endDateTime);
 		
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		view.toggleCreateView(false);
-		view.update();
-	}
+		//view.toggleCreateView(false);
+		//view.update();
+	}*/
 }
