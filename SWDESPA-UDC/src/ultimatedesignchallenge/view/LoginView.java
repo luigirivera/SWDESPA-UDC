@@ -87,7 +87,7 @@ public class LoginView extends JFrame {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 				
 				UserController checker = new UserController(); //this is just temporary, shouldn't instantiate here(just here for testing)
-				checker.checkLogin(loginUser.getText(), loginPass.getText());
+				checker.checkLogin(loginUser.getText(), loginPass.getPassword().toString());
 				
 //				new ClientView();
 //				new DoctorView();
