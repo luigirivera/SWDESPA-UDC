@@ -1,7 +1,6 @@
 package ultimatedesignchallenge.view;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Insets;
@@ -9,18 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.YearMonth;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -33,9 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -44,28 +34,12 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
-import designchallenge1.CellStringFormatter;
-import designchallenge1.EventStringFormatter;
-import designchallenge1.HTMLCellMarkerFormatter;
-import designchallenge1.HTMLEventMarkerFormatter;
-import designchallenge2.item.CalendarEvent;
-import designchallenge2.item.CalendarItem;
 import designchallenge2.view.CalendarObserver;
-import designchallenge2.item.CalendarTask;
-import designchallenge2.view.AgendaHTMLItemStringFormatter;
-import designchallenge2.view.DayHTMLItemStringFormatter;
-import designchallenge2.view.ItemStringFormatter;
 import ultimatedesignchallenge.controller.AppointmentController;
-import ultimatedesignchallenge.controller.SlotBuilder;
-import ultimatedesignchallenge.controller.SlotC;
-import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
-import ultimatedesignchallenge.view.DoctorView.saveCreateBtnListener;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
 //NOTE: Fix generateWeekAgendaTable thanks - Louie
@@ -108,8 +82,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected JList<String> doctorList;
 	protected DefaultListModel<String> modelDoctorList;
 	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, update;
-	protected List<CalendarItem> monthItems;
-	protected List<CalendarItem> dayItems;
+	//protected List<CalendarItem> monthItems;
+	//protected List<CalendarItem> dayItems;
 	protected AppointmentController appointmentController;
 
 //	Stuff from DC2
@@ -575,11 +549,11 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			tableModel.setValueAt(i, row, column);
 			// Added lines below
 			validCells.getList().add(new CellData(i, row, column));
-			try {
+			/*try {
 				refreshTileEvents(i, row, column);
 			} catch (NullPointerException e) {
 				System.out.println("No CalendarModel yet");
-			}
+			}*/
 		}
 
 		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
@@ -587,17 +561,17 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	}
 	
 	public void refreshCurrentPage() {
-		this.refreshCalendar(monthToday, yearToday, modelCalendarTable);
+		/*this.refreshCalendar(monthToday, yearToday, modelCalendarTable);
 		this.refreshCalendar(monthToday, yearToday, modelMonthTable);
 		this.refreshHeader();
 		this.refreshDay();
-		this.refreshAgenda();
+		this.refreshAgenda();*/
 	}
 
 	/* Added this */
 	public void refreshTileEvents(int day, int row, int column) throws NullPointerException {
-		EventStringFormatter esformatter = new HTMLEventMarkerFormatter();
-		CellStringFormatter csformatter = new HTMLCellMarkerFormatter();
+		/*EventStringFormatter esformatter = new HTMLEventMarkerFormatter();
+		CellStringFormatter csformatter = new HTMLCellMarkerFormatter();*/
 
 		//modelCalendarTable.setValueAt(csformatter.format(day,
 		//		esformatter.formatEvents(LegacyEventConverter.convert(model.getItemsOn(flags, LocalDate.of(yearToday, monthToday+1, day))))), row, column);
@@ -608,7 +582,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	}
 	
 	public void refreshDay() {
-		for (int row = 0 ; row < modelDayTable.getRowCount() ; row++) {
+		/*for (int row = 0 ; row < modelDayTable.getRowCount() ; row++) {
 			modelDayTable.setValueAt("", row, 1);
 			for (CalendarItem item : dayItems) {
 				LocalDateTime tmpStartTime = item.getStart();
@@ -620,11 +594,11 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 					break;
 				}
 			}
-		}
+		}*/
 	}
 	
 	public void refreshAgenda() {
-		clearAgenda();
+		/*clearAgenda();
 		for(int row = 0 ; row < dayItems.size() ; row++) {
 			Object[] data = new Object[2];
 			LocalDateTime tmpItemStart = dayItems.get(row).getStart();
@@ -641,7 +615,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			data[0] = tmpItemStart.toLocalTime().toString() + " - " + tmpItemEnd.toLocalTime().toString();
 			data[1] = dayItems.get(row);
 			modelAgendaTable.addRow(data);
-		}
+		}*/
 	}
 	
 	public void clearAgenda() {
@@ -652,7 +626,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	
 	// ------------TABLE MODELS------------//
 	class DayTableCellRenderer extends DefaultTableCellRenderer{
-		private static final long serialVersionUID = 1L;
+		/*private static final long serialVersionUID = 1L;
 		private ItemStringFormatter formatter;
 		
 		public DayTableCellRenderer() {
@@ -685,13 +659,13 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			super.setValue(value);
 			if(value instanceof CalendarItem)
 				setText(formatter.format((CalendarItem)value));
-		}
+		}*/
 		
 		
 	}
 	
 	class AgendaTableCellRenderer extends DefaultTableCellRenderer{
-		private static final long serialVersionUID = 1L;
+		/*private static final long serialVersionUID = 1L;
 		private ItemStringFormatter formatter;
 		
 		public AgendaTableCellRenderer() {
@@ -704,7 +678,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			super.setValue(value);
 			if(value instanceof CalendarItem)
 				setText(formatter.format((CalendarItem)value));
-		}
+		}*/
 		
 		
 	}
@@ -774,9 +748,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int row = dayTable.getSelectedRow();
+			/*int row = dayTable.getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelDayTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(dayTable, arg0.getX(), arg0.getY()); 
+				popup.show(dayTable, arg0.getX(), arg0.getY()); */
 			
 		}
 
@@ -795,10 +769,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int row = weekTable.getSelectedRow();
+			/*int row = weekTable.getSelectedRow();
 			int col = weekTable.getSelectedColumn();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelWeekTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(weekTable, arg0.getX(), arg0.getY()); 
+				popup.show(weekTable, arg0.getX(), arg0.getY()); */
 			
 		}
 
@@ -817,9 +791,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int row = weekTable.getSelectedRow();
+			/*int row = weekTable.getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelWeekAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(weekAgendaTable, arg0.getX(), arg0.getY()); 
+				popup.show(weekAgendaTable, arg0.getX(), arg0.getY()); */
 			
 		}
 
@@ -838,10 +812,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int row = monthTable.getSelectedRow();
+			/*int row = monthTable.getSelectedRow();
 			int col = monthTable.getSelectedColumn();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelMonthTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(monthTable, arg0.getX(), arg0.getY()); 
+				popup.show(monthTable, arg0.getX(), arg0.getY()); */
 			
 		}
 
@@ -860,9 +834,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int row = weekTable.getSelectedRow();
+			/*int row = weekTable.getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelMonthAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(monthAgendaTable, arg0.getX(), arg0.getY()); 
+				popup.show(monthAgendaTable, arg0.getX(), arg0.getY()); */
 			
 		}
 
@@ -883,9 +857,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int row = agendaTable.getSelectedRow();
+			/*int row = agendaTable.getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) && modelAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(agendaTable, arg0.getX(), arg0.getY()); 
+				popup.show(agendaTable, arg0.getX(), arg0.getY()); */
 				
 		}
 
