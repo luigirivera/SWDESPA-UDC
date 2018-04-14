@@ -108,6 +108,7 @@ public class DoctorService {
 		Doctor doctor = new Doctor();
 		
 		doctor.setId(rs.getInt(User.COL_USERID));
+		doctor.setDoctorId(rs.getInt(Doctor.COL_DOCTORID));
 		doctor.setColor(rs.getString(Doctor.COL_COLOR));
 		doctor.setUsername(rs.getString(User.COL_USERNAME));
 		doctor.setFirstname(rs.getString(User.COL_FIRSTNAME));

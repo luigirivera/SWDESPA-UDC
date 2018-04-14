@@ -110,6 +110,7 @@ public class SecretaryService {
 		Secretary sec = new Secretary();
 		
 		sec.setId(rs.getInt(Secretary.COL_USERID));
+		sec.setSecretaryId(rs.getInt(Secretary.COL_SECRETARYID));
 		sec.setUsername(rs.getString(User.COL_USERNAME));
 		sec.setFirstname(rs.getString(User.COL_FIRSTNAME));
 		sec.setLastname(rs.getString(User.COL_LASTNAME));

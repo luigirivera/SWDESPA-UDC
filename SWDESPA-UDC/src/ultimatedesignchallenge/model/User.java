@@ -7,11 +7,11 @@ public abstract class User {
 	protected String lastname;
 
 	public static final String TABLE = "USER";
-	public static final String COL_USERID = "USERid";
-	public static final String COL_USERNAME = "username";
-	public static final String COL_PASSWORD = "password";
-	public static final String COL_FIRSTNAME = "firstname";
-	public static final String COL_LASTNAME = "lastname";
+	public static final String COL_USERID = TABLE + ".USERid";
+	public static final String COL_USERNAME = TABLE + ".username";
+	public static final String COL_PASSWORD = TABLE + ".password";
+	public static final String COL_FIRSTNAME = TABLE + ".firstname";
+	public static final String COL_LASTNAME = TABLE + ".lastname";
 
 	public int getId() {
 		return id;

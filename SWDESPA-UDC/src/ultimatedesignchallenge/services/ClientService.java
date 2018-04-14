@@ -142,6 +142,7 @@ public class ClientService {
 		Client client = new Client();
 		
 		client.setId(rs.getInt(Client.COL_USERID));
+		client.setClientId(rs.getInt(Client.COL_CLIENTID));
 		client.setUsername(rs.getString(User.COL_USERNAME));
 		client.setFirstname(rs.getString(User.COL_FIRSTNAME));
 		client.setLastname(rs.getString(User.COL_LASTNAME));
