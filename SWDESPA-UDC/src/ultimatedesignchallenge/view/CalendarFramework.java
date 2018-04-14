@@ -33,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
@@ -1159,6 +1160,39 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		@Override
 		public void windowOpened(WindowEvent arg0) {}
 		
+	}
+	
+	private void saveCreation() {
+		String[] startDate = new String[3];
+		LocalDateTime startDateTime, endDateTime;
+		
+		try {
+			if(createName.getText().equals(createPlaceholderName) || createName.getText().isEmpty())
+				throw new Exception("Please enter a name");
+			if(this.startDate.getText().equals(createPlaceholderStartDate) || this.startDate.getText().isEmpty())
+				throw new Exception("Please enter a starting date");
+			startDate = this.startDate.getText().split("/");
+			if(startDate.length !=3)
+				throw new Exception("Invalid date format");
+			startDateTime = LocalDateTime.of(LocalDate.of(Integer.valueOf(startDate[0]), 
+					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) startTime.getSelectedItem());
+			
+			endDateTime = LocalDateTime.of(LocalDate.of(Integer.valueOf(startDate[0]), 
+					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) endTime.getSelectedItem());
+			System.out.println(startDateTime);
+			System.out.println(endDateTime);
+			
+			if(recurringAppRB.isSelected())
+				//set recurring appointment    controller.addTask(createName.getText(), startDateTime, some stuff to add);
+			
+			else
+				//set single appointment       controller.addEvent(createName.getText(), startDateTime, endDateTime);
+		
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		view.toggleCreateView(false);
+		view.update();
 	}
 	
 	private void toggleAgendaView(boolean toggle) {
