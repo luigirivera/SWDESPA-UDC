@@ -64,6 +64,7 @@ import designchallenge2.view.ItemStringFormatter;
 import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.controller.SlotC;
 import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
+import ultimatedesignchallenge.view.DoctorView.saveCreateBtnListener;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
 //NOTE: Fix generateWeekAgendaTable thanks - Louie
@@ -94,7 +95,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 	/**** Added during the project ****/
 	protected int taskCount, dayToday;
 	protected JComboBox<LocalTime> startTime, endTime;
-	protected JComboBox<String> viewType, doctorsCBList, recurringCBList;
+	protected JComboBox<String> viewType, doctorsCBList, daysCBList;
 	protected CellDataHolder validCells;
 	protected final String createPlaceholderName = "Client/Appointment Name";
 	protected final String createPlaceholderStartDate = "Date";
@@ -184,7 +185,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		startTime = new JComboBox<LocalTime>();
 		endTime = new JComboBox<LocalTime>();
 		viewType = new JComboBox<String>();
-		recurringCBList = new JComboBox<String>();
+		daysCBList = new JComboBox<String>();
 		startDate = new JTextField();
 		
 		popup = new JPopupMenu();
@@ -324,7 +325,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		createPanel.add(save);
 		createPanel.add(discard);
 		createPanel.add(createTOLabelTime);
-		createPanel.add(recurringCBList);
+		createPanel.add(daysCBList);
 		createPanel.setVisible(false);
 		
 		add(dayPanel);
@@ -365,13 +366,19 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		
 		createPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		recurringAppRB.setBounds(10, 70, 150, 50);
-		recurringCBList.setBounds(160, 70, 120, 40);
 		startDate.setBounds(10, 120, 120, 40);
 		startTime.setBounds(10, 160, 120, 40);
+		daysCBList.setBounds(160, 70, 120, 40);
 		createTOLabelTime.setBounds(140, 160, 20, 40);
 		endTime.setBounds(160, 160, 120, 40);
 		save.setBounds(300, 120, 90, 40);
 		discard.setBounds(300, 160, 90, 40);
+		
+		String[] headers = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+		
+		for(String h : headers)
+			daysCBList.addItem(h);
+
 		
 		dayPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		scrollDayTable.setBounds(20, 20, dayPanel.getWidth()-50, dayPanel.getHeight()-50);
@@ -391,11 +398,12 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 	protected void doctorListInst() {
 		doctorListFrame = new JFrame("Clinic Doctors");
 		doctorListPanel = new JPanel();
+		doctorsCBList = new JComboBox<String>();
 		
 		doctorListFrame.setResizable(false);
 		
 		doctors = new JToggleButton("Doctors");	
-		doctorsCBList = new JComboBox<String>();
+		
 		scrollDoctorList = new JScrollPane(doctorList);
 		
 		doctorListFrame.setSize(420, 625);
@@ -555,12 +563,6 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		tableModel.setRowCount(6);
 		
 		refreshCalendar(monthBound, yearBound, tableModel); // Refresh calendar
-		
-
-		
-		
-
-	
 	}
 	
 	public void refreshCalendar(int month, int year, DefaultTableModel tableModel) {
@@ -733,11 +735,9 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		calendarTable.addMouseListener(new calendarTableMouseListener());
 		
 		create.addActionListener(new createbtnListener());
-		save.addActionListener(new saveCreateBtnListener());
 		discard.addActionListener(new discardCreateBtnListener());
 		recurringAppRB.addActionListener(new recurringRBListener());
 		startDate.addFocusListener(new createStartDateFocusListener());
-		startDate.addKeyListener(new createStartDateKeyListener());
 		
 		calendar.addActionListener(new dayToggleBtnListener());
 		agenda.addActionListener(new agendaToggleBtnListener());
@@ -969,79 +969,6 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		
 	}
 	
-	class createNameKeyListener implements KeyListener{
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				saveCreation();
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {}
-	}
-	
-	class createStartDateKeyListener implements KeyListener{
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				saveCreation();
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {}
-	}
-	
-	class createStartTimeKeyListener implements KeyListener{
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				saveCreation();
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {}
-	}
-	
-	class createEndTimeKeyListener implements KeyListener{
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				saveCreation();
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {}
-	}
-	
-	class saveCreateBtnListener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			//saveCreation(); we dont know what this is so we commented it out
-			SlotBuilder builder = new SlotBuilder();
-			SlotC slot = builder.buildDoc1Available(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString());
-			// to do: add created slot to database, set appointment ID based on appointment name
-			
-			//if(recurringAppRB.isSelected())
-				// to do: also set recurringID 
-		}
-	}
-	
 	class discardCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -1162,37 +1089,23 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		
 	}
 	
-	private void saveCreation() {
-		String[] startDate = new String[3];
-		LocalDateTime startDateTime, endDateTime;
-		
-		try {
-			if(createName.getText().equals(createPlaceholderName) || createName.getText().isEmpty())
-				throw new Exception("Please enter a name");
-			if(this.startDate.getText().equals(createPlaceholderStartDate) || this.startDate.getText().isEmpty())
-				throw new Exception("Please enter a starting date");
-			startDate = this.startDate.getText().split("/");
-			if(startDate.length !=3)
-				throw new Exception("Invalid date format");
-			startDateTime = LocalDateTime.of(LocalDate.of(Integer.valueOf(startDate[0]), 
-					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) startTime.getSelectedItem());
+	class recurringRBListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			toggleRecurringCBList(recurringAppRB.isSelected());
 			
-			endDateTime = LocalDateTime.of(LocalDate.of(Integer.valueOf(startDate[0]), 
-					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) endTime.getSelectedItem());
-			System.out.println(startDateTime);
-			System.out.println(endDateTime);
-			
-			if(recurringAppRB.isSelected())
-				//set recurring appointment    controller.addTask(createName.getText(), startDateTime, some stuff to add);
-			
-			else
-				//set single appointment       controller.addEvent(createName.getText(), startDateTime, endDateTime);
-		
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		view.toggleCreateView(false);
-		view.update();
+		
+	}
+	
+	private void toggleRecurringCBList(boolean toggle)
+	{
+		daysCBList.setVisible(toggle);
+		daysCBList.setEnabled(toggle);
+		
+		if(daysCBList.getItemCount()>0)
+			daysCBList.setSelectedIndex(0);
 	}
 	
 	private void toggleAgendaView(boolean toggle) {
@@ -1247,25 +1160,6 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 
 		if(doctorsCBList.getItemCount()>0)
 			doctorsCBList.setSelectedIndex(0);
-	}
-	
-	class recurringRBListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			toggleRecurringCBList(recurringAppRB.isSelected());
-			
-		}
-		
-	}
-	
-	private void toggleRecurringCBList(boolean toggle)
-	{
-		recurringCBList.setVisible(toggle);
-		recurringCBList.setEnabled(toggle);
-		
-		if(recurringCBList.getItemCount()>0)
-			recurringCBList.setSelectedIndex(0);
 	}
 	
 	class todayButtonListener implements ActionListener {
