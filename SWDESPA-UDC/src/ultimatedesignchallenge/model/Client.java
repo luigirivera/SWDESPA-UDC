@@ -5,7 +5,8 @@ public class Client extends User {
 
 	public static final String TABLE = "CLIENT";
 	public static final String COL_CLIENTID = TABLE+".CLIENTid";
-
+	public static final String COL_USERID = TABLE+".USERid"
+;
 	public int getClientId() {
 		return clientId;
 	}

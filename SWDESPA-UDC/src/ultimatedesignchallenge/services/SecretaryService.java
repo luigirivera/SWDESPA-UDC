@@ -80,8 +80,8 @@ public class SecretaryService {
 		
 		String query = "SELECT * FROM " + Secretary.TABLE + " INNER JOIN " + User.TABLE 
 				+ " ON " + User.COL_USERID + " = " + Secretary.COL_USERID
-				+ " WHERE " + Secretary.COL_USERNAME + " = ?"
-				+ " AND " + Secretary.COL_PASSWORD + " = ?";
+				+ " WHERE " + User.COL_USERNAME + " = ?"
+				+ " AND " + User.COL_PASSWORD + " = ?";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
@@ -109,7 +109,7 @@ public class SecretaryService {
 		
 		Secretary sec = new Secretary();
 		
-		sec.setId(rs.getInt(Secretary.COL_USERID));
+		sec.setId(rs.getInt(User.COL_USERID));
 		sec.setSecretaryId(rs.getInt(Secretary.COL_SECRETARYID));
 		sec.setUsername(rs.getString(User.COL_USERNAME));
 		sec.setFirstname(rs.getString(User.COL_FIRSTNAME));
