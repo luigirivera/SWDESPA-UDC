@@ -28,7 +28,7 @@ public class UserController {
 		System.out.println(password);
 		
 		if((model=dsv.getDoctor(username, password))!=null) {
-			new DoctorView((Doctor)model);
+			new DoctorView((Doctor)model, new DoctorController((Doctor)model, dsv));
 			return true;
 		}
 		if((model=csv.getClient(username, password))!=null) {

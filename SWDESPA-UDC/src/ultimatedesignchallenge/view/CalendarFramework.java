@@ -398,29 +398,6 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		toggleRecurringCBList(false);
 	}
 	
-	protected void doctorListInst() {
-		doctorListFrame = new JFrame("Clinic Doctors");
-		doctorListPanel = new JPanel();
-		doctorsCBList = new JComboBox<String>();
-		
-		doctorListFrame.setResizable(false);
-		
-		doctors = new JToggleButton("Doctors");	
-		
-		scrollDoctorList = new JScrollPane(doctorList);
-		
-		doctorListFrame.setSize(420, 625);
-		doctorListFrame.setLayout(null);
-		doctorListPanel.setLayout(null);
-
-		calendarPanel.add(doctors);
-		createPanel.add(doctorsCBList);
-		doctors.setBounds(10, 500, 250,50);
-		doctorsCBList.setBounds(160, 120, 120, 40);
-		doctorListPanel.setBounds(0, 0, doctorListFrame.getWidth(), doctorListFrame.getHeight());
-		scrollDoctorList.setBounds(doctorListPanel.getBounds());
-	}
-	
 	private void generateWeekTable() {
 		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
 		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -765,12 +742,12 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 	// ------------OVERRIDE METHODS------------//
 	@Override
 	public void update() {
-		try {
+		/*try {
 			monthItems = model.getItemsOn(flags, YearMonth.of(yearToday, monthToday+1));
 			dayItems = model.getItemsOn(flags, LocalDate.of(yearToday, monthToday+1, dayToday));
 			taskCount = model.getTaskCount();
 			refreshCurrentPage();
-		}catch (DateTimeException e) {}
+		}catch (DateTimeException e) {}*/
 	}
 	
 	// ------------LISTENERS------------//
@@ -935,7 +912,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 
 		@Override
 		public void mouseClicked(MouseEvent evt) {
-				int col = calendarTable.getSelectedColumn();
+				/*int col = calendarTable.getSelectedColumn();
 				int row = calendarTable.getSelectedRow();
 				
 				try {
@@ -946,7 +923,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 					
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
-				}
+				}*/
 		}
 
 		@Override
@@ -1182,27 +1159,27 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 	class markTaskListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JTable invoker = (JTable)popup.getInvoker();
+			/*JTable invoker = (JTable)popup.getInvoker();
 			CalendarTask task;
 			if(invoker.getValueAt(invoker.getSelectedRow(), 1) instanceof CalendarTask) {
 				task = (CalendarTask)invoker.getValueAt(invoker.getSelectedRow(), 1);
 				controller.markTask(task, !task.isDone());
 				update();
 				System.out.println("Gets here");
-			}
+			}*/
 		}
 	}
 	
 	class deleteItemListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JTable invoker = (JTable)popup.getInvoker();
+			/*JTable invoker = (JTable)popup.getInvoker();
 			CalendarItem item;
 			if(invoker.getValueAt(invoker.getSelectedRow(), 1) instanceof CalendarItem) {
 				item = (CalendarItem)invoker.getValueAt(invoker.getSelectedRow(), 1);
 				controller.deleteItem(item);
 				update();
-			}
+			}*/
 		}
 	}
 	
