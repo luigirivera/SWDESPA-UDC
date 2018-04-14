@@ -71,7 +71,7 @@ import ultimatedesignchallenge.view.DoctorView.saveCreateBtnListener;
 //NOTE: Fix generateWeekAgendaTable thanks - Louie
 //TODO: Recurring Events because idk how that works - Louie
 
-public class CalendarFramework extends JFrame implements CalendarObserver{
+public abstract class CalendarFramework extends JFrame implements CalendarObserver {
 	private static final long serialVersionUID = 1L;
 	/**** Day Components ****/
 	protected int yearBound, monthBound, dayBound, yearToday, monthToday;
@@ -740,15 +740,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 	}
 	
 	// ------------OVERRIDE METHODS------------//
-	@Override
-	public void update() {
-		/*try {
-			monthItems = model.getItemsOn(flags, YearMonth.of(yearToday, monthToday+1));
-			dayItems = model.getItemsOn(flags, LocalDate.of(yearToday, monthToday+1, dayToday));
-			taskCount = model.getTaskCount();
-			refreshCurrentPage();
-		}catch (DateTimeException e) {}*/
-	}
+	
 	
 	// ------------LISTENERS------------//
 	

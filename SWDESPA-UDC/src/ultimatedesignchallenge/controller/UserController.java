@@ -5,6 +5,7 @@ import ultimatedesignchallenge.model.User;
 import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SecretaryService;
+import ultimatedesignchallenge.services.SlotService;
 //just got all of the them, we can change it later if you guys dont wanna do this
 import ultimatedesignchallenge.view.ClientView;
 import ultimatedesignchallenge.view.DoctorView;
@@ -28,7 +29,7 @@ public class UserController {
 		System.out.println(password);
 		
 		if((model=dsv.getDoctor(username, password))!=null) {
-			new DoctorView((Doctor)model, new DoctorController((Doctor)model, dsv));
+			new DoctorView((Doctor)model, new DoctorController((Doctor)model, dsv), new SlotController(new SlotService()));
 			return true;
 		}
 		if((model=csv.getClient(username, password))!=null) {
