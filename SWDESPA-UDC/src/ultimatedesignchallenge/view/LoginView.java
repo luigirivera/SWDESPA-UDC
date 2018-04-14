@@ -94,7 +94,7 @@ public class LoginView extends JFrame {
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 				
-				if (controller.checkLogin(loginUser.getText(), loginPass.getPassword().toString())) {
+				if (controller.checkLogin(loginUser.getText(), String.valueOf(loginPass.getPassword()))) {
 					view.setVisible(false);
 					view.dispose();
 				} else {

@@ -1,5 +1,6 @@
 package ultimatedesignchallenge.controller;
 
+import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.User;
 import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
@@ -16,15 +17,17 @@ public class UserController {
 	private User model;
 	
 	public UserController (DoctorService dsv, SecretaryService ssv, ClientService csv) {
-		dsv = new DoctorService();
-		ssv = new SecretaryService();
-		csv = new ClientService();
+		this.dsv = dsv;
+		this.ssv = ssv;
+		this.csv = csv;
 	}
 	
 	public boolean checkLogin(String username, String password) {
 
+		System.out.println(username);
+		System.out.println(password);
 		if((model=dsv.getDoctor(username, password))!=null) {
-			new DoctorView(model);
+			new DoctorView((Doctor)model);
 			return true;
 		}
 		else if((model=ssv.getSecretary(username, password))!=null){

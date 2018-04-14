@@ -79,8 +79,8 @@ public class DoctorService {
 		
 		String query = "SELECT * FROM " + Doctor.TABLE + " INNER JOIN " + User.TABLE 
 				+ " ON " + User.COL_USERID + " = " + Doctor.COL_USERID
-				+ " WHERE " + Doctor.COL_USERNAME + " = ?"
-				+ " AND " + Doctor.COL_PASSWORD + " = ?";
+				+ " WHERE " + User.COL_USERNAME + " = ?"
+				+ " AND " + User.COL_PASSWORD + " = ?";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
