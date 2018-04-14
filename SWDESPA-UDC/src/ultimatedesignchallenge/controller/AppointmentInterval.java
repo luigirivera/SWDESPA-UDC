@@ -1,36 +1,47 @@
 package ultimatedesignchallenge.controller;
 
-public class AppointmentInterval implements Interval{
-	private String startTime;
-	private String endTime;
-	private String doctor;
-	private String client;
+import java.time.LocalDateTime;
+
+import ultimatedesignchallenge.model.Client;
+import ultimatedesignchallenge.model.Doctor;
+
+public class AppointmentInterval implements SlotC{
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
+	private Doctor doctor;
+	private Client client;
 	
-	public AppointmentInterval(String startTime, String endTime, String doctor, String client) {
+	public AppointmentInterval(LocalDateTime startTime, LocalDateTime endTime, Doctor doctor, Client client) {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.doctor = doctor;
 		this.client = client;
 	}
-	
-	@Override
-	public String startTime() {
-		return startTime;
-	}
 
 	@Override
-	public String endTime() {
-		return endTime;
-	}
-
-	@Override
-	public String doctor() {
+	public Doctor doctor() {
+		// TODO Auto-generated method stub
 		return doctor;
 	}
 
 	@Override
-	public String client() {
+	public LocalDateTime startTime() {
+		// TODO Auto-generated method stub
+		return startTime;
+	}
+
+	@Override
+	public LocalDateTime endTime() {
+		// TODO Auto-generated method stub
+		return endTime;
+	}
+
+	@Override
+	public Client client() {
+		// TODO Auto-generated method stub
 		return client;
 	}
+	
+	
 	
 }

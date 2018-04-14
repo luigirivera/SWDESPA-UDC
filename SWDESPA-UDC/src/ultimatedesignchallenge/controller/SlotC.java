@@ -1,16 +1,14 @@
 package ultimatedesignchallenge.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
-public class SlotC {
-	private List<Interval> intervals = new ArrayList<Interval>();
+import ultimatedesignchallenge.model.Client;
+import ultimatedesignchallenge.model.Doctor;
+
+public interface SlotC {
+	public Doctor doctor();
+	public LocalDateTime startTime();
+	public LocalDateTime endTime();
+	public Client client();
 	
-	public void addInterval(Interval interval) {
-		intervals.add(interval);
-	}
-	
-	public List<Interval> getIntervals(){
-		return intervals;
-	}
 }
