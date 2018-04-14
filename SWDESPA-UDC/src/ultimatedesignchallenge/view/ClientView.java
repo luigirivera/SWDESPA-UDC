@@ -61,6 +61,7 @@ import designchallenge2.view.ItemStringFormatter;
 import ultimatedesignchallenge.model.User;
 
 public class ClientView extends CalendarFramework{
+	private static final long serialVersionUID = 1L;
 	private User model;
 	
 	public ClientView(User model){

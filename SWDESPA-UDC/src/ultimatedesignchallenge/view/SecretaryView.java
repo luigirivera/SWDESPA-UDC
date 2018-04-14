@@ -63,6 +63,7 @@ import designchallenge2.view.ItemStringFormatter;
 import ultimatedesignchallenge.model.User;
 
 public class SecretaryView extends CalendarFramework{
+	private static final long serialVersionUID = 1L;
 	private User model;
 	
 	public SecretaryView(User model) {

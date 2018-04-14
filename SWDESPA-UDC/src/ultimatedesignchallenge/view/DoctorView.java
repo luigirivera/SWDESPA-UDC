@@ -61,6 +61,7 @@ import designchallenge2.view.ItemStringFormatter;
 import ultimatedesignchallenge.model.User;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
+	private static final long serialVersionUID = 1L;
 	private User model;
 	
 	public DoctorView(User model) {
