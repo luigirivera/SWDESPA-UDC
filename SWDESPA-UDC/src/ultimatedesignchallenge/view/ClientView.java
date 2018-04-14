@@ -61,6 +61,8 @@ import designchallenge2.view.DayHTMLItemStringFormatter;
 import designchallenge2.view.ItemStringFormatter;
 import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.controller.SlotC;
+import ultimatedesignchallenge.model.Appointment;
+import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.User;
 
 public class ClientView extends CalendarFramework{
@@ -88,9 +90,13 @@ public class ClientView extends CalendarFramework{
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			//saveCreation(); we dont know what this is so we commented it out
 			SlotBuilder builder = new SlotBuilder();
-			SlotC slot = builder.buildDoc1Available(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString());
+			SlotC slot;
+			
+			if(doctorsCBList.getSelectedItem() == "doctor1")
+				slot = builder.buildDoc1Appointment(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString(), model.getFirstname());
+			else
+				slot = builder.buildDoc2Appointment(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString(), model.getFirstname());
 			// to do: add created slot to database, set appointment ID based on appointment name
 			
 			//if(recurringAppRB.isSelected())
@@ -99,6 +105,7 @@ public class ClientView extends CalendarFramework{
 	}
 	
 	private void saveCreation() {
+		Appointment appointment = new Appointment();
 		String[] startDate = new String[3];
 		LocalDateTime startDateTime, endDateTime;
 		
@@ -117,6 +124,10 @@ public class ClientView extends CalendarFramework{
 					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) endTime.getSelectedItem());
 			System.out.println(startDateTime);
 			System.out.println(endDateTime);
+			
+			appointment.setClient((Client)model);
+			appointment.s
+			
 			
 			if(recurringAppRB.isSelected())
 				//set recurring appointment    controller.addTask(createName.getText(), startDateTime, some stuff to add);
