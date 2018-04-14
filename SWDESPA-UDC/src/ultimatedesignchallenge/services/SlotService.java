@@ -179,7 +179,7 @@ public class SlotService {
 		}
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		DoctorService ds = new DoctorService();
 		SlotService ss = new SlotService();
 		SlotBuilder sb = new SlotBuilder();
@@ -196,5 +196,5 @@ public class SlotService {
 //		System.out.println(ss.getAll());
 //		System.out.println(ss.getFree(LocalDate.of(2018, 4, 14)));
 //		System.out.println(ss.getFree(ds.getDoctor(2), LocalDate.of(2018, 4, 14)));
-	}
+	}*/
 }
