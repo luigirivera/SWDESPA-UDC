@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -25,9 +26,16 @@ public class LoginView extends JFrame {
 	private final String loginPlaceholderUser = "Username";
 	private final String loginPlaceholderPass = "Password";
 	
-	public LoginView()
+	private UserController controller;
+	private LoginView view;
+	
+	public LoginView(UserController controller)
 	{
 		super("Clinic Login");
+		
+		this.controller = controller;
+		this.view = this;
+		
 		setSize(520, 225);
 		
 		instantiate();
@@ -86,8 +94,12 @@ public class LoginView extends JFrame {
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 				
-				UserController checker = new UserController(); //this is just temporary, shouldn't instantiate here(just here for testing)
-				checker.checkLogin(loginUser.getText(), loginPass.getPassword().toString());
+				if (controller.checkLogin(loginUser.getText(), loginPass.getPassword().toString())) {
+					view.setVisible(false);
+					view.dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Login failed!");
+				}
 				
 //				new ClientView();
 //				new DoctorView();
