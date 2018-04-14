@@ -5,11 +5,16 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import designchallenge2.model.CalendarDB;
+import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.controller.SlotC;
 import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Doctor;
@@ -17,11 +22,16 @@ import ultimatedesignchallenge.model.Slot;
 
 public class SlotService {
 	
+	private Connection cnt;
+	
+	public SlotService(Connection cnt) {
+		this.cnt = cnt;
+	}
+	
 	public List<Slot> getAll()
 	{
 		List<Slot> slots = new ArrayList<Slot>();
 		
-		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "SELECT * FROM " + Slot.TABLE;
 		
@@ -47,7 +57,6 @@ public class SlotService {
 	public List<Slot> getFree(LocalDate date) {
 		List<Slot> slots = new ArrayList<Slot>();
 		
-		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "SELECT * FROM " + Slot.TABLE
 				+ " WHERE DATE(" + Slot.COL_START + ") = ?"
@@ -77,7 +86,6 @@ public class SlotService {
 	public List<Slot> getFree(Doctor doctor, LocalDate date) {
 		List<Slot> slots = new ArrayList<Slot>();
 		
-		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "SELECT * FROM " + Slot.TABLE
 				+ " WHERE DATE(" + Slot.COL_START + ") = ?"
@@ -111,7 +119,6 @@ public class SlotService {
 	public List<Slot> getTaken(Appointment appointment){
 		List<Slot> slots = new ArrayList<Slot>();
 		
-		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "SELECT * FROM " + Slot.TABLE
 				+ " WHERE " + Slot.COL_APPOINTMENTID
@@ -148,11 +155,46 @@ public class SlotService {
 		return slot;
 	}
 	
+	public void addSlotC(Slot slot) {
+			
+		String query = "INSERT INTO " + Slot.TABLE + " VALUES (?, ?, ?, ?, ?)";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setNull(1, Types.NULL);
+			ps.setTimestamp(2, Timestamp.valueOf(slot.getStart()));
+			ps.setTimestamp(3, Timestamp.valueOf(slot.getEnd()));
+			ps.setNull(4, Types.NULL);
+			ps.setNull(5, Types.NULL);
+			
+			ps.executeUpdate();
+			
+			ps.close();
+			cnt.close();
+			System.out.println("Success!");
+		} catch(SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error!");
+		}
+	}
+	
 	public static void main(String[] args) {
 		DoctorService ds = new DoctorService();
-		SlotService ss = new SlotService();
-		System.out.println(ss.getAll());
-		System.out.println(ss.getFree(LocalDate.of(2018, 4, 14)));
-		System.out.println(ss.getFree(ds.getDoctor(2), LocalDate.of(2018, 4, 14)));
+		SlotService ss = new SlotService(CalendarDB.getConnection());
+		SlotBuilder sb = new SlotBuilder();
+		LocalDate dtoday = LocalDate.now();
+		LocalTime start = LocalTime.of(1, 0);
+		LocalTime end = LocalTime.of(2, 0);
+		Slot slot = new Slot();
+		slot.setStart(LocalDateTime.of(dtoday, start));
+		slot.setEnd(LocalDateTime.of(dtoday, end));
+		ss.addSlotC(slot);
+		System.out.println(":D");
+		
+		
+//		System.out.println(ss.getAll());
+//		System.out.println(ss.getFree(LocalDate.of(2018, 4, 14)));
+//		System.out.println(ss.getFree(ds.getDoctor(2), LocalDate.of(2018, 4, 14)));
 	}
 }
