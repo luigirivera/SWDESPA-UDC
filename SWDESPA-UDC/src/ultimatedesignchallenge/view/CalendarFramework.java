@@ -61,6 +61,7 @@ import designchallenge2.item.CalendarTask;
 import designchallenge2.view.AgendaHTMLItemStringFormatter;
 import designchallenge2.view.DayHTMLItemStringFormatter;
 import designchallenge2.view.ItemStringFormatter;
+import ultimatedesignchallenge.controller.AppointmentController;
 import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.controller.SlotC;
 import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
@@ -109,6 +110,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, update;
 	protected List<CalendarItem> monthItems;
 	protected List<CalendarItem> dayItems;
+	protected AppointmentController appointmentController;
 
 //	Stuff from DC2
 //	private CalendarModel model;
@@ -253,6 +255,7 @@ public class CalendarFramework extends JFrame implements CalendarObserver{
 		scrollMonthTable = new JScrollPane(monthTable);
 		scrollMonthAgendaTable = new JScrollPane(monthAgendaTable);
 		
+		appointmentController = new AppointmentController();
 	}
 	
 	private void commonInit() {
