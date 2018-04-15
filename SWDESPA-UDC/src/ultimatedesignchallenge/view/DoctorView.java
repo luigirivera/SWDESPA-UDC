@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 
-import designchallenge2.view.CalendarObserver;
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Doctor;

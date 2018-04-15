@@ -1,4 +1,4 @@
-package designchallenge2.view;
+package ultimatedesignchallenge.view;
 
 public interface CalendarObserver {
 	public void update();

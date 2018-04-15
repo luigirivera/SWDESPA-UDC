@@ -38,7 +38,6 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import designchallenge2.view.CalendarObserver;
 import ultimatedesignchallenge.controller.AppointmentController;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
