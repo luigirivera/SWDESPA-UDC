@@ -55,6 +55,15 @@ public class SecretaryView extends CalendarFramework{
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 	}
 	
+	@Override
+	public void update() {
+		dayPanel.refreshTables();//method doesnt exist
+		weekPanel.refreshTables();//method doesnt exist
+		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
+		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
+		
+	}
+	
 	private void setAppointment() {
 		LocalDateTime startDateTime, endDateTime;
 		
@@ -90,16 +99,6 @@ public class SecretaryView extends CalendarFramework{
 		//view.toggleCreateView(false);
 		//view.update();
 	}
-	
-	
-	
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 
 	class saveCreateBtnListener implements ActionListener{
 		@Override

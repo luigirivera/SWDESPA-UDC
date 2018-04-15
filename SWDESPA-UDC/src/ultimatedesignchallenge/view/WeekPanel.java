@@ -170,4 +170,52 @@ public class WeekPanel extends JPanel {
 			
 	}
 
+	public JTable getWeekTable() {
+		return weekTable;
+	}
+
+	public void setWeekTable(JTable weekTable) {
+		this.weekTable = weekTable;
+	}
+
+	public JTable getAgendaTable() {
+		return agendaTable;
+	}
+
+	public void setAgendaTable(JTable agendaTable) {
+		this.agendaTable = agendaTable;
+	}
+
+	public DefaultTableModel getModelWeekTable() {
+		return modelWeekTable;
+	}
+
+	public void setModelWeekTable(DefaultTableModel modelWeekTable) {
+		this.modelWeekTable = modelWeekTable;
+	}
+
+	public DefaultTableModel getModelAgendaTable() {
+		return modelAgendaTable;
+	}
+
+	public void setModelAgendaTable(DefaultTableModel modelAgendaTable) {
+		this.modelAgendaTable = modelAgendaTable;
+	}
+
+	public JScrollPane getScrollWeekTable() {
+		return scrollWeekTable;
+	}
+
+	public void setScrollWeekTable(JScrollPane scrollWeekTable) {
+		this.scrollWeekTable = scrollWeekTable;
+	}
+
+	public JScrollPane getScrollAgendaTable() {
+		return scrollAgendaTable;
+	}
+
+	public void setScrollAgendaTable(JScrollPane scrollAgendaTable) {
+		this.scrollAgendaTable = scrollAgendaTable;
+	}
+
 }

@@ -40,14 +40,14 @@ public class ClientView extends CalendarFramework{
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 	}
 	
-	
-	
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+		dayPanel.refreshTables();//method doesnt exist
+		weekPanel.refreshTables();//method doesnt exist
+		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
+		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		
 	}
-
 
 
 	class saveCreateBtnListener implements ActionListener{

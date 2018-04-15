@@ -108,7 +108,7 @@ public class CalendarPanel extends JPanel{
 		refreshCalendar(framework.getMonthBound(), framework.getYearBound(), framework.getYearBound(), validCells); // Refresh calendar
 	}
 	
-	void refreshCalendar(int month, int year, int yearBound,  CellDataHolder validCells) {
+	public void refreshCalendar(int month, int year, int yearBound,  CellDataHolder validCells) {
 		int nod, som, i, j;
 
 		btnPrev.setEnabled(true);
