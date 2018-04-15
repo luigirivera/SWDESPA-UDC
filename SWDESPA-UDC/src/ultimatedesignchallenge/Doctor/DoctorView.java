@@ -53,7 +53,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		for (int i=0; i<48 ; i++) {
 			for (Slot s : myFree) {
 				if (count.equals(s.getStart())){
-					dayTable.setValueAt(s, i, 1);
+					dayPanel.getDayTable().setValueAt(s, i, 1);
 				}
 			}
 			count = count.plusMinutes(30);

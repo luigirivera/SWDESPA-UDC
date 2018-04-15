@@ -130,4 +130,53 @@ public class DayPanel extends JPanel {
 
 		((DefaultTableCellRenderer)dayTable.getDefaultRenderer(Object.class)).setOpaque(false);
 	}
+
+	public JTable getDayTable() {
+		return dayTable;
+	}
+
+	public void setDayTable(JTable dayTable) {
+		this.dayTable = dayTable;
+	}
+
+	public JTable getAgendaTable() {
+		return agendaTable;
+	}
+
+	public void setAgendaTable(JTable agendaTable) {
+		this.agendaTable = agendaTable;
+	}
+
+	public DefaultTableModel getModelDayTable() {
+		return modelDayTable;
+	}
+
+	public void setModelDayTable(DefaultTableModel modelDayTable) {
+		this.modelDayTable = modelDayTable;
+	}
+
+	public DefaultTableModel getModelAgendaTable() {
+		return modelAgendaTable;
+	}
+
+	public void setModelAgendaTable(DefaultTableModel modelAgendaTable) {
+		this.modelAgendaTable = modelAgendaTable;
+	}
+
+	public JScrollPane getScrollDayTable() {
+		return scrollDayTable;
+	}
+
+	public void setScrollDayTable(JScrollPane scrollDayTable) {
+		this.scrollDayTable = scrollDayTable;
+	}
+
+	public JScrollPane getScrollAgendaTable() {
+		return scrollAgendaTable;
+	}
+
+	public void setScrollAgendaTable(JScrollPane scrollAgendaTable) {
+		this.scrollAgendaTable = scrollAgendaTable;
+	}
+	
 }

@@ -657,8 +657,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		createPanel.recurrence.setVisible(false);
 		createPanel.TOLabelTime.setVisible(true);
 
-		if(createPanel.doctors.getItemCount()>0)
-			createPanel.doctors.setSelectedIndex(0);
+		createPanel.doctors.removeAll();
+		//TODO: get all doctors and put them into the combobox
 	}
 	
 	class todayButtonListener implements ActionListener {

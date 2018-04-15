@@ -72,6 +72,12 @@ public class SecretaryView extends CalendarFramework{
 			System.out.println(startDateTime);
 			System.out.println(endDateTime);
 			
+			//grab doctor selected
+			
+			//create user object for the walk-in client
+			
+			//create an Appointment object? and pass the walk-in client and doctor selected
+			
 			//if(recurringAppRB.isSelected())
 				//set recurring appointment    controller.addTask(createName.getText(), startDateTime, some stuff to add);
 			
