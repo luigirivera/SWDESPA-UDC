@@ -1,4 +1,4 @@
-package ultimatedesignchallenge.view;
+package ultimatedesignchallenge.Secretary;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -7,31 +7,36 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import ultimatedesignchallenge.model.User;
+import ultimatedesignchallenge.model.Secretary;
+import ultimatedesignchallenge.view.CalendarFramework;
 
 public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
-	private User model;
+	private Secretary secretary;
 	
-	public SecretaryView(User model) {
-		super("Central Calendar Census - " + model.getFirstname());
+	public SecretaryView(Secretary secretary) {
+		super("Central Calendar Census - " + secretary.getFirstname());
 		
 //		this.model = model;
 //		this.controller = controller;
-		this.model = model;
+		this.secretary = secretary;
 		
-		instantiate();
 		constructorGen("Clinic Secretary");
+		instantiate();
 		init();
 		initListeners();
 	}
 	
 	private void instantiate() {
-		createName = new JTextField();
+		createPanel.setCreateName(new JTextField());
+		createPanel.setDoctors(new JComboBox<String>());
+		
+
 		
 		notifyDoctor = new JMenuItem("Notify Doctor");
 		notifyClient = new JMenuItem("Notify Client");
@@ -41,33 +46,29 @@ public class SecretaryView extends CalendarFramework{
 		popup.add(notifyDoctor);
 		popup.add(notifyClient);
 		
-		createName.setText(createPlaceholderName);
-		createName.setForeground(Color.GRAY);
+		createPanel.add(createPanel.getCreateName());		
+		createPanel.getCreateName().setBounds(10, 30, 620, 40);
 		
+		createPanel.add(createPanel.getDoctors());
+		createPanel.getDoctors().setBounds(390, 90, 120, 40);
 		
-		createPanel.add(createName);		
-		createName.setBounds(10, 30, 400, 40);
-		
-		save.addActionListener(new saveCreateBtnListener());
+		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 	}
 	
-	private void saveCreation() {
-		String[] startDate = new String[3];
+	private void setAppointment() {
 		LocalDateTime startDateTime, endDateTime;
 		
 		try {
-			if(createName.getText().equals(createPlaceholderName) || createName.getText().isEmpty())
+			if(createPanel.getCreateName().getText().trim().isEmpty())
 				throw new Exception("Please enter a name");
-			if(this.startDate.getText().equals(createPlaceholderStartDate) || this.startDate.getText().isEmpty())
-				throw new Exception("Please enter a starting date");
-			startDate = this.startDate.getText().split("/");
-			if(startDate.length !=3)
-				throw new Exception("Invalid date format");
-			startDateTime = LocalDateTime.of(LocalDate.of(Integer.valueOf(startDate[0]), 
-					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) startTime.getSelectedItem());
 			
-			endDateTime = LocalDateTime.of(LocalDate.of(Integer.valueOf(startDate[0]), 
-					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) endTime.getSelectedItem());
+			startDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem());
+			
+			endDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem());
+			
+			
 			System.out.println(startDateTime);
 			System.out.println(endDateTime);
 			
@@ -97,7 +98,7 @@ public class SecretaryView extends CalendarFramework{
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			//saveCreation(); we dont know what this is so we commented it out
+			setAppointment();
 			/*SlotBuilder builder = new SlotBuilder();
 			SlotC slot = builder.buildDoc1Available(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString());*/
 			// to do: add created slot to database, set appointment ID based on appointment name

@@ -1,31 +1,43 @@
-package ultimatedesignchallenge.view;
+package ultimatedesignchallenge.Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.controller.SlotC;
-import ultimatedesignchallenge.model.User;
+import ultimatedesignchallenge.model.Client;
+import ultimatedesignchallenge.view.CalendarFramework;
 
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
-	private User model;
+	private Client client;
 	
-	public ClientView(User model){
-		super("Client Calendar - " + model.getFirstname());
+	public ClientView(Client client){
+		super("Client Calendar - " + client.getFirstname());
 		
 //		this.model = model;
 //		this.controller = controller;
-		this.model = model;
+		this.client = client;
 		
 		constructorGen("Client");
-		initListeners();
 		init();
+		initListeners();
+		
 	}
 	
 	private void init()
 	{
-		save.addActionListener(new saveCreateBtnListener());
+		createPanel.setDoctors(new JComboBox<String>());
+		createPanel.add(createPanel.getDoctors());
+		createPanel.getDoctors().setBounds(390, 90, 120, 40);
+		
+		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 	}
 	
 	
@@ -52,35 +64,27 @@ public class ClientView extends CalendarFramework{
 			
 			//if(recurringAppRB.isSelected())
 				// to do: also set recurringID 
+			
+			setAppointment();
 		}
 	}
 	
-	/*private void saveCreation() {
-		Appointment appointment = new Appointment();
-		String[] startDate = new String[3];
+	private void setAppointment() {
 		LocalDateTime startDateTime, endDateTime;
 		
 		try {
-			if(createName.getText().equals(createPlaceholderName) || createName.getText().isEmpty())
-				throw new Exception("Please enter a name");
-			if(this.startDate.getText().equals(createPlaceholderStartDate) || this.startDate.getText().isEmpty())
-				throw new Exception("Please enter a starting date");
-			startDate = this.startDate.getText().split("/");
-			if(startDate.length !=3)
-				throw new Exception("Invalid date format");
-			startDateTime = LocalDateTime.of(LocalDate.of(Integer.valueOf(startDate[0]), 
-					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) startTime.getSelectedItem());
 			
-			endDateTime = LocalDateTime.of(LocalDate.of(Integer.valueOf(startDate[0]), 
-					Integer.valueOf(startDate[1]), Integer.valueOf(startDate[2])), (LocalTime) endTime.getSelectedItem());
+			startDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem());
+			
+			endDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem());
+			
+			
 			System.out.println(startDateTime);
 			System.out.println(endDateTime);
 			
-			appointment.setClient((Client)model);
-			//appointment.s
-			
-			
-			if(recurringAppRB.isSelected())
+			//if(recurringAppRB.isSelected())
 				//set recurring appointment    controller.addTask(createName.getText(), startDateTime, some stuff to add);
 			
 			//else
@@ -91,5 +95,5 @@ public class ClientView extends CalendarFramework{
 		}
 		//view.toggleCreateView(false);
 		//view.update();
-	}*/
+	}
 }

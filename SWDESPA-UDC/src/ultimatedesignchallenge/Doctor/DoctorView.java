@@ -1,4 +1,4 @@
-package ultimatedesignchallenge.view;
+package ultimatedesignchallenge.Doctor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +17,8 @@ import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.view.CalendarFramework;
+import ultimatedesignchallenge.view.CalendarObserver;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
 	private static final long serialVersionUID = 1L;
@@ -35,37 +37,12 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 		constructorGen("Doctor");
 		init();
-		doctorListInst();
 		initListeners();
 		update();
 	}
 	
-	
-	protected void doctorListInst() {
-		doctorListFrame = new JFrame("Clinic Doctors");
-		doctorListPanel = new JPanel();
-		doctorsCBList = new JComboBox<String>();
-		
-		doctorListFrame.setResizable(false);
-		
-		doctors = new JToggleButton("Doctors");	
-		
-		scrollDoctorList = new JScrollPane(doctorList);
-		
-		doctorListFrame.setSize(420, 625);
-		doctorListFrame.setLayout(null);
-		doctorListPanel.setLayout(null);
-
-		calendarPanel.add(doctors);
-		createPanel.add(doctorsCBList);
-		doctors.setBounds(10, 500, 250,50);
-		doctorsCBList.setBounds(160, 120, 120, 40);
-		doctorListPanel.setBounds(0, 0, doctorListFrame.getWidth(), doctorListFrame.getHeight());
-		scrollDoctorList.setBounds(doctorListPanel.getBounds());
-	}
-	
 	private void init() {
-		save.addActionListener(new saveCreateBtnListener());
+		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 	}
 	
 	@Override
