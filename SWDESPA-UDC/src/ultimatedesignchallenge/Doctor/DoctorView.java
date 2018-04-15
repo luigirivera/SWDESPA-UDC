@@ -38,7 +38,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		constructorGen("Doctor");
 		init();
 		initListeners();
-		update();
+//		update();
 	}
 	
 	private void init() {
@@ -58,6 +58,11 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			}
 			count = count.plusMinutes(30);
 		}
+		
+		dayPanel.refreshTables();//method doesnt exist
+		weekPanel.refreshTables();//method doesnt exist
+		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
+		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 	}
 	
 	class saveCreateBtnListener implements ActionListener{
