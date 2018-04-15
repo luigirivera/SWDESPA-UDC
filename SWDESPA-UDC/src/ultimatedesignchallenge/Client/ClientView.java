@@ -42,9 +42,13 @@ public class ClientView extends CalendarFramework{
 	
 	@Override
 	public void update() {
-		dayPanel.refreshTables();//method doesnt exist
-		weekPanel.refreshTables();//method doesnt exist
+		//grab necessary data
+		dayPanel.refreshDayTable();//method does not exist
+		dayPanel.refreshAgendaTable();//method does note exist
+		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
+		weekPanel.refreshAgendaTable();//method does not exist
 		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
+		monthPanel.refreshAgendaTable();//method does not exist
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		
 	}

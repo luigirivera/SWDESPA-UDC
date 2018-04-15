@@ -37,4 +37,22 @@ public class DoctorList extends JFrame {
 		add(scrollDoctorList);
 		scrollDoctorList.setBounds(0,0,this.getWidth(),this.getHeight());
 	}
+
+	public JList<String> getDoctorList() {
+		return doctorList;
+	}
+
+	public void setDoctorList(JList<String> doctorList) {
+		this.doctorList = doctorList;
+	}
+
+	public DefaultListModel<String> getModelDoctorList() {
+		return modelDoctorList;
+	}
+
+	public void setModelDoctorList(DefaultListModel<String> modelDoctorList) {
+		this.modelDoctorList = modelDoctorList;
+	}
+	
+	
 }

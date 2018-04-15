@@ -148,4 +148,12 @@ public class CalendarPanel extends JPanel{
 		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
 	}
 
+	public JButton getCreate() {
+		return create;
+	}
+
+	public void setCreate(JButton create) {
+		this.create = create;
+	}
+
 }

@@ -1,49 +1,26 @@
 package ultimatedesignchallenge.view;
 
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 
 import ultimatedesignchallenge.controller.AppointmentController;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
-//NOTE: Fix generateWeekAgendaTable thanks - Louie
-//TODO: Recurring Events because idk how that works - Louie
 
 public abstract class CalendarFramework extends JFrame implements CalendarObserver {
 	private static final long serialVersionUID = 1L;
@@ -297,6 +274,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		try {
 			doctorList.addWindowListener(new doctorListWindowListener());
+			doctorList.addMouseListener(new doctorListListener());
 			calendarPanel.doctors.addActionListener(new toggleDoctorListListener());
 		}catch(Exception e) {}
 	}
@@ -508,6 +486,18 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		@Override
 		public void mouseReleased(MouseEvent e) {}
 		
+	}
+	
+	class doctorListListener extends MouseAdapter{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			super.mouseClicked(e);
+			doctorList.doctorList.getSelectedValuesList();
+			
+			//filter the tables necessary to the selected
+			update();
+			
+		}
 	}
 	
 	class createbtnListener implements ActionListener{

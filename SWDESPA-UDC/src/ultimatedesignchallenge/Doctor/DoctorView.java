@@ -7,12 +7,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JToggleButton;
-
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Doctor;
@@ -42,6 +36,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	}
 	
 	private void init() {
+		calendarPanel.getCreate().setText("Set Appointment Slot");
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 	}
 	
@@ -59,10 +54,17 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			count = count.plusMinutes(30);
 		}
 		
-		dayPanel.refreshTables();//method doesnt exist
-		weekPanel.refreshTables();//method doesnt exist
+		//grab necessary data
+		
+		//grab necessary data
+		dayPanel.refreshDayTable();//method does not exist
+		dayPanel.refreshAgendaTable();//method does note exist
+		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
+		weekPanel.refreshAgendaTable();//method does not exist
 		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
+		monthPanel.refreshAgendaTable();//method does not exist
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
+		
 	}
 	
 	class saveCreateBtnListener implements ActionListener{
