@@ -31,38 +31,33 @@ public class SecretaryView extends CalendarFramework{
 		this.secretary = secretary;
 		
 		constructorGen("Clinic Secretary");
-		instantiate();
-		init();
 		initListeners();
+		init();
 		update();
 	}
 	
-	private void instantiate() {
-		createPanel.setCreateName(new JTextField());
-		createPanel.setDoctors(new JComboBox<String>());
-		doctorList = new DoctorList();
+	private void init() {
 		
+		
+		createPanel.setCreateName(new JTextField());
+		createPanel.add(createPanel.getCreateName());		
+		createPanel.getCreateName().setBounds(10, 30, 620, 40);
+		
+		createPanel.setDoctors(new JComboBox<String>());
+		createPanel.add(createPanel.getDoctors());
+		createPanel.getDoctors().setBounds(390, 90, 120, 40);
+		
+		doctorList = new DoctorList();
 		calendarPanel.setDoctors(new JToggleButton("Doctors"));
 		calendarPanel.add(calendarPanel.getDoctors());
 		calendarPanel.getDoctors().setBounds(10, 500, 250,50);
 		
+		cancelAll = new JMenuItem("Cancel All Meetings");
 		notifyDoctor = new JMenuItem("Notify Doctor");
 		notifyClient = new JMenuItem("Notify Client");
-	}
-	
-	private void init() {
+		popup.add(update);
 		popup.add(notifyDoctor);
 		popup.add(notifyClient);
-		
-		createPanel.add(createPanel.getCreateName());		
-		createPanel.getCreateName().setBounds(10, 30, 620, 40);
-		
-		createPanel.add(createPanel.getDoctors());
-		createPanel.getDoctors().setBounds(390, 90, 120, 40);
-		
-		cancelAll = new JMenuItem("Cancel All Meetings");
-		
-		popup.add(update);
 		popup.add(cancel);
 		popup.add(cancelAll);
 		
@@ -206,6 +201,7 @@ public class SecretaryView extends CalendarFramework{
 			System.out.println(startDateTime);
 			System.out.println(endDateTime);
 			
+			//TODO:
 			//grab doctor selected
 			//check if doctor has that slot
 			//check if that slot is free

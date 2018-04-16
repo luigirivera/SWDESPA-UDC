@@ -34,8 +34,8 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		this.slotController = slotController;
 		
 		constructorGen("Doctor");
-		init();
 		initListeners();
+		init();
 		update();
 	}
 	
@@ -69,6 +69,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			count = count.plusMinutes(30);
 		}
 		
+		//TODO:
 		//grab necessary data
 		
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
@@ -84,6 +85,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	@Override
 	protected void refreshDayView()
 	{
+		//TODO:
 		//clear all rows
 		//use this -> clearAgenda(dayPanel.getModelAgendaTable());
 		//get slots that i have set available, all of them
@@ -94,6 +96,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	@Override
 	protected void refreshWeekView()
 	{
+		//TODO:
 		//clear all rows
 		//use this -> clearAgenda(weekPanel.getModelAgendaTable());
 		//get slots that i have set available, all of them
@@ -147,6 +150,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	class cancelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//TODO:
 			//get selected slot
 			//remove that slot from doctor's slots
 			update();

@@ -31,8 +31,8 @@ public class ClientView extends CalendarFramework{
 		this.client = client;
 		
 		constructorGen("Client");
-		init();
 		initListeners();
+		init();
 		update();
 		
 	}
@@ -43,13 +43,12 @@ public class ClientView extends CalendarFramework{
 		createPanel.add(createPanel.getDoctors());
 		createPanel.getDoctors().setBounds(390, 90, 120, 40);
 		
-		cancelAll = new JMenuItem("Cancel All Meetings");
 		doctorList = new DoctorList();
-		
 		calendarPanel.setDoctors(new JToggleButton("Doctors"));
 		calendarPanel.add(calendarPanel.getDoctors());
 		calendarPanel.getDoctors().setBounds(10, 500, 250,50);
 		
+		cancelAll = new JMenuItem("Cancel All Meetings");
 		popup.add(update);
 		popup.add(cancel);
 		popup.add(cancelAll);
@@ -64,6 +63,7 @@ public class ClientView extends CalendarFramework{
 	
 	@Override
 	public void update() {
+		//TODO:
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
@@ -194,6 +194,7 @@ public class ClientView extends CalendarFramework{
 			System.out.println(startDateTime);
 			System.out.println(endDateTime);
 			
+			//TODO:
 			//grab doctor selected
 			//check if doctor has that slot
 			//check if that slot is free

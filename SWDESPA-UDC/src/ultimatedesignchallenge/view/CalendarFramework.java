@@ -123,14 +123,14 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		//TODO:
 		//clear calendar rows
 		//use this -> clearAgenda(dayPanel.modelAgendaTable);
-		//check filter for which doctor
+		//check filter for which doctor/s
 		//get slots that the doctor have set available, all of them
 		//get all of my appointments in color
 		//get all other appointments in redacted
 		//display it in the dayTable
 		//display occupied slots in agenda table, colored and redacted
 		
-		
+		//PS: not sure about this on the bottom
 		/*for (int row = 0 ; row < modelDayTable.getRowCount() ; row++) {
 			modelDayTable.setValueAt("", row, 1);
 			for (CalendarItem item : dayItems) {
@@ -151,7 +151,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		//TODO:
 		//clear calendar rows
 		//use this -> clearAgenda(weekPanel.modelAgendaTable);
-		//check filter for which doctor
+		//check filter for which doctor/s
 		//get slots that the doctor have set available, all of them
 		//get all of my appointments in color
 		//get all other appointments in redacted
@@ -354,8 +354,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
 			doctorList.doctorList.getSelectedValuesList();
-			
-			//filter the tables necessary to the selected
 			update();
 			
 		}
