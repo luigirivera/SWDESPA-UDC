@@ -73,13 +73,16 @@ public class SecretaryView extends CalendarFramework{
 	@Override
 	public void update() {
 		//grab necessary data
-		dayPanel.refreshDayTable();//method does not exist
-		dayPanel.refreshAgendaTable();//method does note exist
-		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
-		weekPanel.refreshAgendaTable();//method does not exist
-		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
-		monthPanel.refreshAgendaTable();//method does not exist
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
+		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);	
+		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
+		
+//		TODO: MAKE THESE METHODS
+//		dayPanel.refreshDayTable();//method does not exist
+//		
+//		dayPanel.refreshAgendaTable();//method does note exist
+//		weekPanel.refreshAgendaTable();//method does not exist
+//		monthPanel.refreshAgendaTable();//method does not exist
 		
 	}
 	
