@@ -17,6 +17,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
 
@@ -127,9 +128,11 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		//		esformatter.formatEvents(LegacyEventConverter.convert(model.getItemsOn(flags, LocalDate.of(yearToday, monthToday+1, day))))), row, column);
 	}
 
-	protected void refreshDayView() {
+	protected void refreshDayView()
+	{
 		//TODO:
-		//clear all rows
+		//clear calendar rows
+		//use this -> clearAgenda(dayPanel.modelAgendaTable);
 		//check filter for which doctor
 		//get slots that the doctor have set available, all of them
 		//get all of my appointments in color
@@ -156,7 +159,8 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected void refreshWeekView()
 	{
 		//TODO:
-		//clear all rows
+		//clear calendar rows
+		//use this -> clearAgenda(weekPanel.modelAgendaTable);
 		//check filter for which doctor
 		//get slots that the doctor have set available, all of them
 		//get all of my appointments in color
@@ -196,9 +200,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}*/
 	}
 	
-	public void clearAgenda() {
-		for (int row = modelAgendaTable.getRowCount()-1 ; row >= 0 ; row--) {
-			modelAgendaTable.removeRow(row);
+	public void clearAgenda(DefaultTableModel model) {
+		for (int row = model.getRowCount()-1 ; row >= 0 ; row--) {
+			model.removeRow(row);
 		}
 	}
 	
@@ -298,6 +302,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
+		
+		refreshDayView();
+		refreshWeekView();
+		refreshMonthView();
 	}
 	
 	// ------------LISTENERS------------//
@@ -602,7 +610,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		monthPanel.scrollMonthTable.setEnabled(toggle);
 	}
 	
-	private void toggleCreateView(boolean toggle) {
+	protected void toggleCreateView(boolean toggle) {
 		toggleDayView(!toggle);
 		toggleAgendaView(false);
 		topPanel.calendar.setEnabled(!toggle);
@@ -630,6 +638,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		createPanel.TOLabelTime.setVisible(true);
 		
 		try {
+			createPanel.createName.setText("");
 			createPanel.doctors.removeAll();
 			//TODO: get all doctors and put them into the combobox
 		}catch(Exception e) {}

@@ -15,11 +15,9 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.SlotBuilder;
-import ultimatedesignchallenge.controller.SlotC;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DoctorList;
-import ultimatedesignchallenge.view.dayTableMouseListener;
 
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
@@ -108,8 +106,6 @@ public class ClientView extends CalendarFramework{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			SlotBuilder builder = new SlotBuilder();
-			SlotC slot;
-			
 			/*if(doctorsCBList.getSelectedItem() == "doctor1")
 				slot = builder.buildAppointment(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString(), model.getFirstname());
 			else
@@ -139,7 +135,6 @@ public class ClientView extends CalendarFramework{
 			System.out.println(endDateTime);
 			
 			//grab doctor selected
-			
 			//create an Appointment object? and pass the client and doctor selected
 			
 			//if(recurringAppRB.isSelected())
@@ -151,7 +146,7 @@ public class ClientView extends CalendarFramework{
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		//view.toggleCreateView(false);
-		//view.update();
+		toggleCreateView(false);
+		update();
 	}
 }

@@ -150,8 +150,8 @@ public class SecretaryView extends CalendarFramework{
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		//view.toggleCreateView(false);
-		//view.update();
+		toggleCreateView(false);
+		update();
 	}
 
 	class saveCreateBtnListener implements ActionListener{

@@ -147,6 +147,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			
+			toggleCreateView(false);
 			update();
 		}
 	}
