@@ -135,6 +135,8 @@ public class ClientView extends CalendarFramework{
 			System.out.println(endDateTime);
 			
 			//grab doctor selected
+			//check if doctor has that slot
+			//check if that slot is free
 			//create an Appointment object? and pass the client and doctor selected
 			
 			//if(recurringAppRB.isSelected())

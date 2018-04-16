@@ -136,7 +136,8 @@ public class SecretaryView extends CalendarFramework{
 			System.out.println(endDateTime);
 			
 			//grab doctor selected
-			
+			//check if doctor has that slot
+			//check if that slot is free
 			//create user object for the walk-in client
 			
 			//create an Appointment object? and pass the walk-in client and doctor selected
