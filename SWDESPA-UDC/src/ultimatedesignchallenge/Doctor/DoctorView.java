@@ -2,8 +2,8 @@ package ultimatedesignchallenge.Doctor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -29,7 +29,6 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		super("Doctor Calendar - " + doctor.getFirstname());
 		
 //		this.model = model;
-//		this.controller = controller;
 		this.doctor = doctor;
 		this.controller = controller;
 		this.slotController = slotController;
@@ -37,7 +36,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		constructorGen("Doctor");
 		init();
 		initListeners();
-//		update();
+		update();
 	}
 	
 	private void init() {
@@ -107,7 +106,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display appointments in agenda table in order of the days 
 	}
 	
-	class dayTableMouseListener implements MouseListener{
+	class dayTableMouseListener extends MouseAdapter{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -118,23 +117,13 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			//update();
 			
 		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {			
-			//saveCreation(); we dont know what this is so we commented it out
-			// to do: add created slot to database, set appointment ID based on appointment name
+			//TODO: add created slot to database, set appointment ID based on appointment name
 						
 			try {
 				if(createPanel.getRecurring().isSelected() == true)

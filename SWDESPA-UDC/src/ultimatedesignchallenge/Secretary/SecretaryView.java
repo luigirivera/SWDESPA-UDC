@@ -1,10 +1,9 @@
 package ultimatedesignchallenge.Secretary;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -83,7 +82,7 @@ public class SecretaryView extends CalendarFramework{
 		
 	}
 	
-	class dayTableMouseListener implements MouseListener{
+	class dayTableMouseListener extends MouseAdapter{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -106,16 +105,6 @@ public class SecretaryView extends CalendarFramework{
 			
 			//update();
 		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
-		
 	}
 	
 	private void setAppointment() {
