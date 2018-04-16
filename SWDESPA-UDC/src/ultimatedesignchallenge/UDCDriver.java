@@ -10,7 +10,14 @@ import ultimatedesignchallenge.view.LoginView;
 public class UDCDriver {
 	public static void main(String[] args) {
 		CalendarDB.getConnection();
-		new LoginView(new UserController(new DoctorService(), new SecretaryService(), new ClientService()));
+		
+		DoctorService dsv = new DoctorService();
+		SecretaryService ssv = new SecretaryService();
+		ClientService csv = new ClientService();
+		
+		UserController uc = new UserController(dsv, ssv, csv);
+		
+		new LoginView(uc);
 	}
 
 }

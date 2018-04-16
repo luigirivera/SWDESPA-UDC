@@ -1,15 +1,14 @@
 package ultimatedesignchallenge.controller;
 
+import ultimatedesignchallenge.Client.ClientView;
+import ultimatedesignchallenge.Doctor.DoctorView;
+import ultimatedesignchallenge.Secretary.SecretaryView;
 import ultimatedesignchallenge.model.*;
 import ultimatedesignchallenge.model.User;
 import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SecretaryService;
 import ultimatedesignchallenge.services.SlotService;
-//just got all of the them, we can change it later if you guys dont wanna do this
-import ultimatedesignchallenge.view.ClientView;
-import ultimatedesignchallenge.view.DoctorView;
-import ultimatedesignchallenge.view.SecretaryView;
 
 public class UserController {
 	private DoctorService dsv;

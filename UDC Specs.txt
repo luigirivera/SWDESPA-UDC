@@ -1,0 +1,38 @@
+1. April 18 Grade Consul
+2. April 14 Deadline
+
+2. Doctor Sets/Allocates Available Time aka Available Slot intervals of 30 mins
+3. Booked slot cant be allocated for professional work, only free and available slots
+4. Day, week, calendar views
+5. Secretaries can see all doctors. Doctors can just see themselves. aka Secretary is Server
+6. No overlapping appointments. (10:00-10:30 & 10:30-11:00 arent overlapping)
+7. Variable durations of appointments
+8. Seeing cancelled arent required. Just bonus.
+- Doctors cannot have conflicting reservations but can share free slots
+
+9. Secretaries can see calendar or agenda form of all appointment slots of doctors
+10. Check appointments of all or some doctors to accomodate walk-in clients.
+11. Secretaries set appointment for walk-in clients but dont create account
+12. Secretaries can book for walk-in and phone-in
+13. Sec verifies filled appointment slots of doctors for reminding aka notifications
+14. Sec can notify doctor by button or notifications are auto, or both
+15. Sec can filter slots
+16. Sec can identify docs by color
+- Sec can cancel reservation from anyone
+- If from someone with login, that someone is notified
+
+17. Client see all free slots of all or some doctors
+18. Client reserve slot with doctor.
+19. Client can cancel a slot
+- Clients can reserve a free slot that was cancelled before on different doctor
+20. Client can only see their own reservations. Slots filled by others can be seen but redacted information
+21. Client can have multiple reservations as long as free
+22. Clients can have recurring reservations
+23. Client can cancel one, some, or all of recurring meetings
+
+
+24. Only 1 clinic
+25. Only 2 doctors
+26. Only 1 secretary
+27. No need to create user
+28. Predefined Users
