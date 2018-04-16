@@ -130,7 +130,7 @@ public class DayPanel extends JPanel {
 
 		((DefaultTableCellRenderer)dayTable.getDefaultRenderer(Object.class)).setOpaque(false);
 	}
-
+	
 	public JTable getDayTable() {
 		return dayTable;
 	}

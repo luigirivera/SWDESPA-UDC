@@ -71,14 +71,38 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);	
 		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
+//		TODO: FULFILL THE STEPS
+		refreshDayView();
+		refreshWeekView();
+		refreshMonthView();
+
 		
-//		TODO: MAKE THESE METHODS
-//		dayPanel.refreshDayTable();//method does not exist
-//		
-//		dayPanel.refreshAgendaTable();//method does note exist
-//		weekPanel.refreshAgendaTable();//method does not exist
-//		monthPanel.refreshAgendaTable();//method does not exist
-		
+	}
+	
+	@Override
+	protected void refreshDayView()
+	{
+		//clear all rows
+		//get slots that i have set available, all of them
+		//display it in the dayTable
+		//display occupied slots in agenda table
+	}
+	
+	@Override
+	protected void refreshWeekView()
+	{
+		//clear all rows
+		//get slots that i have set available, all of them
+		//display it in the weekTable
+		//display appointments in agenda table in order of the days
+	}
+	
+	@Override
+	protected void refreshMonthView()
+	{
+		//get all my appointments of the month
+		//display it in the calendar
+		//display appointments in agenda table in order of the days 
 	}
 	
 	class dayTableMouseListener implements MouseListener{
@@ -126,7 +150,4 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			update();
 		}
 	}
-	
-
-
 }

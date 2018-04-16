@@ -18,8 +18,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import ultimatedesignchallenge.controller.AppointmentController;
-
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
 
 public abstract class CalendarFramework extends JFrame implements CalendarObserver {
@@ -36,7 +34,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, update;
 	//protected List<CalendarItem> monthItems;
 	//protected List<CalendarItem> dayItems;
-	protected AppointmentController appointmentController;
 	
 	protected TopPanel topPanel;
 	protected CalendarPanel calendarPanel;
@@ -90,8 +87,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		update = new JMenuItem("Update");
 
 		validCells = new CellDataHolder();	
-
-		appointmentController = new AppointmentController();
 	}
 	
 	private void commonInit() {
@@ -132,7 +127,17 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		//		esformatter.formatEvents(LegacyEventConverter.convert(model.getItemsOn(flags, LocalDate.of(yearToday, monthToday+1, day))))), row, column);
 	}
 
-	public void refreshDay() {
+	protected void refreshDayView() {
+		//TODO:
+		//clear all rows
+		//check filter for which doctor
+		//get slots that the doctor have set available, all of them
+		//get all of my appointments in color
+		//get all other appointments in redacted
+		//display it in the dayTable
+		//display occupied slots in agenda table, colored and redacted
+		
+		
 		/*for (int row = 0 ; row < modelDayTable.getRowCount() ; row++) {
 			modelDayTable.setValueAt("", row, 1);
 			for (CalendarItem item : dayItems) {
@@ -146,6 +151,28 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				}
 			}
 		}*/
+	}
+	
+	protected void refreshWeekView()
+	{
+		//TODO:
+		//clear all rows
+		//check filter for which doctor
+		//get slots that the doctor have set available, all of them
+		//get all of my appointments in color
+		//get all other appointments in redacted
+		//display it in the weekTable
+		//display appointments in agenda table in order of the days, colored and redacted
+	}
+	
+	protected void refreshMonthView()
+	{
+		//TODO:
+		//check filter for which doctor
+		//get all my appointments of the month in color
+		//get all other appointments of the month in redacted
+		//display it in the calendar
+		//display appointments in agenda table in order of the days, colored and redacted 
 	}
 	
 	public void refreshAgenda() {
