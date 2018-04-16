@@ -11,12 +11,14 @@ import java.time.LocalTime;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.controller.SlotC;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.view.CalendarFramework;
+import ultimatedesignchallenge.view.DoctorList;
 import ultimatedesignchallenge.view.dayTableMouseListener;
 
 public class ClientView extends CalendarFramework{
@@ -43,6 +45,11 @@ public class ClientView extends CalendarFramework{
 		createPanel.getDoctors().setBounds(390, 90, 120, 40);
 		
 		cancelAll = new JMenuItem("Cancel All Meetings");
+		doctorList = new DoctorList();
+		
+		calendarPanel.setDoctors(new JToggleButton("Doctors"));
+		calendarPanel.add(calendarPanel.getDoctors());
+		calendarPanel.getDoctors().setBounds(10, 500, 250,50);
 		
 		popup.add(update);
 		popup.add(cancel);

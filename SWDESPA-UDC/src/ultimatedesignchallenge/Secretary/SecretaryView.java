@@ -13,10 +13,12 @@ import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.view.CalendarFramework;
+import ultimatedesignchallenge.view.DoctorList;
 
 public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
@@ -38,8 +40,11 @@ public class SecretaryView extends CalendarFramework{
 	private void instantiate() {
 		createPanel.setCreateName(new JTextField());
 		createPanel.setDoctors(new JComboBox<String>());
+		doctorList = new DoctorList();
 		
-
+		calendarPanel.setDoctors(new JToggleButton("Doctors"));
+		calendarPanel.add(calendarPanel.getDoctors());
+		calendarPanel.getDoctors().setBounds(10, 500, 250,50);
 		
 		notifyDoctor = new JMenuItem("Notify Doctor");
 		notifyClient = new JMenuItem("Notify Client");

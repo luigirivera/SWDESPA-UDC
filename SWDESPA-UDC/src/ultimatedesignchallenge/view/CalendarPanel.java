@@ -50,8 +50,7 @@ public class CalendarPanel extends JPanel{
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
 				return false;
 			}
-		};
-		doctors = new JToggleButton("Doctors");	
+		};	
 		calendarTable = new JTable(modelCalendarTable);
 		scrollCalendarTable = new JScrollPane(calendarTable);
 	}
@@ -63,7 +62,7 @@ public class CalendarPanel extends JPanel{
 		add(btnNext);
 		add(scrollCalendarTable);
 		add(create);
-		add(doctors);
+		
 		
 		btnPrev.setMargin(new Insets(0,0,0,0));
 		btnNext.setMargin(new Insets(0,0,0,0));
@@ -75,7 +74,6 @@ public class CalendarPanel extends JPanel{
 		btnPrev.setBounds(180, 60, 40, 30);
 		btnNext.setBounds(220, 60, 40, 30);
 		scrollCalendarTable.setBounds(10, 100, 250, 390);
-		doctors.setBounds(10, 500, 250,50);
 	}
 	
 	void generateCalendar(CellDataHolder validCells) {
@@ -155,5 +153,15 @@ public class CalendarPanel extends JPanel{
 	public void setCreate(JButton create) {
 		this.create = create;
 	}
+
+	public JToggleButton getDoctors() {
+		return doctors;
+	}
+
+	public void setDoctors(JToggleButton doctors) {
+		this.doctors = doctors;
+	}
+	
+	
 
 }

@@ -83,7 +83,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		dayPanel = new DayPanel();
 		weekPanel = new WeekPanel();
 		monthPanel = new MonthPanel();
-		doctorList = new DoctorList();
+		
 		
 		popup = new JPopupMenu();
 		cancel = new JMenuItem("Cancel");
