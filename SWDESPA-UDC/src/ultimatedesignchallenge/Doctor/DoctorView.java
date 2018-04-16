@@ -83,6 +83,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	protected void refreshDayView()
 	{
 		//clear all rows
+		//use this -> clearAgenda(dayPanel.getModelAgendaTable());
 		//get slots that i have set available, all of them
 		//display it in the dayTable
 		//display occupied slots in agenda table
@@ -92,6 +93,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	protected void refreshWeekView()
 	{
 		//clear all rows
+		//use this -> clearAgenda(weekPanel.getModelAgendaTable());
 		//get slots that i have set available, all of them
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days

@@ -200,7 +200,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}*/
 	}
 	
-	public void clearAgenda(DefaultTableModel model) {
+	protected void clearAgenda(DefaultTableModel model) {
 		for (int row = model.getRowCount()-1 ; row >= 0 ; row--) {
 			model.removeRow(row);
 		}
