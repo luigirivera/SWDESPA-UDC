@@ -34,6 +34,7 @@ public class SecretaryView extends CalendarFramework{
 		instantiate();
 		init();
 		initListeners();
+		update();
 	}
 	
 	private void instantiate() {
@@ -74,7 +75,8 @@ public class SecretaryView extends CalendarFramework{
 	public void update() {
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);	
+		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
+		changeLabel();
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
 		refreshWeekView();

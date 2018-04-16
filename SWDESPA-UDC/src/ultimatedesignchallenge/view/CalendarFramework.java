@@ -6,7 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected int yearBound, monthBound, dayBound, yearToday, monthToday, dayToday;
 	protected String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
 			"October", "November", "December" };
+	protected String[] monthsAbrev = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
 
 
 	/**** Added during the project ****/
@@ -246,6 +249,33 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 	}
 	
+	protected void changeLabel()
+	{
+		String label = months[monthToday] + " " + dayToday + ", " + yearToday;
+		if(topPanel.viewType.getSelectedItem().equals("Week"))
+		{
+			Calendar cal = Calendar.getInstance();
+			cal.set(yearToday, monthToday, dayToday);
+			cal.get(Calendar.WEEK_OF_YEAR);
+			cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+			
+			if(cal.get(Calendar.WEEK_OF_YEAR) == 1)
+			{
+				label = "Dec " + cal.get(Calendar.DATE) + ", " + cal.get(Calendar.YEAR) + " - ";
+				cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+				label += "Jan " + cal.get(Calendar.DATE) + ", " + cal.get(Calendar.YEAR);
+			}
+			else
+			{
+				label = monthsAbrev[cal.get(Calendar.MONTH)] + " " + cal.get(Calendar.DATE) + " - ";
+				cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+				label += monthsAbrev[cal.get(Calendar.MONTH)] + " " + cal.get(Calendar.DATE) + ", " + yearToday;
+			}	
+		}
+		
+		topPanel.viewLabel.setText(label);
+	}
+	
 	protected void initListeners() {
 		calendarPanel.btnNext.addActionListener(new btnNext_Action());
 		calendarPanel.btnPrev.addActionListener(new btnPrev_Action());
@@ -279,7 +309,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	{
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
-		
+		changeLabel();
 		refreshDayView();
 		refreshWeekView();
 	}
@@ -360,7 +390,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 					// TODO: show the day/agenda for that day
 					dayToday = day;
 					update();
-					weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				}
@@ -423,11 +452,13 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			{
 				weekPanel.setVisible(true);
 				dayPanel.setVisible(false);
+				changeLabel();
 			}
 			else
 			{
 				weekPanel.setVisible(false);
 				dayPanel.setVisible(true);
+				changeLabel();
 			}
 			
 		}
