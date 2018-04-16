@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Doctor;
@@ -67,15 +69,37 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 	}
 	
+	private void setAppointment() {
+		LocalDateTime startDateTime, endDateTime;
+		
+		try {
+			if(createPanel.getCreateName().getText().trim().isEmpty())
+				throw new Exception("Please enter a name");
+			
+			startDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem());
+			
+			endDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem());
+						
+			System.out.println(startDateTime);
+			System.out.println(endDateTime);		
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
 	class saveCreateBtnListener implements ActionListener{
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) {			
 			//saveCreation(); we dont know what this is so we commented it out
 			// to do: add created slot to database, set appointment ID based on appointment name
-			controller.createFree(
-					LocalDateTime.of(LocalDate.parse(startDate.getText()), startTime.getItemAt(startTime.getSelectedIndex())), 
-					LocalDateTime.of(LocalDate.parse(startDate.getText()), endTime.getItemAt(endTime.getSelectedIndex())));
+
+			setAppointment();
+						
+			// controller.createFree(startDateTime, endDateTime);
 			update();
+			
 			//if(recurringAppRB.isSelected())
 				// to do: also set recurringID 
 		}
