@@ -284,7 +284,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				monthToday -= 1;
 			}
 			calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-			update();
 		}
 	}
 
@@ -297,7 +296,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				monthToday += 1;
 			}
 			calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-			update();
 		}
 	}
 	
