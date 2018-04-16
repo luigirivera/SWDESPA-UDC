@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -33,10 +32,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	/**** Added during the project ****/
 	protected CellDataHolder validCells;
 	protected JPopupMenu popup;
-	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, update;
-	//protected List<CalendarItem> monthItems;
-	//protected List<CalendarItem> dayItems;
-	
+	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, update;	
 	protected TopPanel topPanel;
 	protected CalendarPanel calendarPanel;
 	protected CreatePanel createPanel;
