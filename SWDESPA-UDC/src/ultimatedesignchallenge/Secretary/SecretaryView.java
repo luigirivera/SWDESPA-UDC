@@ -68,6 +68,9 @@ public class SecretaryView extends CalendarFramework{
 		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
+		dayPanel.getAgendaTable().addMouseListener(new agendaTableMouseListener());
+		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
+		weekPanel.getAgendaTable().addMouseListener(new weekAgendaTableMouseListener());
 		cancel.addActionListener(new cancelListener());
 	}
 	
@@ -103,6 +106,76 @@ public class SecretaryView extends CalendarFramework{
 				 */
 					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
 			}
+		}
+	}
+	
+	class agendaTableMouseListener extends MouseAdapter{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = dayPanel.getAgendaTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& if there is a selected item*/)
+			{
+				//TODO:
+				/*if(this is NOT a recurring meeting)
+				 *	cancellAll.setEnabled(false);
+				 *else
+				 *	cancellAll.setEnabled(true);
+				 *
+				 *if(client does not have account)
+				 *	notifyClient.setEnabled(false);
+				 *else
+				 *	notifyClient.setEnabled(true);
+				 */
+					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+			}	
+		}	
+	}
+	
+	class weekTableMouseListener extends MouseAdapter{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = weekPanel.getWeekTable().getSelectedRow();
+			int col = weekPanel.getWeekTable().getSelectedColumn();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& if there is a selected item*/)
+			{
+				//TODO:
+				/*if(this is NOT a recurring meeting)
+				 *	cancellAll.setEnabled(false);
+				 *else
+				 *	cancellAll.setEnabled(true);
+				 *
+				 *if(client does not have account)
+				 *	notifyClient.setEnabled(false);
+				 *else
+				 *	notifyClient.setEnabled(true);
+				 */
+					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+			}
+		}
+	}
+	
+	class weekAgendaTableMouseListener extends MouseAdapter{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row =  weekPanel.getAgendaTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& if there is a selected item*/)
+			{
+				//TODO:
+				/*if(this is NOT a recurring meeting)
+				 *	cancellAll.setEnabled(false);
+				 *else
+				 *	cancellAll.setEnabled(true);
+				 *
+				 *if(client does not have account)
+				 *	notifyClient.setEnabled(false);
+				 *else
+				 *	notifyClient.setEnabled(true);
+				 */
+					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+			}	
 		}
 	}
 	

@@ -49,6 +49,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
+		dayPanel.getAgendaTable().addMouseListener(new agendaTableMouseListener());
+		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
+		weekPanel.getAgendaTable().addMouseListener(new weekAgendaTableMouseListener());
 		cancel.addActionListener(new cancelListener());
 	}
 	
@@ -106,10 +109,39 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
 				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
 			
-			//update();
-			
 		}
 		
+	}
+	
+	class agendaTableMouseListener extends MouseAdapter{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = dayPanel.getAgendaTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
+				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+		}
+	}
+	
+	class weekTableMouseListener extends MouseAdapter{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = weekPanel.getWeekTable().getSelectedRow();
+			int col = weekPanel.getWeekTable().getSelectedColumn();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
+				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+		}
+	}
+	
+	class weekAgendaTableMouseListener extends MouseAdapter{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = weekPanel.getAgendaTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
+				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());	
+		}
 	}
 	
 	class cancelListener implements ActionListener {

@@ -284,11 +284,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		topPanel.agenda.addActionListener(new agendaToggleBtnListener());
 		topPanel.viewType.addActionListener(new calendarViewCBListener());
 		topPanel.today.addActionListener(new todayButtonListener());
-	
-		
-//		agendaTable.addMouseListener(new agendaTableMouseListener());
-//		weekTable.addMouseListener(new weekTableMouseListener());
-//		weekAgendaTable.addMouseListener(new weekAgendaTableMouseListener());
 		
 		try {
 			cancelAll.addActionListener(new cancelAllListener());
@@ -336,44 +331,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}
 	}
 	
-
-	
-	class weekTableMouseListener extends MouseAdapter{
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-//			int row = weekTable.getSelectedRow();
-//			int col = weekTable.getSelectedColumn();
-//			if(SwingUtilities.isRightMouseButton(arg0) && modelWeekTable.getValueAt(row, 1) instanceof CalendarItem)
-//				popup.show(weekTable, arg0.getX(), arg0.getY());
-			
-		}
-	}
-	
-	class weekAgendaTableMouseListener extends MouseAdapter{
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			/*int row = weekTable.getSelectedRow();
-			if(SwingUtilities.isRightMouseButton(arg0) && modelWeekAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(weekAgendaTable, arg0.getX(), arg0.getY()); */
-			
-		}
-		
-	}
-	
-	class agendaTableMouseListener extends MouseAdapter{
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			/*int row = agendaTable.getSelectedRow();
-			if(SwingUtilities.isRightMouseButton(arg0) && modelAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(agendaTable, arg0.getX(), arg0.getY()); */
-				
-		}
-		
-	}
-	
 	class calendarTableMouseListener extends MouseAdapter{
 
 		@Override
@@ -383,7 +340,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				
 				try {
 					int day = validCells.getDayAtCell(row, col);
-					// TODO: show the day/agenda for that day
 					dayToday = day;
 					update();
 				} catch (IllegalArgumentException e) {
