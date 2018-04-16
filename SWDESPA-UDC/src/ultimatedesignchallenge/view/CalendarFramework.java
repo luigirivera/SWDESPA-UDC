@@ -46,21 +46,12 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected MonthPanel monthPanel;
 	protected DoctorList doctorList;
 
-//	Stuff from DC2
-//	private CalendarModel model;
-//	private CalendarController controller;
-//	private ItemGetFlags flags;
 	
 	public CalendarFramework(String name) {
 		super(name);
 	}
 	
 	protected void constructorGen(String topLabel) {
-//		this.monthItems = new ArrayList<CalendarItem>();
-//		this.dayItems = new ArrayList<CalendarItem>();
-//		
-//		this.flags = new ItemGetFlags();
-//		flags.setAll(true);
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -96,20 +87,14 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 		popup = new JPopupMenu();
 		cancel = new JMenuItem("Cancel");
-		cancelAll = new JMenuItem("Cancel All Meetings");
 		update = new JMenuItem("Update");
-		
-		
+
 		validCells = new CellDataHolder();	
 
 		appointmentController = new AppointmentController();
 	}
 	
 	private void commonInit() {
-		popup.add(update);
-		popup.add(cancel);
-		popup.add(cancelAll);
-
 		
 		add(calendarPanel);
 		add(topPanel);
@@ -134,7 +119,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	public void refreshCurrentPage() {
 		/*this.refreshCalendar(monthToday, yearToday, modelCalendarTable);
 		this.refreshCalendar(monthToday, yearToday, modelMonthTable);
-		this.refreshHeader();
 		this.refreshDay();
 		this.refreshAgenda();*/
 	}
@@ -263,7 +247,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		topPanel.viewType.addActionListener(new calendarViewCBListener());
 		topPanel.today.addActionListener(new todayButtonListener());
 	
-		dayPanel.dayTable.addMouseListener(new dayTableMouseListener());
+		
 //		agendaTable.addMouseListener(new agendaTableMouseListener());
 //		weekTable.addMouseListener(new weekTableMouseListener());
 //		weekAgendaTable.addMouseListener(new weekAgendaTableMouseListener());
@@ -317,34 +301,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}
 	}
 	
-	class dayTableMouseListener implements MouseListener{
 
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			int row = dayPanel.dayTable.getSelectedRow();
-			if(SwingUtilities.isRightMouseButton(arg0) /*&& modelDayTable.getValueAt(row, 1) instanceof CalendarItem*/)
-			
-			//TODO:
-			/*if(this is NOT a recurring meeting)
-			 *	disable cancelAll
-			 *else
-			 *	enable cancelAll
-			 *
-			 */
-				popup.show(dayPanel.dayTable, arg0.getX(), arg0.getY());
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
-		
-	}
 	
 	class weekTableMouseListener implements MouseListener{
 

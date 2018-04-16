@@ -2,17 +2,22 @@ package ultimatedesignchallenge.Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.controller.SlotC;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.view.CalendarFramework;
+import ultimatedesignchallenge.view.dayTableMouseListener;
 
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
@@ -37,7 +42,14 @@ public class ClientView extends CalendarFramework{
 		createPanel.add(createPanel.getDoctors());
 		createPanel.getDoctors().setBounds(390, 90, 120, 40);
 		
+		cancelAll = new JMenuItem("Cancel All Meetings");
+		
+		popup.add(update);
+		popup.add(cancel);
+		popup.add(cancelAll);
+		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
+		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
 	}
 	
 	@Override
@@ -50,6 +62,37 @@ public class ClientView extends CalendarFramework{
 		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
 		monthPanel.refreshAgendaTable();//method does not exist
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
+		
+	}
+	
+	class dayTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = dayPanel.getDayTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& modelDayTable.getValueAt(row, 1) instanceof CalendarItem*/)
+			{
+				//TODO:
+				/*if(this is NOT a recurring meeting)
+				 *	disable cancelAll
+				 *else
+				 *	enable cancelAll
+				 *
+				 */
+					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+			}
+			
+			//update();
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 

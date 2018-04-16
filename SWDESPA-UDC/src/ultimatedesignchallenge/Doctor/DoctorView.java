@@ -2,12 +2,15 @@ package ultimatedesignchallenge.Doctor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SlotController;
@@ -39,7 +42,14 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	
 	private void init() {
 		calendarPanel.getCreate().setText("Set Appointment Slot");
+		
+		cancel.setText("Free Slot");
+		
+		popup.add(update);
+		popup.add(cancel);
+		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
+		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
 	}
 	
 	@Override
@@ -66,6 +76,29 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
 		monthPanel.refreshAgendaTable();//method does not exist
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
+		
+	}
+	
+	class dayTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = dayPanel.getDayTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
+				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+			
+			//update();
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	

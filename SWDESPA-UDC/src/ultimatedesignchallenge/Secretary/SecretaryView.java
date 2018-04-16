@@ -3,6 +3,8 @@ package ultimatedesignchallenge.Secretary;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.view.CalendarFramework;
@@ -52,7 +55,14 @@ public class SecretaryView extends CalendarFramework{
 		createPanel.add(createPanel.getDoctors());
 		createPanel.getDoctors().setBounds(390, 90, 120, 40);
 		
+		cancelAll = new JMenuItem("Cancel All Meetings");
+		
+		popup.add(update);
+		popup.add(cancel);
+		popup.add(cancelAll);
+		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
+		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
 	}
 	
 	@Override
@@ -65,6 +75,41 @@ public class SecretaryView extends CalendarFramework{
 		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
 		monthPanel.refreshAgendaTable();//method does not exist
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
+		
+	}
+	
+	class dayTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = dayPanel.getDayTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0) /*&& modelDayTable.getValueAt(row, 1) instanceof CalendarItem*/)
+			{
+				//TODO:
+				/*if(this is NOT a recurring meeting)
+				 *	cancellAll.setEnabled(false);
+				 *else
+				 *	cancellAll.setEnabled(true);
+				 *
+				 *if(client does not have account)
+				 *	notifyClient.setEnabled(false);
+				 *else
+				 *	notifyClient.setEnabled(true);
+				 */
+					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+			}
+			
+			//update();
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	
