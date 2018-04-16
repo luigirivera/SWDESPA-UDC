@@ -171,7 +171,7 @@ public class SlotService {
 			ps.executeUpdate();
 			
 			ps.close();
-			cnt.close();
+			// cnt.close();
 			System.out.println("Success!");
 		} catch(SQLException e) {
 			e.printStackTrace();

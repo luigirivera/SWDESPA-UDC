@@ -109,17 +109,19 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			// to do: add created slot to database, set appointment ID based on appointment name
 						
 			try {
-				controller.createFree(LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
-				(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem()), LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
-						(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem()));
+				if(createPanel.getRecurring().isSelected() == true)
+					System.out.println("boy");
+				
+				else {
+					controller.createFree(LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem()), LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+							(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem()));
+				}				
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			
 			update();
-			
-			//if(recurringAppRB.isSelected())
-				// to do: also set recurringID 
 		}
 	}
 	
