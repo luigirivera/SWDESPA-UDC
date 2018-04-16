@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -14,7 +14,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -336,7 +335,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	
 
 	
-	class weekTableMouseListener implements MouseListener{
+	class weekTableMouseListener extends MouseAdapter{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -346,19 +345,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 //				popup.show(weekTable, arg0.getX(), arg0.getY());
 			
 		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
-		
 	}
 	
-	class weekAgendaTableMouseListener implements MouseListener{
+	class weekAgendaTableMouseListener extends MouseAdapter{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -367,19 +356,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				popup.show(weekAgendaTable, arg0.getX(), arg0.getY()); */
 			
 		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	
-	class monthTableMouseListener implements MouseListener{
+	class monthTableMouseListener extends MouseAdapter{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -389,19 +369,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				popup.show(monthTable, arg0.getX(), arg0.getY()); */
 			
 		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	
-	class monthAgendaTableMouseListener implements MouseListener{
+	class monthAgendaTableMouseListener extends MouseAdapter{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -410,21 +381,12 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				popup.show(monthAgendaTable, arg0.getX(), arg0.getY()); */
 			
 		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	
 	
 	
-	class agendaTableMouseListener implements MouseListener{
+	class agendaTableMouseListener extends MouseAdapter{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -433,19 +395,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				popup.show(agendaTable, arg0.getX(), arg0.getY()); */
 				
 		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	
-	class calendarTableMouseListener implements MouseListener{
+	class calendarTableMouseListener extends MouseAdapter{
 
 		@Override
 		public void mouseClicked(MouseEvent evt) {
@@ -463,18 +416,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 					e.printStackTrace();
 				}
 		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {}
 		
 	}
 	
@@ -565,30 +506,11 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 	}
 	
-	class doctorListWindowListener implements WindowListener{
-
-		@Override
-		public void windowActivated(WindowEvent arg0) {}
-
-		@Override
-		public void windowClosed(WindowEvent arg0) {}
-
+	class doctorListWindowListener extends WindowAdapter{
 		@Override
 		public void windowClosing(WindowEvent arg0) {
 			toggleDoctorList(false);
 		}
-
-		@Override
-		public void windowDeactivated(WindowEvent arg0) {}
-
-		@Override
-		public void windowDeiconified(WindowEvent arg0) {}
-
-		@Override
-		public void windowIconified(WindowEvent arg0) {}
-
-		@Override
-		public void windowOpened(WindowEvent arg0) {}
 		
 	}
 	
@@ -636,6 +558,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		createPanel.recurring.setSelected(false);
 		createPanel.recurrence.setVisible(false);
 		createPanel.TOLabelTime.setVisible(true);
+		createPanel.setToday();
+		createPanel.startTime.setSelectedIndex(0);
+		createPanel.endTime.setSelectedIndex(0);
 		
 		try {
 			createPanel.createName.setText("");
