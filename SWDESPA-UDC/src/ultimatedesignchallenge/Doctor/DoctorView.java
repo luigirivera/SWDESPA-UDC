@@ -69,35 +69,20 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 	}
 	
-	private void setAppointment() {
-		LocalDateTime startDateTime, endDateTime;
-		
-		try {
-			if(createPanel.getCreateName().getText().trim().isEmpty())
-				throw new Exception("Please enter a name");
-			
-			startDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
-					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem());
-			
-			endDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
-					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem());
-						
-			System.out.println(startDateTime);
-			System.out.println(endDateTime);		
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}
-	}
-	
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {			
 			//saveCreation(); we dont know what this is so we commented it out
 			// to do: add created slot to database, set appointment ID based on appointment name
-
-			setAppointment();
 						
-			// controller.createFree(startDateTime, endDateTime);
+			try {
+				controller.createFree(LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+				(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem()), LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+						(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem()));
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			
 			update();
 			
 			//if(recurringAppRB.isSelected())
