@@ -49,6 +49,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
+		cancel.addActionListener(new cancelListener());
 	}
 	
 	@Override
@@ -69,11 +70,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);	
-		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
 		refreshWeekView();
-		refreshMonthView();
 
 		
 	}
@@ -98,14 +97,6 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display appointments in agenda table in order of the days
 	}
 	
-	@Override
-	protected void refreshMonthView()
-	{
-		//get all my appointments of the month
-		//display it in the calendar
-		//display appointments in agenda table in order of the days 
-	}
-	
 	class dayTableMouseListener extends MouseAdapter{
 
 		@Override
@@ -118,6 +109,15 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			
 		}
 		
+	}
+	
+	class cancelListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//get selected slot
+			//remove that slot from doctor's slots
+			update();
+		}
 	}
 	
 	class saveCreateBtnListener implements ActionListener{

@@ -1,6 +1,5 @@
 package ultimatedesignchallenge;
 
-import designchallenge2.model.CalendarDB;
 import ultimatedesignchallenge.controller.UserController;
 import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;

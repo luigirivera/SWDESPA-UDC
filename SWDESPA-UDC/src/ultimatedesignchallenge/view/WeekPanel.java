@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -91,6 +92,7 @@ public class WeekPanel extends JPanel {
 		}
 		
 		weekTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		weekTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weekTable.getTableHeader().setReorderingAllowed(false);
 		weekTable.getTableHeader().setResizingAllowed(false);
 		
@@ -125,6 +127,7 @@ public class WeekPanel extends JPanel {
 		
 		agendaTable.getColumnModel().getColumn(1).setPreferredWidth(agendaTable.getWidth() - agendaTable.getColumnModel().getColumn(0).getWidth()-95);
 		agendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		agendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		agendaTable.getTableHeader().setReorderingAllowed(false);
 		agendaTable.getTableHeader().setResizingAllowed(false);
 		agendaTable.setTableHeader(null);

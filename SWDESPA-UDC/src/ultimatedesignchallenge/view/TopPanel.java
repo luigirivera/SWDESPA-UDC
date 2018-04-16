@@ -55,7 +55,6 @@ public class TopPanel extends JPanel {
 		
 		viewType.addItem("Day");
 		viewType.addItem("Week");
-		viewType.addItem("Month");
 		
 		buttonGroup.add(calendar);
 		buttonGroup.add(agenda);

@@ -1,4 +1,4 @@
-package designchallenge2.model;
+package ultimatedesignchallenge;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

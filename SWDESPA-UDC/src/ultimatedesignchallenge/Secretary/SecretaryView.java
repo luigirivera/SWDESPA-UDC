@@ -67,6 +67,7 @@ public class SecretaryView extends CalendarFramework{
 		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
+		cancel.addActionListener(new cancelListener());
 	}
 	
 	@Override
@@ -74,11 +75,9 @@ public class SecretaryView extends CalendarFramework{
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);	
-		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
 		refreshWeekView();
-		refreshMonthView();
 		
 	}
 	
@@ -102,8 +101,16 @@ public class SecretaryView extends CalendarFramework{
 				 */
 					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
 			}
-			
-			//update();
+		}
+	}
+	
+	class cancelListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//TODO:
+			//get selected appointment/s
+			//delete those appointments from the DB
+			update();
 		}
 	}
 	

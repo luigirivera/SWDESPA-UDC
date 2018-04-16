@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -40,7 +39,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	protected CreatePanel createPanel;
 	protected DayPanel dayPanel;
 	protected WeekPanel weekPanel;
-	protected MonthPanel monthPanel;
 	protected DoctorList doctorList;
 
 	
@@ -62,7 +60,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		commonInstantiate(topLabel);
 		commonInit();
 		calendarPanel.generateCalendar(validCells);
-		monthPanel.generateCalendar(dayBound, monthBound, yearBound, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		
 		setResizable(false);
@@ -79,7 +76,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		createPanel = new CreatePanel();
 		dayPanel = new DayPanel();
 		weekPanel = new WeekPanel();
-		monthPanel = new MonthPanel();
 		
 		
 		popup = new JPopupMenu();
@@ -96,19 +92,15 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		add(createPanel);
 		add(dayPanel);
 		add(weekPanel);
-		add(monthPanel);
 		
 		dayPanel.setVisible(true);
 		weekPanel.setVisible(false);
-		monthPanel.setVisible(false);
-		
 
 		topPanel.setBounds(0,0,this.getWidth(), 70);
 		calendarPanel.setBounds(0, 70, 270, 610);
 		createPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		dayPanel.setBounds(createPanel.getBounds());
 		weekPanel.setBounds(createPanel.getBounds());
-		monthPanel.setBounds(createPanel.getBounds());
 	}
 	
 	public void refreshCurrentPage() {
@@ -166,16 +158,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		//get all other appointments in redacted
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days, colored and redacted
-	}
-	
-	protected void refreshMonthView()
-	{
-		//TODO:
-		//check filter for which doctor
-		//get all my appointments of the month in color
-		//get all other appointments of the month in redacted
-		//display it in the calendar
-		//display appointments in agenda table in order of the days, colored and redacted 
 	}
 	
 	public void refreshAgenda() {
@@ -281,12 +263,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 //		agendaTable.addMouseListener(new agendaTableMouseListener());
 //		weekTable.addMouseListener(new weekTableMouseListener());
 //		weekAgendaTable.addMouseListener(new weekAgendaTableMouseListener());
-//		monthTable.addMouseListener(new monthTableMouseListener());
-//		monthAgendaTable.addMouseListener(new monthAgendaTableMouseListener());
-		
-		cancel.addActionListener(new deleteItemListener());
 		
 		try {
+			cancelAll.addActionListener(new cancelAllListener());
 			doctorList.addWindowListener(new doctorListWindowListener());
 			doctorList.addMouseListener(new doctorListListener());
 			calendarPanel.doctors.addActionListener(new toggleDoctorListListener());
@@ -299,12 +278,10 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	public void update()
 	{
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-		monthPanel.refreshCalendar(monthToday, yearToday, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		
 		refreshDayView();
 		refreshWeekView();
-		refreshMonthView();
 	}
 	
 	// ------------LISTENERS------------//
@@ -359,33 +336,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		
 	}
 	
-	class monthTableMouseListener extends MouseAdapter{
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			/*int row = monthTable.getSelectedRow();
-			int col = monthTable.getSelectedColumn();
-			if(SwingUtilities.isRightMouseButton(arg0) && modelMonthTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(monthTable, arg0.getX(), arg0.getY()); */
-			
-		}
-		
-	}
-	
-	class monthAgendaTableMouseListener extends MouseAdapter{
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			/*int row = weekTable.getSelectedRow();
-			if(SwingUtilities.isRightMouseButton(arg0) && modelMonthAgendaTable.getValueAt(row, 1) instanceof CalendarItem)
-				popup.show(monthAgendaTable, arg0.getX(), arg0.getY()); */
-			
-		}
-		
-	}
-	
-	
-	
 	class agendaTableMouseListener extends MouseAdapter{
 
 		@Override
@@ -410,7 +360,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 					// TODO: show the day/agenda for that day
 					dayToday = day;
 					update();
-					monthPanel.refreshCalendar(monthToday, yearToday, validCells);
 					weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
@@ -474,19 +423,11 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			{
 				weekPanel.setVisible(true);
 				dayPanel.setVisible(false);
-				monthPanel.setVisible(false);
-			}
-			else if(topPanel.viewType.getSelectedItem().equals("Month"))
-			{
-				weekPanel.setVisible(false);
-				dayPanel.setVisible(false);
-				monthPanel.setVisible(true);
 			}
 			else
 			{
 				weekPanel.setVisible(false);
 				dayPanel.setVisible(true);
-				monthPanel.setVisible(false);
 			}
 			
 		}
@@ -519,8 +460,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		dayPanel.scrollAgendaTable.setEnabled(toggle);
 		weekPanel.scrollAgendaTable.setVisible(toggle);
 		weekPanel.scrollAgendaTable.setEnabled(toggle);
-		monthPanel.scrollAgendaTable.setVisible(toggle);
-		monthPanel.scrollAgendaTable.setEnabled(toggle);
 	}
 	
 	private void toggleDayView(boolean toggle) {
@@ -528,8 +467,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		dayPanel.scrollDayTable.setEnabled(toggle);
 		weekPanel.scrollWeekTable.setVisible(toggle);
 		weekPanel.scrollWeekTable.setEnabled(toggle);
-		monthPanel.scrollMonthTable.setVisible(toggle);
-		monthPanel.scrollMonthTable.setEnabled(toggle);
 	}
 	
 	protected void toggleCreateView(boolean toggle) {
@@ -583,16 +520,13 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}
 	}
 	
-	class deleteItemListener implements ActionListener {
+	class cancelAllListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			/*JTable invoker = (JTable)popup.getInvoker();
-			CalendarItem item;
-			if(invoker.getValueAt(invoker.getSelectedRow(), 1) instanceof CalendarItem) {
-				item = (CalendarItem)invoker.getValueAt(invoker.getSelectedRow(), 1);
-				controller.deleteItem(item);
-				update();
-			}*/
+			//TODO:
+			//get the recurring id of the selected slot
+			//delete all appointments using that id
+			update();
 		}
 	}
 	

@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.omg.PortableInterceptor.USER_EXCEPTION;
 
-import designchallenge2.model.CalendarDB;
+import ultimatedesignchallenge.CalendarDB;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.User;
 

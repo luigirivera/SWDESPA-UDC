@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import designchallenge2.model.CalendarDB;
+import ultimatedesignchallenge.CalendarDB;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.User;
