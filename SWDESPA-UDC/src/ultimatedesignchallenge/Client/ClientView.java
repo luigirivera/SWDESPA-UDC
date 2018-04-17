@@ -217,11 +217,16 @@ public class ClientView extends CalendarFramework{
 		//System.out.println(tempM);
 		//System.out.println(tempD);
 		
-		for(int i = 0; i < doctors.size(); i++) {
-			slots.addAll(slotService.getFree(doctors.get(i), LocalDate.of(tempY, tempM, tempD)));
+		if(filterFlag == false) {
+			for(int i = 0; i < doctors.size(); i++) {
+				slots.addAll(slotService.getFree(doctors.get(i), LocalDate.of(tempY, tempM, tempD)));
+			}
+			
+			slots.addAll(slotService.getAll(client.getId()));
+		}else {
+			slots.addAll(slotService.getFree(doctor,  LocalDate.of(tempY, tempM, tempD)));
+			slots.addAll(slotService.getAll(client.getId()));
 		}
-		
-		slots.addAll(slotService.getAll(client.getId()));
 		
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 		for (int i = 0; i < 48 ; i++) {
