@@ -59,7 +59,7 @@ CREATE TABLE `CLIENT` (
   PRIMARY KEY (`CLIENTid`),
   KEY `client_user_idx` (`USERid`),
   CONSTRAINT `client_user` FOREIGN KEY (`USERid`) REFERENCES `USER` (`USERid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,6 +68,7 @@ CREATE TABLE `CLIENT` (
 
 LOCK TABLES `CLIENT` WRITE;
 /*!40000 ALTER TABLE `CLIENT` DISABLE KEYS */;
+INSERT INTO `CLIENT` VALUES (1,3);
 /*!40000 ALTER TABLE `CLIENT` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,7 +86,7 @@ CREATE TABLE `DOCTOR` (
   PRIMARY KEY (`DOCTORid`),
   KEY `doctor_user_idx` (`USERid`),
   CONSTRAINT `doctor_user` FOREIGN KEY (`USERid`) REFERENCES `USER` (`USERid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,6 +95,7 @@ CREATE TABLE `DOCTOR` (
 
 LOCK TABLES `DOCTOR` WRITE;
 /*!40000 ALTER TABLE `DOCTOR` DISABLE KEYS */;
+INSERT INTO `DOCTOR` VALUES (1,'FF0000',1),(2,'00FF00',2);
 /*!40000 ALTER TABLE `DOCTOR` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +164,7 @@ CREATE TABLE `SLOT` (
   KEY `slot_recurring_idx` (`RECURRINGid`),
   CONSTRAINT `slot_appointment` FOREIGN KEY (`APPOINTMENTid`) REFERENCES `APPOINTMENT` (`APPOINTMENTid`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `slot_recurring` FOREIGN KEY (`RECURRINGid`) REFERENCES `RECURRING` (`RECURRINGid`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,8 +173,81 @@ CREATE TABLE `SLOT` (
 
 LOCK TABLES `SLOT` WRITE;
 /*!40000 ALTER TABLE `SLOT` DISABLE KEYS */;
+INSERT INTO `SLOT` VALUES (1,'2018-04-14 15:00:00','2018-04-14 15:30:00',NULL,NULL),(3,'2018-04-14 15:30:00','2018-04-14 16:00:00',NULL,NULL),(4,'2018-04-14 16:00:00','2018-04-14 16:30:00',NULL,NULL),(7,'2018-04-14 19:00:00','2018-04-14 19:30:00',NULL,NULL),(8,'2018-04-14 19:30:00','2018-04-14 20:00:00',NULL,NULL),(10,'2018-04-17 00:00:00','2018-04-17 00:30:00',NULL,NULL),(11,'2018-02-03 01:00:00','2018-02-03 01:30:00',NULL,NULL),(12,'2018-02-03 01:30:00','2018-02-03 02:00:00',NULL,NULL);
 /*!40000 ALTER TABLE `SLOT` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `udc_db`.`SLOT_BEFORE_INSERT` BEFORE INSERT ON `SLOT` FOR EACH ROW
+BEGIN
+	IF NEW.end <= NEW.start THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'End must be after start';
+    END IF;
+    IF (SELECT COUNT(*) FROM SLOT WHERE 
+    SLOT.SLOTid <> NEW.SLOTid AND
+    (NEW.start >= SLOT.start AND NEW.start < SLOT.end OR
+    NEW.end > SLOT.start AND NEW.end <= SLOT.end)) > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot have overlapping slots';
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `udc_db`.`SLOT_BEFORE_UPDATE` BEFORE UPDATE ON `SLOT` FOR EACH ROW
+BEGIN
+	IF NEW.end <= NEW.start THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'End must be after start';
+    END IF;
+    IF (SELECT COUNT(*) FROM SLOT WHERE 
+    SLOT.SLOTid <> NEW.SLOTid AND
+    (NEW.start >= SLOT.start AND NEW.start < SLOT.end OR
+    NEW.end > SLOT.start AND NEW.end <= SLOT.end)) > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot have overlapping slots';
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `udc_db`.`SLOT_BEFORE_DELETE` BEFORE DELETE ON `SLOT` FOR EACH ROW
+BEGIN
+	IF OLD.APPOINTMENTid IS NOT NULL THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Appointment already reserved during this slot';
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `SLOT_DOC`
@@ -197,6 +272,7 @@ CREATE TABLE `SLOT_DOC` (
 
 LOCK TABLES `SLOT_DOC` WRITE;
 /*!40000 ALTER TABLE `SLOT_DOC` DISABLE KEYS */;
+INSERT INTO `SLOT_DOC` VALUES (1,1),(3,1),(4,1),(11,1),(12,1),(7,2),(8,2);
 /*!40000 ALTER TABLE `SLOT_DOC` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,7 +291,7 @@ CREATE TABLE `USER` (
   `lastname` varchar(45) NOT NULL,
   PRIMARY KEY (`USERid`),
   UNIQUE KEY `USERusername_UNIQUE` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -224,6 +300,7 @@ CREATE TABLE `USER` (
 
 LOCK TABLES `USER` WRITE;
 /*!40000 ALTER TABLE `USER` DISABLE KEYS */;
+INSERT INTO `USER` VALUES (1,'doc1','aaa','Mantis','Toboggan'),(2,'doc2','aaa','Golden','God'),(3,'cli1','aaa','Jordan','Jordan');
 /*!40000 ALTER TABLE `USER` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -236,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-11 23:15:06
+-- Dump completed on 2018-04-17 21:57:51
