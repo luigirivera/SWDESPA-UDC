@@ -108,8 +108,12 @@ public class WeekPanel extends JPanel {
 				
 	}
 	
-	private void generateAgendaTable() {	
+	private void generateAgendaTable() {
+		modelAgendaTable.addColumn("Time");
+		modelAgendaTable.addColumn("Event/Task");
+		
 		modelAgendaTable.setColumnCount(2);
+		
 		agendaTable.setRowHeight(50);
 		agendaTable.getColumnModel().getColumn(0).setCellRenderer(new AgendaTableRenderer()); //FOR TIME
 		agendaTable.getColumnModel().getColumn(0).setPreferredWidth(150);
@@ -124,7 +128,7 @@ public class WeekPanel extends JPanel {
 		agendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		agendaTable.getTableHeader().setReorderingAllowed(false);
 		agendaTable.getTableHeader().setResizingAllowed(false);
-		agendaTable.setTableHeader(null);
+		//agendaTable.setTableHeader(null);
 		
 		agendaTable.setOpaque(false);
 		scrollAgendaTable.setOpaque(false);

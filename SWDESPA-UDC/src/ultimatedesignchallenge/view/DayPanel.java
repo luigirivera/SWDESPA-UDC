@@ -100,7 +100,6 @@ public class DayPanel extends JPanel {
 	}
 	
 	private void generateAgendaTable() {
-		
 		modelAgendaTable.addColumn("Time");
 		modelAgendaTable.addColumn("Event/Task");
 		
