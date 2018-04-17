@@ -114,13 +114,19 @@ public class ClientView extends CalendarFramework{
 		
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 		
-		for(int i = 0; i< doctors.size(); i++){
-		
-			slots.addAll(slotService.getFree(doctors.get(i), LocalDate.of(yearToday, monthToday+1, dayToday)));
-		
+		if(filterFlag == false) {
+			for(int i = 0; i< doctors.size(); i++){
+			
+				slots.addAll(slotService.getFree(doctors.get(i), LocalDate.of(yearToday, monthToday+1, dayToday)));
+			
+			}
+			
+			slots.addAll(slotService.getAll(client.getId()));
+			
+		}else{
+			slots.addAll(slotService.getFree(doctor, LocalDate.of(yearToday, monthToday+1, dayToday)));
+			slots.addAll(slotService.getAll(client.getId()));
 		}
-		
-		slots.addAll(slotService.getAll(client.getId()));
 		
 		for (int i = 0; i < 48; i++) {
 			dayPanel.getDayTable().setValueAt(null, i, 1);
@@ -297,11 +303,16 @@ public class ClientView extends CalendarFramework{
 			List<Doctor> doctors = new ArrayList<Doctor>();
 			doctors = doctorService.getAll();
 			
-			for(int i = 0; i < doctors.size(); i++) {
-				if(doctors.get(i).getFirstname().equals(strDoctor.split(", ")[1]) && doctors.get(i).getLastname().equals(strDoctor.split(", ")[0]))
-					doctor = doctors.get(i);
+			if(doctorList.getDoctorList().getSelectedValue().equalsIgnoreCase("all"))
+				filterFlag = false;
+			else {
+				filterFlag = true;
+				for(int i = 0; i < doctors.size(); i++) {
+					if(doctors.get(i).getFirstname().equals(strDoctor.split(", ")[1]) && doctors.get(i).getLastname().equals(strDoctor.split(", ")[0]))
+						doctor = doctors.get(i);
+				}
 			}
-			filterFlag = true;
+			
 			update();
 			
 		}
