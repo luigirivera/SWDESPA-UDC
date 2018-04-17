@@ -191,6 +191,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 		List<Slot> myFree = slotService.getFree(doctor, 
 				LocalDate.of(tempY, tempM, tempD));
+		List<Slot> myTaken = slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 		for (int i = 0; i < 48 ; i++) {
 			weekPanel.getWeekTable().setValueAt(null, i, day);
@@ -200,6 +201,12 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 					//System.out.println(weekPanel.getWeekTable().getValueAt(i, 0));
 							weekPanel.getWeekTable().setValueAt(s, i, day);
 							//System.out.println(weekPanel.getWeekTable().getValueAt(i, day));
+				}
+			}
+			for (Slot s : myTaken) {
+				
+				if (count.equals(s.getStart())){
+					weekPanel.getWeekTable().setValueAt(s, i, day);
 				}
 			}
 			count = count.plusMinutes(30);

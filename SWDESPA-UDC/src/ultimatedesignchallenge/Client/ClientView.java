@@ -108,6 +108,8 @@ public class ClientView extends CalendarFramework{
 		
 		}
 		
+		slots.addAll(slotService.getAll(client.getId()));
+		
 		for (int i = 0; i < 48; i++) {
 			dayPanel.getDayTable().setValueAt(null, i, 1);
 			for (Slot s : slots) {
