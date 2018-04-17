@@ -1,7 +1,10 @@
 package ultimatedesignchallenge.view;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Insets;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
@@ -11,6 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
@@ -143,7 +148,7 @@ public class CalendarPanel extends JPanel{
 			}*/
 		}
 
-		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
+		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer(framework));
 	}
 
 	public JButton getCreate() {
@@ -161,7 +166,4 @@ public class CalendarPanel extends JPanel{
 	public void setDoctors(JToggleButton doctors) {
 		this.doctors = doctors;
 	}
-	
-	
-
 }
