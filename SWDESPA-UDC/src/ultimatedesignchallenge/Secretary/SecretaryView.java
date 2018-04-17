@@ -81,6 +81,46 @@ public class SecretaryView extends CalendarFramework{
 		
 	}
 	
+	private void refreshDayView()
+	{
+		//TODO:
+		//clear calendar rows
+		//use this -> clearAgenda(dayPanel.modelAgendaTable);
+		//check filter for which doctor/s
+		//get all time slots
+		//color available slots on the time column. color depends on doctor. white if none //Custom TableRenderer only for day can be used
+		//get all appointments
+		//display it in the dayTable
+		//display appointments in agenda table //Custom TableRenderer only for day agenda can be used
+		
+		//PS: not sure about this on the bottom
+		/*for (int row = 0 ; row < modelDayTable.getRowCount() ; row++) {
+			modelDayTable.setValueAt("", row, 1);
+			for (CalendarItem item : dayItems) {
+				LocalDateTime tmpStartTime = item.getStart();
+				LocalDateTime tmpEndTime = item.getEnd();
+				LocalDateTime tmpTableTime = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), (LocalTime)modelDayTable.getValueAt(row, 0));
+				if((tmpStartTime.equals(tmpTableTime) || tmpStartTime.isBefore(tmpTableTime)) &&
+						tmpEndTime.isAfter(tmpTableTime)) {
+					modelDayTable.setValueAt(item, row, 1);
+					break;
+				}
+			}
+		}*/
+	}
+	
+	private void refreshWeekView()
+	{
+		//TODO:
+		//clear calendar rows
+		//use this -> clearAgenda(weekPanel.modelAgendaTable);
+		//check filter for which doctor/s
+		//get time slots. color unoccupied slots white. color non-appointment slots (slots non of the doctors set) as gray //Custom TableRenderer only for week can be used
+		//get all appointments
+		//display it in the weekTable
+		//display appointments in agenda table in order of the days and time //Custom TableRenderer only for week agenda can be used
+	}
+	
 	class dayTableMouseListener extends MouseAdapter{
 
 		@Override
