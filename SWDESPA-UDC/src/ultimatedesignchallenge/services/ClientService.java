@@ -10,7 +10,10 @@ import java.util.List;
 import org.omg.PortableInterceptor.USER_EXCEPTION;
 
 import ultimatedesignchallenge.CalendarDB;
+import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Client;
+import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.model.User;
 
 public class ClientService {

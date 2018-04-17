@@ -316,7 +316,7 @@ public class SlotService {
 		return true;
 	}
 	
-	public int getId(Slot slot) {
+	public Slot getId(Slot slot) {
 		Connection cnt = CalendarDB.getConnection();
 		
 		Slot slotTemp = null;
@@ -339,8 +339,10 @@ public class SlotService {
 			e.printStackTrace();
 		}
 		
-		return slotTemp.getId();
+		return slotTemp;
 	}
+	
+	
 	
 	public void deleteSlot(int SlotID) {
         //get connection

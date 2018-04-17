@@ -67,8 +67,8 @@ public class AppointmentService {
 		String query = "INSERT INTO " + Appointment.TABLE + " VALUES(?,?,?,?)";
 		String query2 = "SELECT LAST_INSERT_ID() FROM " + Appointment.TABLE;
 		String query3 = "UPDATE " + Slot.TABLE
-				+ " SET " + Slot.COL_APPOINTMENTID + " = ?"
-				+ " WHERE " + Slot.COL_SLOTID + " = ?"
+				+ " SET " + Slot.COL_APPOINTMENTID + " = ? "
+				+ " WHERE " + Slot.COL_SLOTID + " = ? "
 				+ " AND " + Slot.COL_APPOINTMENTID + " IS NULL";
 		
 		try {
@@ -77,6 +77,7 @@ public class AppointmentService {
 			ps.setNull(1, Types.NULL);
 			ps.setInt(2, appointment.getDoctor().getDoctorId());
 			ps.setInt(3, appointment.getClient().getClientId());
+			ps.setNull(4, Types.NULL);
 			
 			ps.executeUpdate();
 			
@@ -94,6 +95,7 @@ public class AppointmentService {
 			for (Slot slot : appointment.getSlots()) {
 				ps = cnt.prepareStatement(query3);
 				
+				System.out.println(slot.getId());
 				ps.setInt(1, appointment.getId());
 				ps.setInt(2, slot.getId());
 				

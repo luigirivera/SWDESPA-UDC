@@ -46,7 +46,7 @@ public class DoctorController {
 			System.out.println(slotc);
 			result = service.addSlotC(slotc);
 			if (result) {
-				temp.setSlotId(service.getId(slotc));
+				temp.setSlotId(service.getId(slotc).getId());
 				temp.setDoctorId(doctor.getDoctorId());
 				sdocService.addSlot_Doc(temp);
 			}
@@ -125,12 +125,12 @@ public class DoctorController {
 		for (Slot slotc : slots) {
 			System.out.println(slotc);
 			service.addSlotC(slotc, tempo);
-			temp.setSlotId(service.getId(slotc));
+			temp.setSlotId(service.getId(slotc).getId());
 			temp.setDoctorId(doctor.getDoctorId());
 			sdocService.addSlot_Doc(temp);
 		}
 		
-		return false; //i dont understand why the one above is false but ill do the same
+		return false; //i don't understand why the one above is false but ill do the same
 	}
 	
 	public boolean updateFree(Slot oldSlot, LocalDateTime newStart, LocalDateTime newEnd) {
