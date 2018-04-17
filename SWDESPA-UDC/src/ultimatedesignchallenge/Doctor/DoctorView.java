@@ -11,7 +11,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.DoctorController;
@@ -165,8 +167,22 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			// TODO Auto-generated method stub
 			Slot temp = new Slot();
 			temp = (Slot)dayPanel.getDayTable().getValueAt(dayPanel.getDayTable().getSelectedRow(), dayPanel.getDayTable().getSelectedColumn());
-			//add joptionpane here pls <3
-			//controller.updateFree();
+			
+			JPanel panel = new JPanel();
+			JComboBox<LocalTime> startTime, endTime;
+			startTime = new JComboBox<LocalTime>();
+			endTime = new JComboBox<LocalTime>();
+			
+			panel.add(startTime);
+			panel.add(endTime);
+			LocalTime tmpTime = LocalTime.of(0, 0);
+			for(int i=0 ; i<48 ; i++) {
+				startTime.addItem(tmpTime);
+				endTime.addItem(tmpTime);
+				tmpTime = tmpTime.plusMinutes(30);
+			}
+			
+			int result = JOptionPane.showConfirmDialog(null, panel, "Update Slot", JOptionPane.OK_CANCEL_OPTION);
 		}
 		
 	}
