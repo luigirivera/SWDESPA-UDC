@@ -13,6 +13,7 @@ import java.util.List;
 
 import ultimatedesignchallenge.CalendarDB;
 import ultimatedesignchallenge.model.Appointment;
+import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.model.User;
@@ -198,6 +199,49 @@ public class SlotService {
 		}
 		
 		return slots;
+	}
+	
+	public List<Client> getAppointmentClientsList(Doctor doctor, LocalDate date)
+	{
+		List<Client> clients = new ArrayList<Client>();
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Slot.TABLE + " INNER JOIN " + Appointment.TABLE 
+				+ " ON " + Slot.COL_APPOINTMENTID + " = " + Appointment.COL_APPOINTMENTID
+				+ " INNER JOIN " + Client.TABLE + " ON " + Appointment.COL_CLIENTID + " = " + Client.COL_CLIENTID
+				+ " INNER JOIN " + User.TABLE + " ON " + Client.COL_USERID + " = " + User.COL_USERID
+				+ " WHERE Appointment.DOCTORid = ?"
+				+ " AND " + " DATE(" + Slot.COL_START + ") = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setInt(1, doctor.getDoctorId());
+			ps.setDate(2, Date.valueOf(date));
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				clients.add(toClient(rs));
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[CLIENT] SELECT SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[CLIENT] SELECT FAILED");
+			e.printStackTrace();
+		}
+		
+		return clients;
+	}
+	
+	private Client toClient(ResultSet rs) throws SQLException {
+		Client client = new Client();
+		
+		client.setFirstname(rs.getString(User.COL_FIRSTNAME));
+		client.setLastname(rs.getString(User.COL_LASTNAME));
+		
+		return client;
 	}
 	
 	private Slot toSlot(ResultSet rs) throws SQLException{

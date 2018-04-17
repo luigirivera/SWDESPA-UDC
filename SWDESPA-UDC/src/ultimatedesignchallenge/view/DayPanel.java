@@ -100,21 +100,27 @@ public class DayPanel extends JPanel {
 	}
 	
 	private void generateAgendaTable() {
-		modelAgendaTable.addColumn("Time");
-		modelAgendaTable.addColumn("Event/Task");
+		modelAgendaTable.addColumn("Start");
+		modelAgendaTable.addColumn("End");
+		modelAgendaTable.addColumn("Details");
 		
-		modelAgendaTable.setColumnCount(2);
+		modelAgendaTable.setColumnCount(3);
 		
 		agendaTable.setRowHeight(50);
 		agendaTable.getColumnModel().getColumn(0).setCellRenderer(new AgendaTableRenderer()); //FOR TIME
-		agendaTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+		agendaTable.getColumnModel().getColumn(0).setPreferredWidth(220);
 		
 		//TODO ? AgendaTableCellRenderer itemRender = new AgendaTableCellRenderer();
 		//itemRender.setOpaque(false);
 		//agendaTable.getColumnModel().getColumn(1).setCellRenderer(itemRender);
 		
 		agendaTable.getColumnModel().getColumn(1).setCellRenderer(new AgendaTableRenderer()); //FOR APPOINTMENTS
-		agendaTable.getColumnModel().getColumn(1).setPreferredWidth(agendaTable.getWidth() - agendaTable.getColumnModel().getColumn(0).getWidth()-95);
+		agendaTable.getColumnModel().getColumn(1).setPreferredWidth(220);
+		//agendaTable.getColumnModel().getColumn(1).setPreferredWidth(agendaTable.getWidth() - agendaTable.getColumnModel().getColumn(0).getWidth()-95);
+		
+		agendaTable.getColumnModel().getColumn(2).setCellRenderer(new AgendaTableRenderer()); //FOR APPOINTMENTS
+		agendaTable.getColumnModel().getColumn(2).setPreferredWidth(220);
+		
 		agendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		agendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		agendaTable.getTableHeader().setReorderingAllowed(false);

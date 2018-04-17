@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SlotController;
+import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.services.SlotService;
@@ -98,12 +99,23 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			count = count.plusMinutes(30);
 		}
 		
+		clearAgenda(dayPanel.getModelAgendaTable());
 		List<Slot> agendaList = slotController.getAppointmentAgendaList(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
-		clearAgenda(dayPanel.getModelAgendaTable());
+		List<Client> clientList = slotController.getAppointmentClientsList(doctor, 
+				LocalDate.of(yearToday, monthToday+1, dayToday));
+		
 		for (Slot s : agendaList) {
-			dayPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd()});
-			// dayPanel.getDayTable().setValueAt(s, i, 1);
+			int i = 0;
+			//System.out.println(s.getStart().getHour());
+			//System.out.println(s.getStart().getMinute());
+			//System.out.println(s.getStart().getSecond());
+			
+			Client c = clientList.get(i);
+			
+			String temp = "Client: " + c.getLastname() + ", " + c.getFirstname();
+			dayPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp});
+			i++;
 		}
 		
 		// UPDATE AGENDA

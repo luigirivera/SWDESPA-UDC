@@ -3,6 +3,7 @@ package ultimatedesignchallenge.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.services.SlotService;
@@ -29,5 +30,10 @@ public class SlotController {
 	public List<Slot> getAppointmentAgendaList(Doctor doctor, LocalDate date)
 	{
 		return service.getAppointmentAgendaList(doctor, date);
+	}
+	
+	public List<Client> getAppointmentClientsList(Doctor doctor, LocalDate date)
+	{
+		return service.getAppointmentClientsList(doctor, date);
 	}
 }
