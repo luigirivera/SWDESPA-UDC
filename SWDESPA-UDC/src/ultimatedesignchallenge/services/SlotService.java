@@ -297,7 +297,7 @@ public class SlotService {
         Connection cnt = CalendarDB.getConnection();
 
         //create query
-        String query = "DELETE FROM " + Slot.TABLE + " WHERE Username = ?";
+        String query = "DELETE FROM " + Slot.TABLE + " WHERE " + Slot.COL_SLOTID + " = ?";
 
         try {
             //create prepared statement
