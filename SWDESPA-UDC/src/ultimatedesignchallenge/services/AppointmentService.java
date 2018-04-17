@@ -95,9 +95,12 @@ public class AppointmentService {
 			for (Slot slot : appointment.getSlots()) {
 				ps = cnt.prepareStatement(query3);
 				
+				System.out.println(appointment.getId());
 				System.out.println(slot.getId());
 				ps.setInt(1, appointment.getId());
 				ps.setInt(2, slot.getId());
+				
+				ps.executeUpdate();
 				
 				ps.close();
 			}
