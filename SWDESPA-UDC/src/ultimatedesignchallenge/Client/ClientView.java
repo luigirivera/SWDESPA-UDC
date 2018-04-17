@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
@@ -17,6 +19,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.SlotBuilder;
+import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
@@ -24,10 +27,14 @@ import ultimatedesignchallenge.view.DayTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
 import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
 import ultimatedesignchallenge.view.WeekTableRenderer;
+import ultimatedesignchallenge.services.SlotService;
+import ultimatedesignchallenge.model.Slot;
 
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
 	private Client client;
+	private SlotService slotService;
+	private SlotController slotController;
 	
 	public ClientView(Client client){
 		super("Client Calendar - " + client.getFirstname());
@@ -87,8 +94,47 @@ public class ClientView extends CalendarFramework{
 	
 	private void refreshDayView()
 	{
+		System.out.println(monthToday + " " + yearToday + " " + dayToday);
+		//this is a nullpointerexception but in doctorview it is not. idek why. please help me and my stupidity - pdlr
+		List<Slot> freeThis = slotController.getCFree(LocalDate.of(yearToday, monthToday+1, dayToday));
+		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
+		
+		for (int i = 0; i < 48; i++) {
+			dayPanel.getDayTable().setValueAt(null, i, 1);
+			for (Slot s : freeThis) {
+				//System.out.println(s.getStart());
+				//System.out.println(count);
+				if (count.equals(s.getStart())){
+					//System.out.println("changed");
+					dayPanel.getDayTable().setValueAt(s, i, 1);
+				}
+			}
+			count = count.plusMinutes(30);
+		}
+
+		clearAgenda(dayPanel.getModelAgendaTable());
+		
+//		TODO: updating agenda
+//		List<Slot> agendaList = slotController.getAppointmentAgendaList(doctor, 
+//				LocalDate.of(yearToday, monthToday+1, dayToday));
+//		List<Client> clientList = slotController.getAppointmentClientsList(doctor, 
+//				LocalDate.of(yearToday, monthToday+1, dayToday));
+//		
+//		for (Slot s : agendaList) {
+//			int i = 0;
+//			//System.out.println(s.getStart().getHour());
+//			//System.out.println(s.getStart().getMinute());
+//			//System.out.println(s.getStart().getSecond());
+//			
+//			Client c = clientList.get(i);
+//			
+//			String temp = "Client: " + c.getLastname() + ", " + c.getFirstname();
+//			dayPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp});
+//			i++;
+//		}
+		
 		//TODO:
-		//clear calendar rows
+		//supposedly clears calendar rows
 		//use this -> clearAgenda(dayPanel.modelAgendaTable);
 		//check filter for which doctor/s
 		//get slots that the doctor/s have set available, all of them
@@ -118,7 +164,36 @@ public class ClientView extends CalendarFramework{
 	}
 	
 	private void refreshWeekView()
-	{
+	{	
+		//TODO: refreshWeekAgendaTable(Calendar cal){}
+		
+		clearAgenda(weekPanel.getModelAgendaTable());
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(yearToday, monthToday, dayToday);
+		cal.get(Calendar.WEEK_OF_YEAR);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		refreshWeekViewByColumn(cal, 1);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		refreshWeekViewByColumn(cal, 2);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+		refreshWeekViewByColumn(cal, 3);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+		refreshWeekViewByColumn(cal, 4);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+		refreshWeekViewByColumn(cal, 5);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+		refreshWeekViewByColumn(cal, 6);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+		refreshWeekViewByColumn(cal, 7);
+		refreshWeekAgendaTable(cal);
+		
 		//TODO:
 		//clear calendar rows
 		//use this -> clearAgenda(weekPanel.modelAgendaTable);
@@ -131,6 +206,53 @@ public class ClientView extends CalendarFramework{
 	
 		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
 		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
+	}
+	
+	private void refreshWeekViewByColumn(Calendar cal, int day)
+	{	
+		int tempY = cal.get(Calendar.YEAR);
+		int tempM = cal.get(Calendar.MONTH)+1;
+		int tempD = cal.get(Calendar.DATE);
+		//System.out.println(tempY);
+		//System.out.println(tempM);
+		//System.out.println(tempD);
+		
+		List<Slot> myFree = slotController.getCFree(LocalDate.of(tempY, tempM, tempD));
+		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
+		for (int i = 0; i < 48 ; i++) {
+			weekPanel.getWeekTable().setValueAt(null, i, day);
+			for (Slot s : myFree) {
+				if (count.equals(s.getStart())) {
+					//System.out.println("changed!");
+					//System.out.println(weekPanel.getWeekTable().getValueAt(i, 0));
+							weekPanel.getWeekTable().setValueAt(s, i, day);
+							//System.out.println(weekPanel.getWeekTable().getValueAt(i, day));
+				}
+			}
+			count = count.plusMinutes(30);
+		}
+	}
+	
+	private void refreshWeekAgendaTable(Calendar cal) {
+//		int tempY = cal.get(Calendar.YEAR);
+//		int tempM = cal.get(Calendar.MONTH)+1;
+//		int tempD = cal.get(Calendar.DATE);
+//		//System.out.println(tempY);
+//		//System.out.println(tempM);
+//		//System.out.println(tempD);
+//		
+//		List<Slot> agendaList = slotController.getAppointmentAgendaList(doctor, 
+//				LocalDate.of(tempY, tempM, tempD));
+//		List<Client> clientList = slotController.getAppointmentClientsList(doctor, 
+//				LocalDate.of(tempY, tempM, tempD));
+//		
+//		for (Slot s : agendaList) {
+//			int i = 0;
+//			Client c = clientList.get(i);
+//			String temp = "Client: " + c.getLastname() + ", " + c.getFirstname();
+//			weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp});
+//			i++;
+//		}
 	}
 	
 	class updateAppointment implements ActionListener{
