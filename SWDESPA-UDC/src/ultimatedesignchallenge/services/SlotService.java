@@ -311,7 +311,6 @@ public class SlotService {
 
             //close resources
             ps.close();
-            cnt.close();
 
             System.out.println("[SLOT] DELETE SUCCESS!");
         } catch (SQLException e) {
