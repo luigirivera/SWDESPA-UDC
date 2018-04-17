@@ -250,6 +250,12 @@ public class SlotService {
 		slot.setId(rs.getInt(Slot.COL_SLOTID));
 		slot.setStart(rs.getTimestamp(Slot.COL_START).toLocalDateTime());
 		slot.setEnd(rs.getTimestamp(Slot.COL_END).toLocalDateTime());
+		if(rs.getInt(Slot.COL_RECURRINGID) == 0) {
+			slot.setIsRecurring(false);
+		}
+		else{
+			slot.setIsRecurring(true);
+		}
 		
 		return slot;
 	}
