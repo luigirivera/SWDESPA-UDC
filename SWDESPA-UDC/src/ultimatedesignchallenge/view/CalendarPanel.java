@@ -148,7 +148,42 @@ public class CalendarPanel extends JPanel{
 			}*/
 		}
 
-		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer(framework));
+		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
+	}
+	
+	class TableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if (column == 0 || column == 6)
+				setBackground(new Color(220, 220, 255));
+			else
+				setBackground(Color.WHITE);
+			
+			if(table.getValueAt(row, column) == null)
+				setBackground(Color.GRAY);
+			
+			
+			else
+			{
+				Calendar cal = Calendar.getInstance();
+				cal.set(framework.yearToday, framework.monthToday, (int)table.getValueAt(row, column));
+				
+				//TODO:
+				//if(this day has no slots allocated OR slots are full)
+				//	setBackground(Color.RED);
+				//else
+				// setBackground(Color.GREEN);
+			}
+			
+			setBorder(null);
+			setForeground(Color.black);
+			setVerticalAlignment(SwingConstants.TOP); // added
+			return this;
+		}
 	}
 
 	public JButton getCreate() {
