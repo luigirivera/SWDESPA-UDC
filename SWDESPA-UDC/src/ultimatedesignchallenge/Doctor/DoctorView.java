@@ -7,11 +7,16 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.DoctorController;
@@ -167,10 +172,84 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	}
 	
 	class updateSlot implements ActionListener{
-
+		JComboBox<Integer> month, day, year;
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			Slot temp = new Slot();
+			temp = (Slot)dayPanel.getDayTable().getValueAt(dayPanel.getDayTable().getSelectedRow(), dayPanel.getDayTable().getSelectedColumn());
+			
+			JPanel panel = new JPanel();
+			JComboBox<LocalTime> startTime, endTime;
+			
+			startTime = new JComboBox<LocalTime>();
+			endTime = new JComboBox<LocalTime>();
+			
+			List<Integer> years = new ArrayList<Integer>();
+			
+			for(int i = 100; i >0; i--)
+				years.add(Year.now().minusYears(i).getValue());
+			
+			years.add(Year.now().getValue());
+			
+			for(int i = 1; i <=100; i++)
+				years.add(Year.now().plusYears(i).getValue());
+			
+			Integer[] yearsA = years.toArray(new Integer[years.size()]);
+			
+			Integer[] months = {1,2,3,4,5,6,7,8,9,10,11,12};
+			
+			
+			month = new JComboBox<Integer>(months);
+			day = new JComboBox<Integer>();
+			year = new JComboBox<Integer>(yearsA);
+			
+			month.addActionListener(new checkDaysListener());
+			year.addActionListener(new checkDaysListener());
+			
+			panel.add(month);
+			panel.add(day);
+			panel.add(year);
+			panel.add(startTime);
+			panel.add(endTime);
+			
+			setToday();
+			LocalTime tmpTime = LocalTime.of(0, 0);
+			for(int i=0 ; i<48 ; i++) {
+				startTime.addItem(tmpTime);
+				endTime.addItem(tmpTime);
+				tmpTime = tmpTime.plusMinutes(30);
+			}
+			
+			int result = JOptionPane.showConfirmDialog(null, panel, "Update Slot", JOptionPane.OK_CANCEL_OPTION);
+		}
+		
+		private void setToday()
+		{
+			LocalDateTime now = LocalDateTime.now();
+			month.setSelectedItem(now.getMonth().getValue());
+			year.setSelectedItem(now.getYear());
+			
+			day.removeAllItems();
+			
+			for(int i = 1; i <=now.getMonth().length(Year.isLeap(now.getYear())); i++)
+				day.addItem(i);
+			
+			day.setSelectedItem(now.getDayOfMonth());
+		}
+		
+		class checkDaysListener implements ActionListener{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int daysC = Month.of((int)month.getSelectedItem()).length(Year.isLeap((int)year.getSelectedItem()));
+				
+				day.removeAllItems();
+				
+				for(int i = 1; i<= daysC; i++)
+					day.addItem(i);
+								
+			}
 			
 		}
 		
