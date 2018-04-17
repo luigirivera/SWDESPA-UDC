@@ -27,6 +27,7 @@ public class DoctorController {
 		for (Slot slotc : slots) {
 			System.out.println(slotc);
 			service.addSlotC(slotc);
+			System.out.println(service.getId(slotc));
 		}
 		return false; //change this
 	}
