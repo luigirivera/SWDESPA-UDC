@@ -23,6 +23,7 @@ import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.CalendarObserver;
 
@@ -31,6 +32,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	private Doctor doctor;
 	private DoctorController controller;
 	private SlotController slotController;
+	private SlotService slotService;
 	
 	public DoctorView(Doctor doctor, DoctorController controller, SlotController slotController) {
 		super("Doctor Calendar - " + doctor.getFirstname());
@@ -255,6 +257,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 				
 				controller.updateFree(temp, startDateTime, endDateTime);
 			}
+			update();
 		}
 		
 		private void setToday()
@@ -343,9 +346,11 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	class cancelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//TODO:
-			//get selected slot
-			//remove that slot from doctor's slots
+			slotService = new SlotService();
+			Slot temp = new Slot();
+			temp = (Slot)dayPanel.getDayTable().getValueAt(dayPanel.getDayTable().getSelectedRow(), dayPanel.getDayTable().getSelectedColumn());
+			
+			slotService.deleteSlot(temp.getId());
 			update();
 		}
 	}
