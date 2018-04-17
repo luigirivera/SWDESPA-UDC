@@ -123,6 +123,22 @@ public class SecretaryView extends CalendarFramework{
 					}
 					count = count.plusMinutes(30);
 				}
+				
+				clearAgenda(dayPanel.getModelAgendaTable());
+				List<Slot> agendaList = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
+				List<Client> allClients = slotService.getAllDoctorAppointmentsClients(LocalDate.of(yearToday, monthToday+1, dayToday));
+				List<Doctor> allDoctors = slotService.getAllDoctorAppointmentsDoctors(LocalDate.of(yearToday, monthToday+1, dayToday));
+
+				int i = 0;
+				for (Slot s : agendaList) {
+					Client c = allClients.get(i);
+					Doctor d = allDoctors.get(i);
+					String temp = "Doctor: " + d.getLastname() + ", " + d.getFirstname();
+					String temp2 = "Client: " + c.getLastname() + ", " + c.getFirstname();
+					String temp3 = temp + "; " + temp2;
+					dayPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp3});
+					i++;
+				}
 			}
 			
 			else {
@@ -146,6 +162,25 @@ public class SecretaryView extends CalendarFramework{
 								}
 							}
 							count = count.plusMinutes(30);
+						}
+						
+						clearAgenda(dayPanel.getModelAgendaTable());
+						List<Slot> agendaList = slotService.getAppointmentAgendaList(d, 
+								LocalDate.of(yearToday, monthToday+1, dayToday));
+						List<Client> clientList = slotService.getAppointmentClientsList(d, 
+								LocalDate.of(yearToday, monthToday+1, dayToday));
+
+						int i = 0;
+						for (Slot s : agendaList) {
+							//System.out.println(s.getStart().getHour());
+							//System.out.println(s.getStart().getMinute());
+							//System.out.println(s.getStart().getSecond());
+							
+							Client c = clientList.get(i);
+							
+							String temp2 = "Client: " + c.getLastname() + ", " + c.getFirstname();
+							dayPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp2});
+							i++;
 						}
 					}
 				}
