@@ -39,8 +39,8 @@ public class SecretaryView extends CalendarFramework{
 		this.slotController = slotController;
 		
 		constructorGen("Clinic Secretary");
-		initListeners();
 		init();
+		initListeners();
 		update();
 	}
 	

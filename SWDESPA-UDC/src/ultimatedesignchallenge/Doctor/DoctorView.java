@@ -36,8 +36,8 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		this.slotController = slotController;
 		
 		constructorGen("Doctor");
-		initListeners();
 		init();
+		initListeners();
 		update();
 	}
 	
