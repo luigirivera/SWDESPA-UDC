@@ -227,7 +227,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 						day.getItemAt(day.getSelectedIndex())), startTime.getItemAt(startTime.getSelectedIndex()));
 				
 				LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(year.getItemAt(year.getSelectedIndex()), month.getItemAt(month.getSelectedIndex()),
-						day.getItemAt(day.getSelectedIndex())), endTime.getItemAt(startTime.getSelectedIndex()));
+						day.getItemAt(day.getSelectedIndex())), endTime.getItemAt(endTime.getSelectedIndex()));
 				
 				controller.updateFree(temp, startDateTime, endDateTime);
 			}
