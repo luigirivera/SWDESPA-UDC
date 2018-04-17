@@ -47,6 +47,37 @@ public class SlotService {
 		return slots;
 	}
 	
+	public List<Slot> getAll(int clientId)
+	{
+		List<Slot> slots = new ArrayList<Slot>();
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "select SLOTid, start, end from ("+ Slot.TABLE + " inner join " + Appointment.TABLE + " on " + Slot.COL_APPOINTMENTID + " = " + Appointment.COL_APPOINTMENTID +") " 
+				+ "inner join " + Client.TABLE + " on " + Client.COL_CLIENTID + " = " + Appointment.COL_CLIENTID 
+				+ " where USERid = ? ";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				slots.add(toSlot(rs));
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[SLOT] SELECT SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[SLOT] SELECT FAILED");
+			e.printStackTrace();
+		}
+		
+		return slots;
+	}
+	
+	
+	
 	public List<Slot> getTakenDoctor(Doctor doctor, LocalDate date) {
 		List<Slot> slots = new ArrayList<Slot>();
 		
