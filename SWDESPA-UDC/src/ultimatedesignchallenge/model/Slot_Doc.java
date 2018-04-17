@@ -7,7 +7,7 @@ public class Slot_Doc {
 
 	public static final String TABLE = "SLOT_DOC";
 	public static final String COL_SLOTID = TABLE+".SLOTid";
-	public static final String COL_DOCTORid = TABLE+".DOCTORid";
+	public static final String COL_DOCTORID = TABLE+".DOCTORid";
 	
 	public int getSlotId() {
 		return slotId;

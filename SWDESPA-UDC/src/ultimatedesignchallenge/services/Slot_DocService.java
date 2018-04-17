@@ -47,10 +47,8 @@ public class Slot_DocService {
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
-			
 			ps.setInt(1, docSlot.getSlotId());
 			ps.setInt(2, docSlot.getDoctorId());
-			
 			ps.executeUpdate();
 			
 			ps.close();
@@ -66,7 +64,7 @@ public class Slot_DocService {
 		Slot_Doc docSlot = new Slot_Doc();
 		
 		docSlot.setSlotId(rs.getInt(Slot_Doc.COL_SLOTID));
-		docSlot.setDoctorId(rs.getInt(Slot_Doc.COL_DOCTORid));
+		docSlot.setDoctorId(rs.getInt(Slot_Doc.COL_DOCTORID));
 		
 		return docSlot;
 	}
