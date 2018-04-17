@@ -59,6 +59,7 @@ public class SlotService {
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setInt(1, clientId);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next())
