@@ -53,7 +53,7 @@ public class SlotService {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "select SLOTid, start, end from ("+ Slot.TABLE + " inner join " + Appointment.TABLE + " on " + Slot.COL_APPOINTMENTID + " = " + Appointment.COL_APPOINTMENTID +") " 
+		String query = "select SLOTid, start, end, " + Slot.COL_RECURRINGID + "from ("+ Slot.TABLE + " inner join " + Appointment.TABLE + " on " + Slot.COL_APPOINTMENTID + " = " + Appointment.COL_APPOINTMENTID +") " 
 				+ "inner join " + Client.TABLE + " on " + Client.COL_CLIENTID + " = " + Appointment.COL_CLIENTID 
 				+ " where USERid = ? ";
 		
