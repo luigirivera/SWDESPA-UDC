@@ -205,6 +205,32 @@ public class SlotService {
 		}
 	}
 	
+	public void addSlotC(Slot slot, int recurringID) {
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "INSERT INTO " + Slot.TABLE + " VALUES (?, ?, ?, ?, ?)";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setNull(1, Types.NULL);
+			ps.setTimestamp(2, Timestamp.valueOf(slot.getStart()));
+			ps.setTimestamp(3, Timestamp.valueOf(slot.getEnd()));
+			ps.setNull(4, Types.NULL);
+			ps.setInt(5, recurringID);
+			
+			ps.executeUpdate();
+			
+			ps.close();
+			// cnt.close();
+			System.out.println("Success!");
+		} catch(SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error!");
+		}
+	}
+	
 	public int getId(Slot slot) {
 		Connection cnt = CalendarDB.getConnection();
 		
@@ -230,6 +256,36 @@ public class SlotService {
 		
 		return slotTemp.getId();
 	}
+	
+	public void deleteSlot(int SlotID) {
+        //get connection
+        Connection cnt = CalendarDB.getConnection();
+
+        //create query
+        String query = "DELETE FROM " + Slot.TABLE + " WHERE Username = ?";
+
+        try {
+            //create prepared statement
+            PreparedStatement ps = cnt.prepareStatement(query);
+
+            //prepare the values
+            ps.setInt(1, SlotID);
+
+            //execute the update
+            ps.executeUpdate();
+
+            //close resources
+            ps.close();
+            cnt.close();
+
+            System.out.println("[SLOT] DELETE SUCCESS!");
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            System.out.println("[SLOT] DELETE FAILED!");
+            e.printStackTrace();
+        }
+
+    }
 	
 	/*public static void main(String[] args) {
 		DoctorService ds = new DoctorService();
