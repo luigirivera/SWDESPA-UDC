@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -41,7 +42,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	}
 	
 	private void init() {
-		calendarPanel.getCreate().setText("Set Appointment Slot");
+		calendarPanel.setCreate(new JButton("Set Appointment Slot"));
+		calendarPanel.add(calendarPanel.getCreate());
+		calendarPanel.getCreate().setBounds(10, 10, 250, 40);
 		
 		cancel.setText("Free Slot");
 		
