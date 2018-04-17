@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -59,7 +61,6 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	public void update() {
 		//TODO:
 		//grab necessary data
-		
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		changeLabel();
@@ -67,18 +68,20 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		refreshDayView();
 		refreshWeekView();
 	}
-
-	private void refreshDayView()
+	
+	@Override
+	protected void refreshDayView()
 	{
 		List<Slot> myFree = slotController.getFree(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 		for (int i = 0; i < 48; i++) {
+			dayPanel.getDayTable().setValueAt(null, i, 1);
 			for (Slot s : myFree) {
-				System.out.println(s.getStart());
-				System.out.println(count);
+				//System.out.println(s.getStart());
+				//System.out.println(count);
 				if (count.equals(s.getStart())){
-					System.out.println("changed");
+					//System.out.println("changed");
 					dayPanel.getDayTable().setValueAt(s, i, 1);
 				}
 			}
@@ -94,27 +97,29 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display it in the dayTable
 		//display occupied slots in agenda table
 	}
-
-	private void refreshWeekView()
+	
+	@Override
+	protected void refreshWeekView()
 	{
-		List<Slot> myFree = slotController.getFree(doctor, 
-				LocalDate.of(yearToday, monthToday+1, dayToday));
-		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
-		for (int i = 0; i < 48 ; i++) {
-			for (Slot s : myFree) {
-				if (count.equals(s.getStart())) {
-					System.out.println("changed!");
-					System.out.println(weekPanel.getWeekTable().getValueAt(i, 0));
-					for (int j = 1; j < 8; j++) {
-						if (weekPanel.getWeekTable().getColumnName(j).equals("APRIL 17")) {
-							weekPanel.getWeekTable().setValueAt(s, i, j);
-							System.out.println(weekPanel.getWeekTable().getValueAt(i, j));
-						}
-					}
-				}
-			}
-			count = count.plusMinutes(30);
-		}
+		Calendar cal = Calendar.getInstance();
+		cal.set(yearToday, monthToday, dayToday);
+		cal.get(Calendar.WEEK_OF_YEAR);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		refreshWeekViewByColumn(cal, 1);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		refreshWeekViewByColumn(cal, 2);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+		refreshWeekViewByColumn(cal, 3);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+		refreshWeekViewByColumn(cal, 4);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+		refreshWeekViewByColumn(cal, 5);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+		refreshWeekViewByColumn(cal, 6);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+		refreshWeekViewByColumn(cal, 7);
+		
+		// UPDATE AGENDA
 		
 		//TODO:
 		//clear all rows
@@ -122,6 +127,33 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//get slots that i have set available, all of them
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days
+	}
+	
+
+	protected void refreshWeekViewByColumn(Calendar cal, int day)
+	{	
+		int tempY = cal.get(Calendar.YEAR);
+		int tempM = cal.get(Calendar.MONTH)+1;
+		int tempD = cal.get(Calendar.DATE);
+		System.out.println(tempY);
+		System.out.println(tempM);
+		System.out.println(tempD);
+		
+		List<Slot> myFree = slotController.getFree(doctor, 
+				LocalDate.of(tempY, tempM, tempD));
+		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
+		for (int i = 0; i < 48 ; i++) {
+			weekPanel.getWeekTable().setValueAt(null, i, day);
+			for (Slot s : myFree) {
+				if (count.equals(s.getStart())) {
+					//System.out.println("changed!");
+					//System.out.println(weekPanel.getWeekTable().getValueAt(i, 0));
+							weekPanel.getWeekTable().setValueAt(s, i, day);
+							//System.out.println(weekPanel.getWeekTable().getValueAt(i, day));
+				}
+			}
+			count = count.plusMinutes(30);
+		}
 	}
 	
 	class dayTableMouseListener extends MouseAdapter{
