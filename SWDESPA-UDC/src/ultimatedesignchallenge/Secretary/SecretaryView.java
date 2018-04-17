@@ -177,6 +177,10 @@ public class SecretaryView extends CalendarFramework{
 			recurrence.addItem("3 Weeks");
 			recurrence.addItem("4 Weeks");
 			
+			JPanel panel2 = new JPanel();
+			JTextField name = new JTextField();
+			panel2.add(name);
+			
 			recurring.addActionListener(new ActionListener() {
 
 				@Override
@@ -190,7 +194,14 @@ public class SecretaryView extends CalendarFramework{
 				
 			});
 			int result = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
-			//TODO: set the appointment based on values
+			
+			if(result == JOptionPane.OK_OPTION == !name.getText().trim().isEmpty())
+			{
+				int result2 = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
+				//TODO: set the appointment based on values
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
