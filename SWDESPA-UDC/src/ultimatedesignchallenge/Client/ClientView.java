@@ -54,6 +54,7 @@ public class ClientView extends CalendarFramework{
 		popup.add(cancelAll);
 		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
+		doctorList.getDoctorList().addMouseListener(new doctorListListener());
 		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
 		dayPanel.getAgendaTable().addMouseListener(new agendaTableMouseListener());
 		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
@@ -114,6 +115,16 @@ public class ClientView extends CalendarFramework{
 		//get all other appointments in redacted //Custom TableRenderer only for week can be used
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
+	}
+	
+	class doctorListListener extends MouseAdapter{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			super.mouseClicked(e);
+			doctorList.getDoctorList().getSelectedValuesList();
+			update();
+			
+		}
 	}
 	
 	class dayTableMouseListener extends MouseAdapter{

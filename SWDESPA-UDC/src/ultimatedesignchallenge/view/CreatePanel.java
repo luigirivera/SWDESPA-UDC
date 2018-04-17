@@ -91,10 +91,10 @@ public class CreatePanel extends JPanel {
 		
 		TOLabelTime.setFont(new Font("Arial", Font.BOLD, 15));
 		
-		recurrence.addItem("Every Week");
-		recurrence.addItem("Every 2 Weeks");
-		recurrence.addItem("Every 3 Weeks");
-		recurrence.addItem("Every Month");
+		recurrence.addItem("1 Week");
+		recurrence.addItem("2 Weeks");
+		recurrence.addItem("3 Weeks");
+		recurrence.addItem("4 Weeks");
 		
 		LocalTime tmpTime = LocalTime.of(0, 0);
 		for(int i=0 ; i<48 ; i++) {

@@ -16,7 +16,6 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SecretaryController;
 import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Secretary;
@@ -70,6 +69,7 @@ public class SecretaryView extends CalendarFramework{
 		popup.add(cancelAll);
 		
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
+		doctorList.getDoctorList().addMouseListener(new doctorListListener());
 		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
 		dayPanel.getAgendaTable().addMouseListener(new agendaTableMouseListener());
 		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
@@ -142,6 +142,16 @@ public class SecretaryView extends CalendarFramework{
 		//get all appointments
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time //Custom TableRenderer only for week agenda can be used
+	}
+	
+	class doctorListListener extends MouseAdapter{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			super.mouseClicked(e);
+			doctorList.getDoctorList().getSelectedValuesList();
+			update();
+			
+		}
 	}
 	
 	class dayTableMouseListener extends MouseAdapter{

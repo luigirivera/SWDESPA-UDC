@@ -245,9 +245,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		topPanel.today.addActionListener(new todayButtonListener());
 		
 		try {
-			
 			doctorList.addWindowListener(new doctorListWindowListener());
-			doctorList.addMouseListener(new doctorListListener());
 			calendarPanel.doctors.addActionListener(new toggleDoctorListListener());
 		}catch(Exception e) {e.printStackTrace();}
 	}
@@ -296,16 +294,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				}
 		}
 		
-	}
-	
-	class doctorListListener extends MouseAdapter{
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			super.mouseClicked(e);
-			doctorList.doctorList.getSelectedValuesList();
-			update();
-			
-		}
 	}
 	
 	class createbtnListener implements ActionListener{
