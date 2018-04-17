@@ -245,11 +245,12 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		topPanel.today.addActionListener(new todayButtonListener());
 		
 		try {
-			cancelAll.addActionListener(new cancelAllListener());
+			
 			doctorList.addWindowListener(new doctorListWindowListener());
 			doctorList.addMouseListener(new doctorListListener());
 			calendarPanel.doctors.addActionListener(new toggleDoctorListListener());
-		}catch(Exception e) {}
+
+		}catch(Exception e) {e.printStackTrace();}
 	}
 	
 	// ------------OVERRIDE METHODS------------//
@@ -368,10 +369,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(calendarPanel.doctors.isSelected())
-				toggleDoctorList(true);
-			else
-				toggleDoctorList(false);
+			toggleDoctorList(calendarPanel.doctors.isSelected());
 			
 		}
 		

@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
@@ -15,24 +16,31 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
+import ultimatedesignchallenge.controller.DoctorController;
+import ultimatedesignchallenge.controller.SecretaryController;
+import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Secretary;
+import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DoctorList;
 
 public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
 	private Secretary secretary;
+	private SecretaryController controller;
+	private SlotController slotController;
 	
-	public SecretaryView(Secretary secretary) {
+	public SecretaryView(Secretary secretary, SecretaryController controller, SlotController slotController) {
 		super("Central Calendar Census - " + secretary.getFirstname());
 		
 //		this.model = model;
-//		this.controller = controller;
 		this.secretary = secretary;
+		this.controller = controller;
+		this.slotController = slotController;
 		
 		constructorGen("Clinic Secretary");
-		initListeners();
 		init();
+		initListeners();
 		update();
 	}
 	
@@ -83,6 +91,21 @@ public class SecretaryView extends CalendarFramework{
 	
 	private void refreshDayView()
 	{
+		List<Slot> myFree = slotController.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
+		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
+		for (int i = 0; i < 48; i++) {
+			dayPanel.getDayTable().setValueAt(null, i, 1);
+			for (Slot s : myFree) {
+				//System.out.println(s.getStart());
+				//System.out.println(count);
+				if (count.equals(s.getStart())){
+					//System.out.println("changed");
+					dayPanel.getDayTable().setValueAt(s, i, 1);
+				}
+			}
+			count = count.plusMinutes(30);
+		}
+		
 		//TODO:
 		//clear calendar rows
 		//use this -> clearAgenda(dayPanel.modelAgendaTable);

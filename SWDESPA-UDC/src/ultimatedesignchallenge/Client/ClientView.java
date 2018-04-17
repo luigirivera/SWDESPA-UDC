@@ -31,8 +31,8 @@ public class ClientView extends CalendarFramework{
 		this.client = client;
 		
 		constructorGen("Client");
-		initListeners();
 		init();
+		initListeners();
 		update();
 		
 	}

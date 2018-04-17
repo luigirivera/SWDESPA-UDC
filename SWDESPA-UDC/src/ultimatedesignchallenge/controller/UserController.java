@@ -36,7 +36,7 @@ public class UserController {
 			return true;
 		}
 		if((model=ssv.getSecretary(username, password))!=null){
-			new SecretaryView((Secretary)model);
+			new SecretaryView((Secretary)model, new SecretaryController((Secretary)model, ssv), new SlotController(new SlotService()));
 			return true;
 		}
 		return false;
