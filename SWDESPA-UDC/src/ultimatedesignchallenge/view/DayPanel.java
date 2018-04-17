@@ -84,7 +84,6 @@ public class DayPanel extends JPanel {
 		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(scrollDayTable.getWidth() - dayTable.getColumnModel().getColumn(0).getWidth() - 45);
 		dayTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		dayTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		dayTable.getTableHeader().setReorderingAllowed(false);
 		dayTable.getTableHeader().setResizingAllowed(false);
 		/*

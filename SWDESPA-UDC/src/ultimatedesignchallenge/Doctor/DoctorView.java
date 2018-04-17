@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.Calendar;
 import java.util.List;
 
@@ -49,6 +48,8 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		popup.add(update);
 		popup.add(cancel);
 		
+		update.addActionListener(new updateSlot());
+		calendarPanel.getCreate().addActionListener(new createbtnListener());
 		createPanel.getSave().addActionListener(new saveCreateBtnListener());
 		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
 		dayPanel.getAgendaTable().addMouseListener(new agendaTableMouseListener());
@@ -152,6 +153,25 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			}
 			count = count.plusMinutes(30);
 		}
+	}
+	
+	class updateSlot implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	class createbtnListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			toggleCreateView(true);
+		}
+		
 	}
 	
 	class dayTableMouseListener extends MouseAdapter{

@@ -92,7 +92,6 @@ public class WeekPanel extends JPanel {
 		}
 		
 		weekTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		weekTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weekTable.getTableHeader().setReorderingAllowed(false);
 		weekTable.getTableHeader().setResizingAllowed(false);
 		

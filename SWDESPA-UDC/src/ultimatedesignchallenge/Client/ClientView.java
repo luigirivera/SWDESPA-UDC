@@ -11,6 +11,8 @@ import java.time.LocalTime;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
@@ -46,14 +48,18 @@ public class ClientView extends CalendarFramework{
 		doctorList = new DoctorList();
 		calendarPanel.setDoctors(new JToggleButton("Doctors"));
 		calendarPanel.add(calendarPanel.getDoctors());
-		calendarPanel.getDoctors().setBounds(10, 500, 250,50);
+		calendarPanel.getDoctors().setBounds(10, 10, 250, 40);
 		
+		setAppointment = new JMenuItem("Set Appointment");
 		cancelAll = new JMenuItem("Cancel All Meetings");
+		
+		popup.add(setAppointment);
 		popup.add(update);
 		popup.add(cancel);
 		popup.add(cancelAll);
 		
-		createPanel.getSave().addActionListener(new saveCreateBtnListener());
+		update.addActionListener(new updateAppointment());
+		setAppointment.addActionListener(new setAppointment());
 		doctorList.getDoctorList().addMouseListener(new doctorListListener());
 		dayPanel.getDayTable().addMouseListener(new dayTableMouseListener());
 		dayPanel.getAgendaTable().addMouseListener(new agendaTableMouseListener());
@@ -117,6 +123,51 @@ public class ClientView extends CalendarFramework{
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
 	}
 	
+	class updateAppointment implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	class setAppointment implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JPanel panel = new JPanel();
+			JRadioButton recurring = new JRadioButton("Recurring");
+			JComboBox<String> recurrence = new JComboBox<String>();
+			
+			panel.add(recurring);
+			panel.add(recurrence);
+			
+			recurrence.setVisible(false);
+			recurrence.addItem("1 Week");
+			recurrence.addItem("2 Weeks");
+			recurrence.addItem("3 Weeks");
+			recurrence.addItem("4 Weeks");
+			
+			recurring.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					boolean toggle = recurring.isSelected();
+					
+					recurrence.setVisible(toggle);
+					recurrence.setEnabled(toggle);
+					
+				}
+				
+			});
+			int result = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
+			//TODO: set the appointment based on values
+		}
+		
+	}
+	
 	class doctorListListener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -140,6 +191,10 @@ public class ClientView extends CalendarFramework{
 				 *else
 				 *	enable cancelAll
 				 *
+				 *if(conflicting appointments && conflicting doctor availability because of filter)
+				 *	setAppointemnt.setEnabled(false);
+				 *else
+				 *	setAppointemnt.setEnabled(true);
 				 */
 					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
 			}
@@ -179,6 +234,10 @@ public class ClientView extends CalendarFramework{
 				 *else
 				 *	enable cancelAll
 				 *
+				 *if(conflicting appointments && conflicting doctor availability because of filter)
+				 *	setAppointemnt.setEnabled(false);
+				 *else
+				 *	setAppointemnt.setEnabled(true);
 				 */
 					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
 			}
