@@ -179,7 +179,7 @@ public class SlotService {
 		return slot;
 	}
 	
-	public void addSlotC(Slot slot) {
+	public boolean addSlotC(Slot slot) {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
@@ -202,10 +202,12 @@ public class SlotService {
 		} catch(SQLException e) {
 			e.printStackTrace();
 			System.out.println("Error!");
+			return false;
 		}
+		return true;
 	}
 	
-	public void addSlotC(Slot slot, int recurringID) {
+	public boolean addSlotC(Slot slot, int recurringID) {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
@@ -228,7 +230,9 @@ public class SlotService {
 		} catch(SQLException e) {
 			e.printStackTrace();
 			System.out.println("Error!");
+			return false;
 		}
+		return true;
 	}
 	
 	public int getId(Slot slot) {
