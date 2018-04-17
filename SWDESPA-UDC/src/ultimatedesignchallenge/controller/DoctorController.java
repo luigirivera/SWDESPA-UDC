@@ -40,14 +40,16 @@ public class DoctorController {
 		temp = new Slot_Doc();
 		sdocService = new Slot_DocService();
 		
+		boolean result = false;
+		
 		for (Slot slotc : slots) {
 			System.out.println(slotc);
-			service.addSlotC(slotc);
+			result = service.addSlotC(slotc);
 			temp.setSlotId(service.getId(slotc));
 			temp.setDoctorId(doctor.getDoctorId());
 			sdocService.addSlot_Doc(temp);
 		}
-		return false; //change this
+		return result; //change this
 	}
 	
 	public boolean createFreeRecurring(LocalDateTime start, LocalDateTime end, int option) {
@@ -127,6 +129,15 @@ public class DoctorController {
 		}
 		
 		return false; //i dont understand why the one above is false but ill do the same
+	}
+	
+	public boolean updateFree(Slot oldSlot, LocalDateTime newStart, LocalDateTime newEnd) {
+		SlotService ssv = new SlotService();
+		if (this.createFree(newStart, newEnd)) {
+			ssv.deleteSlot(oldSlot.getId());
+			return true;
+		}
+		return false;
 	}
 	
 }
