@@ -45,9 +45,11 @@ public class DoctorController {
 		for (Slot slotc : slots) {
 			System.out.println(slotc);
 			result = service.addSlotC(slotc);
-			temp.setSlotId(service.getId(slotc));
-			temp.setDoctorId(doctor.getDoctorId());
-			sdocService.addSlot_Doc(temp);
+			if (result) {
+				temp.setSlotId(service.getId(slotc));
+				temp.setDoctorId(doctor.getDoctorId());
+				sdocService.addSlot_Doc(temp);
+			}
 		}
 		return result; //change this
 	}
