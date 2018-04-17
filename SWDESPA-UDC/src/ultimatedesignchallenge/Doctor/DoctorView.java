@@ -89,14 +89,19 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	{
 		List<Slot> myFree = slotController.getFree(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
+		List<Slot> myTaken = slotController.getTaken(doctor, LocalDate.of(yearToday, monthToday+1, dayToday));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 		for (int i = 0; i < 48; i++) {
 			dayPanel.getDayTable().setValueAt(null, i, 1);
 			for (Slot s : myFree) {
-				//System.out.println(s.getStart());
-				//System.out.println(count);
+				
 				if (count.equals(s.getStart())){
-					//System.out.println("changed");
+					dayPanel.getDayTable().setValueAt(s, i, 1);
+				}
+			}
+			for (Slot s : myTaken) {
+				
+				if (count.equals(s.getStart())){
 					dayPanel.getDayTable().setValueAt(s, i, 1);
 				}
 			}

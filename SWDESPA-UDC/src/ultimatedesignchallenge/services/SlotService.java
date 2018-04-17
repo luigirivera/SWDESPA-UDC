@@ -47,6 +47,40 @@ public class SlotService {
 		return slots;
 	}
 	
+	public List<Slot> getTakenDoctor(Doctor doctor, LocalDate date) {
+		List<Slot> slots = new ArrayList<Slot>();
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Slot.TABLE
+				+ " WHERE DATE(" + Slot.COL_START + ") = ?"
+				+ " AND " + Slot.COL_APPOINTMENTID + " IS NOT NULL"
+				+ " AND (SELECT COUNT(*) FROM SLOT_DOC WHERE"
+				+ " SLOT_DOC.SLOTid = " + Slot.COL_SLOTID
+				+ " AND SLOT_DOC.DOCTORid = ?) = 1"
+				+ " ORDER BY " + Slot.COL_START;
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setDate(1, Date.valueOf(date));
+			ps.setInt(2, doctor.getDoctorId());
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				slots.add(toSlot(rs));
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[SLOT] SELECT SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[SLOT] SELECT FAILED");
+			e.printStackTrace();
+		}
+		
+		return slots;
+	}
+	
 	public List<Slot> getFree(LocalDate date) {
 		List<Slot> slots = new ArrayList<Slot>();
 		
