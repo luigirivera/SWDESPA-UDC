@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
@@ -18,6 +20,10 @@ import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.model.Client;
+import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.DoctorService;
+import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DayTableRenderer;
@@ -28,6 +34,8 @@ import ultimatedesignchallenge.view.WeekTableRenderer;
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
 	private Client client;
+	private DoctorService doctorService;
+	private SlotService slotService;
 	
 	public ClientView(Client client){
 		super("Client Calendar - " + client.getFirstname());
@@ -35,6 +43,8 @@ public class ClientView extends CalendarFramework{
 //		this.model = model;
 //		this.controller = controller;
 		this.client = client;
+		doctorService = new DoctorService();
+		slotService = new SlotService();
 		
 		constructorGen("Client");
 		init();
@@ -87,6 +97,27 @@ public class ClientView extends CalendarFramework{
 	
 	private void refreshDayView()
 	{
+		List<Doctor> doctors = doctorService.getAll();
+		List<Slot> slots = new ArrayList<Slot>();
+		
+		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
+		
+		for(int i = 0; i< doctors.size(); i++){
+		
+			slots.addAll(slotService.getFree(doctors.get(i), LocalDate.of(yearToday, monthToday+1, dayToday)));
+		
+		}
+		
+		for (int i = 0; i < 48; i++) {
+			dayPanel.getDayTable().setValueAt(null, i, 1);
+			for (Slot s : slots) {
+				
+				if (count.equals(s.getStart())){
+					dayPanel.getDayTable().setValueAt(s, i, 1);
+				}
+			}
+			count = count.plusMinutes(30);
+		}
 		
 		//TODO:
 		//clear calendar rows

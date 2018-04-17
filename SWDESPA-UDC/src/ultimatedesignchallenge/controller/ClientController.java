@@ -69,7 +69,7 @@ public class ClientController {
 //		ClientService cs = new ClientService();
 //		ClientController cc = new ClientController(client, cs);
 //		
-//		//cc.transformToAppointment(slots, doctor);
+//		cc.transformToAppointment(slots, doctor);
 //		
 //		Appointment apt = new Appointment();
 //		apt.setClient(client);
@@ -77,7 +77,7 @@ public class ClientController {
 //		apt.setId(9);
 //		apt.setSlots(slots);
 //		
-//		AppointmentService sTemp = new AppointmentService();
-//		sTemp.deleteAppointment(apt);
+////		AppointmentService sTemp = new AppointmentService();
+////		sTemp.deleteAppointment(apt);
 //	}
 }

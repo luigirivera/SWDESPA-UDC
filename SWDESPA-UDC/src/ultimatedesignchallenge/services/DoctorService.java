@@ -20,8 +20,8 @@ public class DoctorService {
 		
 		Connection cnt = CalendarDB.getConnection();
 		
-		String query = "SELECT * FROM " + Secretary.TABLE + " INNER JOIN" + User.TABLE
-				+ " ON " + User.COL_USERID + " = " + Secretary.COL_USERID;
+		String query = "SELECT * FROM " + Doctor.TABLE + " INNER JOIN " + User.TABLE
+				+ " ON " + User.COL_USERID + " = " + Doctor.COL_USERID;
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
