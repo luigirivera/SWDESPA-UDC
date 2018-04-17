@@ -66,15 +66,11 @@ public class CalendarPanel extends JPanel{
 		add(btnPrev);
 		add(btnNext);
 		add(scrollCalendarTable);
-		add(create);
-		
-		
 		btnPrev.setMargin(new Insets(0,0,0,0));
 		btnNext.setMargin(new Insets(0,0,0,0));
 		
 		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-		
-		create.setBounds(10, 10, 250, 40);
+
 		monthLabel.setBounds(10, 50, 200, 50);
 		btnPrev.setBounds(180, 60, 40, 30);
 		btnNext.setBounds(220, 60, 40, 30);

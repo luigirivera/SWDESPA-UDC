@@ -32,7 +32,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	/**** Added during the project ****/
 	protected CellDataHolder validCells;
 	protected JPopupMenu popup;
-	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, update;	
+	protected JMenuItem cancel, notifyDoctor, notifyClient, cancelAll, update, setAppointment;	
 	protected TopPanel topPanel;
 	protected CalendarPanel calendarPanel;
 	protected CreatePanel createPanel;
@@ -235,7 +235,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		calendarPanel.btnNext.addActionListener(new btnNext_Action());
 		calendarPanel.btnPrev.addActionListener(new btnPrev_Action());
 		calendarPanel.calendarTable.addMouseListener(new calendarTableMouseListener());
-		calendarPanel.create.addActionListener(new createbtnListener());
 		
 		createPanel.discard.addActionListener(new discardCreateBtnListener());
 	
@@ -247,7 +246,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		try {
 			doctorList.addWindowListener(new doctorListWindowListener());
 			calendarPanel.doctors.addActionListener(new toggleDoctorListListener());
-		}catch(Exception e) {e.printStackTrace();}
+		}catch(Exception e) {}
 	}
 	
 	// ------------OVERRIDE METHODS------------//
@@ -292,15 +291,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				}
-		}
-		
-	}
-	
-	class createbtnListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			toggleCreateView(true);
 		}
 		
 	}
