@@ -39,7 +39,7 @@ public class ClientController {
 	
 	public static void main(String[] args) {
 		Slot slot = new Slot();
-		slot.setId(17);
+		slot.setId(16);
 		slot.setStart(LocalDateTime.of(2018, 4, 17, 0, 0));
 		slot.setEnd(LocalDateTime.of(2018, 4, 17, 0, 30));
 		List<Slot> slots = new ArrayList<Slot>();
