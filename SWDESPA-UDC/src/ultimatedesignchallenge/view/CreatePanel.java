@@ -103,18 +103,18 @@ public class CreatePanel extends JPanel {
 			tmpTime = tmpTime.plusMinutes(30);
 		}
 		
-		recurring.setBounds(130, 90, 90, 50);
-		recurrence.setBounds(250, 90, 120, 40);
+		recurring.setBounds(130, 90, 110, 50);
+		recurrence.setBounds(250, 90, 140, 40);
 		
-		month.setBounds(90, 140, 40, 40);
-		day.setBounds(140, 140, 40, 40);
-		year.setBounds(190,140, 60, 40);
-		startTime.setBounds(380, 140, 70, 40);
+		month.setBounds(70, 140, 60, 40);
+		day.setBounds(120, 140, 80, 40);
+		year.setBounds(190,140, 100, 40);
+		startTime.setBounds(360, 140, 90, 40);
 		TOLabelTime.setBounds(460, 140, 20, 40);
-		endTime.setBounds(480, 140, 70, 40);
+		endTime.setBounds(480, 140, 90, 40);
 		
-		save.setBounds(10, 200, 300, 40);
-		discard.setBounds(330, 200, 300, 40);
+		save.setBounds(10, 200, 300, 60);
+		discard.setBounds(330, 200, 300, 60);
 		
 		setToday();
 
