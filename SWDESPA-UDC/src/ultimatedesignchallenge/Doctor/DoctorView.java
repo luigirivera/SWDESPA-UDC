@@ -68,8 +68,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		refreshWeekView();
 	}
 	
-	@Override
-	protected void refreshDayView()
+	private void refreshDayView()
 	{
 		List<Slot> myFree = slotController.getFree(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
@@ -96,8 +95,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display occupied slots in agenda table
 	}
 	
-	@Override
-	protected void refreshWeekView()
+	private void refreshWeekView()
 	{
 		List<Slot> myFree = slotController.getFree(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
