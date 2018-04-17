@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.omg.PortableInterceptor.USER_EXCEPTION;
 
-import designchallenge2.model.CalendarDB;
+import ultimatedesignchallenge.CalendarDB;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.User;
 
@@ -142,9 +142,7 @@ public class ClientService {
 		Client client = new Client();
 		
 		client.setId(rs.getInt(User.COL_USERID));
-		System.out.println(rs.getInt(User.COL_USERID));
 		client.setClientId(rs.getInt(Client.COL_CLIENTID));
-		System.out.println(rs.getInt(Client.COL_CLIENTID));
 		client.setUsername(rs.getString(User.COL_USERNAME));
 		client.setFirstname(rs.getString(User.COL_FIRSTNAME));
 		client.setLastname(rs.getString(User.COL_LASTNAME));

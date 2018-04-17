@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.services.DoctorService;
+import ultimatedesignchallenge.services.SlotService;
 
 public class DoctorController {
 	private Doctor doctor;
@@ -16,10 +18,15 @@ public class DoctorController {
 	}
 	
 	public boolean createFree(LocalDateTime start, LocalDateTime end) {
+		System.out.println("yes!!!!");
+		System.out.println(start);
+		System.out.println(end);
 		SlotBuilder builder = new SlotBuilder();
-		List<SlotC> slots = builder.buildAvailable(start, end, doctor);
-		for (SlotC slotc : slots) {
+		SlotService service = new SlotService();
+		List<Slot> slots = builder.buildSlots(start, end);
+		for (Slot slotc : slots) {
 			System.out.println(slotc);
+			service.addSlotC(slotc);
 		}
 		return false; //change this
 	}

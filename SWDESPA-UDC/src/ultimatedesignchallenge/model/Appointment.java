@@ -12,6 +12,7 @@ public class Appointment {
 	private Client client;
 	private Doctor doctor;
 	private List<Slot> slots;
+	
 
 	public static final String TABLE = "APPOINTMENT";
 	public static final String COL_APPOINTMENTID = TABLE+".APPOINTMENTid";

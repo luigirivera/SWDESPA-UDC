@@ -13,6 +13,7 @@ public class Slot {
 	private int id;
 	private LocalDateTime start;
 	private LocalDateTime end;
+	private boolean isRecurring;
 
 	public static final String TABLE = "SLOT";
 	public static final String COL_SLOTID = TABLE+".SLOTid";
@@ -27,6 +28,14 @@ public class Slot {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public boolean isRecurring() {
+		return isRecurring;
+	}
+
+	public void setIsRecurring(boolean isRecurring) {
+		this.isRecurring = isRecurring;
 	}
 
 	public LocalDateTime getStart() {
@@ -50,3 +59,4 @@ public class Slot {
 		return String.format("%d %s to %s", id, start.toString(), end.toString());
 	}
 }
+
