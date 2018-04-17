@@ -163,7 +163,10 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
+			Slot temp = new Slot();
+			temp = (Slot)dayPanel.getDayTable().getValueAt(dayPanel.getDayTable().getSelectedRow(), dayPanel.getDayTable().getSelectedColumn());
+			//add joptionpane here pls <3
+			//controller.updateFree();
 		}
 		
 	}
