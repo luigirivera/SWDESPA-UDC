@@ -175,6 +175,32 @@ public class SlotService {
 		}
 	}
 	
+	public int getId(Slot slot) {
+		Connection cnt = CalendarDB.getConnection();
+		
+		Slot slotTemp = null;
+		String query = "select * from " + Slot.TABLE + " where " + Slot.COL_START + " = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setString(1, slot.getStart().toString());
+			ResultSet rs = ps.executeQuery();
+			
+			rs.next();
+			slotTemp = (toSlot(rs));
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[SLOT] ID SELECTION SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[SLOT] ID SELECTION FAILED");
+			e.printStackTrace();
+		}
+		
+		return slotTemp.getId();
+	}
+	
 	/*public static void main(String[] args) {
 		DoctorService ds = new DoctorService();
 		SlotService ss = new SlotService();
