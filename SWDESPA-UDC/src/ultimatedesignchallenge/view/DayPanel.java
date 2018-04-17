@@ -1,7 +1,9 @@
 package ultimatedesignchallenge.view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.time.LocalTime;
+import java.util.Calendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -67,8 +69,6 @@ public class DayPanel extends JPanel {
 	}
 	
 	private void generateDayTable() {
-		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
-		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		modelDayTable.addColumn("Time");
 		modelDayTable.addColumn("Event/Task");
@@ -79,15 +79,14 @@ public class DayPanel extends JPanel {
 		dayTable.setShowVerticalLines(true);
 		dayTable.setGridColor(Color.BLACK);
 		dayTable.setRowHeight(75);
-		dayTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-		//dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableCellRenderer());//luis
+		dayTable.getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
+		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(scrollDayTable.getWidth() - dayTable.getColumnModel().getColumn(0).getWidth() - 45);
 		dayTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		dayTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		dayTable.getTableHeader().setReorderingAllowed(false);
 		dayTable.getTableHeader().setResizingAllowed(false);
-		
 		/*
 		for(int i = 0; i < 48; i++)
 			if(i%2==0)
@@ -98,25 +97,22 @@ public class DayPanel extends JPanel {
 			dayTable.setValueAt(tmpTime, i, 0);
 			tmpTime = tmpTime.plusMinutes(30);
 		}
-				
+		
+		
 	}
 	
 	private void generateAgendaTable() {
-		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
-		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
-		rightRender.setOpaque(false);
-		
 		modelAgendaTable.setColumnCount(2);
 		
 		agendaTable.setRowHeight(50);
-		agendaTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
+		agendaTable.getColumnModel().getColumn(0).setCellRenderer(new AgendaTableRenderer()); //FOR TIME
 		agendaTable.getColumnModel().getColumn(0).setPreferredWidth(150);
 		
 		//TODO ? AgendaTableCellRenderer itemRender = new AgendaTableCellRenderer();
 		//itemRender.setOpaque(false);
 		//agendaTable.getColumnModel().getColumn(1).setCellRenderer(itemRender);
 		
-		
+		agendaTable.getColumnModel().getColumn(1).setCellRenderer(new AgendaTableRenderer()); //FOR APPOINTMENTS
 		agendaTable.getColumnModel().getColumn(1).setPreferredWidth(agendaTable.getWidth() - agendaTable.getColumnModel().getColumn(0).getWidth()-95);
 		agendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		agendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -132,6 +128,56 @@ public class DayPanel extends JPanel {
 		agendaTable.setShowGrid(false);
 
 		((DefaultTableCellRenderer)dayTable.getDefaultRenderer(Object.class)).setOpaque(false);
+	}
+	
+	class DayTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+			{
+				//TODO:
+				setHorizontalAlignment(SwingConstants.RIGHT);
+				//setBackground(color of doctor who alloted this slot). mixture if both
+			}
+			else
+			{
+				//setBackground(color of doctor who has an appointment on this slot)
+			}
+			
+			
+			setBorder(null);
+			setForeground(Color.black);
+			return this;
+		}
+	}
+	
+	class AgendaTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+			{
+				//TODO:
+				setHorizontalAlignment(SwingConstants.RIGHT);
+				//setForeground(color of doctor who alloted this slot). mixture if both
+			}
+			else
+			{
+				//setForeground(color of doctor who has an appointment on this slot)
+			}
+			
+			
+			setBorder(null);
+			setForeground(Color.black);
+			return this;
+		}
 	}
 	
 	public JTable getDayTable() {

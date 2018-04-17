@@ -1,6 +1,7 @@
 package ultimatedesignchallenge.view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -14,6 +15,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import ultimatedesignchallenge.view.DayPanel.AgendaTableRenderer;
 
 public class WeekPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -70,9 +73,6 @@ public class WeekPanel extends JPanel {
 	}
 	
 	private void generateWeekTable() {
-		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
-		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
-		
 		modelWeekTable.addColumn("Time");
 		for(int i = 0; i< 7; i++)
 			modelWeekTable.addColumn("Day " + (i+1));
@@ -83,11 +83,11 @@ public class WeekPanel extends JPanel {
 		weekTable.setShowVerticalLines(true);
 		weekTable.setGridColor(Color.BLACK);
 		weekTable.setRowHeight(75);
-		weekTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
+		weekTable.getColumnModel().getColumn(0).setCellRenderer(new WeekTableRenderer()); //FOR TIME
 		weekTable.getColumnModel().getColumn(0).setPreferredWidth(65);
 		for(int i = 1; i < 8; i++)
 		{
-			//TODO ? weekTable.getColumnModel().getColumn(i).setCellRenderer(new DayTableCellRenderer());//luis
+			weekTable.getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); //FOR APPOINTMENTS
 			weekTable.getColumnModel().getColumn(i).setPreferredWidth(80);
 		}
 		
@@ -109,22 +109,17 @@ public class WeekPanel extends JPanel {
 				
 	}
 	
-	private void generateAgendaTable() {
-		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
-		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
-		rightRender.setOpaque(false);
-		
+	private void generateAgendaTable() {	
 		modelAgendaTable.setColumnCount(2);
-		
 		agendaTable.setRowHeight(50);
-		agendaTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
+		agendaTable.getColumnModel().getColumn(0).setCellRenderer(new AgendaTableRenderer()); //FOR TIME
 		agendaTable.getColumnModel().getColumn(0).setPreferredWidth(150);
 		
 		//TODO ? AgendaTableCellRenderer itemRender = new AgendaTableCellRenderer();
 		//itemRender.setOpaque(false);
 		//agendaTable.getColumnModel().getColumn(1).setCellRenderer(itemRender);
 		
-		
+		agendaTable.getColumnModel().getColumn(1).setCellRenderer(new AgendaTableRenderer()); //FOR APPOINTMENTS
 		agendaTable.getColumnModel().getColumn(1).setPreferredWidth(agendaTable.getWidth() - agendaTable.getColumnModel().getColumn(0).getWidth()-95);
 		agendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		agendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -167,10 +162,65 @@ public class WeekPanel extends JPanel {
 		
 		for(int i = 1; i < 8; i++)
 		{
-			//TODO ? weekTable.getColumnModel().getColumn(i).setCellRenderer(new DayTableCellRenderer());//luis
+			weekTable.getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); //FOR APPOINTMENTS
 			weekTable.getColumnModel().getColumn(i).setPreferredWidth(100);
 		}
 			
+	}
+	
+	class WeekTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+			{
+				setHorizontalAlignment(SwingConstants.RIGHT);
+			}
+			else
+			{
+				//TODO:
+				/* if(this slot is not set by any doctor)
+				 * 	setBackground(Color.BLACK);
+				 * else if(this slot is unoccupied)
+				 * 	setBackground(Color.WHITE);
+				 * else
+				 * 	setBackground(color of doctor who has an appointment on this slot)
+				 * 
+				 */
+			}
+			
+			setBorder(null);
+			setForeground(Color.black);
+			return this;
+		}
+	}
+	
+	class AgendaTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+			{
+				//TODO:
+				setHorizontalAlignment(SwingConstants.RIGHT);
+				//setForeground(color of doctor who alloted this slot). mixture if both
+			}
+			else
+			{
+				//setForeground(color of doctor who has an appointment on this slot)
+			}
+			
+			
+			setBorder(null);
+			setForeground(Color.black);
+			return this;
+		}
 	}
 
 	public JTable getWeekTable() {
