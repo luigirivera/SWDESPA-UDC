@@ -82,8 +82,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 	}
 	
-	@Override
-	protected void refreshDayView()
+	private void refreshDayView()
 	{
 		//TODO:
 		//clear all rows
@@ -93,8 +92,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display occupied slots in agenda table
 	}
 	
-	@Override
-	protected void refreshWeekView()
+	private void refreshWeekView()
 	{
 		//TODO:
 		//clear all rows

@@ -73,6 +73,47 @@ public class ClientView extends CalendarFramework{
 		refreshWeekView();
 		
 	}
+
+	private void refreshDayView()
+	{
+		//TODO:
+		//clear calendar rows
+		//use this -> clearAgenda(dayPanel.modelAgendaTable);
+		//check filter for which doctor/s
+		//get slots that the doctor/s have set available, all of them
+		//get all of my appointments in color
+		//get all other appointments in redacted
+		//display it in the dayTable
+		//display occupied slots in agenda table, colored and redacted
+		
+		//PS: not sure about this on the bottom
+		/*for (int row = 0 ; row < modelDayTable.getRowCount() ; row++) {
+			modelDayTable.setValueAt("", row, 1);
+			for (CalendarItem item : dayItems) {
+				LocalDateTime tmpStartTime = item.getStart();
+				LocalDateTime tmpEndTime = item.getEnd();
+				LocalDateTime tmpTableTime = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), (LocalTime)modelDayTable.getValueAt(row, 0));
+				if((tmpStartTime.equals(tmpTableTime) || tmpStartTime.isBefore(tmpTableTime)) &&
+						tmpEndTime.isAfter(tmpTableTime)) {
+					modelDayTable.setValueAt(item, row, 1);
+					break;
+				}
+			}
+		}*/
+	}
+	
+	private void refreshWeekView()
+	{
+		//TODO:
+		//clear calendar rows
+		//use this -> clearAgenda(weekPanel.modelAgendaTable);
+		//check filter for which doctor/s
+		//get slots that the doctor/s have set available, all of them
+		//get all of my appointments in color
+		//get all other appointments in redacted
+		//display it in the weekTable
+		//display appointments in agenda table in order of the days, colored and redacted
+	}
 	
 	class dayTableMouseListener extends MouseAdapter{
 
