@@ -116,23 +116,32 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	
 	private void refreshWeekView()
 	{
+		clearAgenda(weekPanel.getModelAgendaTable());
+		
 		Calendar cal = Calendar.getInstance();
 		cal.set(yearToday, monthToday, dayToday);
 		cal.get(Calendar.WEEK_OF_YEAR);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		refreshWeekViewByColumn(cal, 1);
+		refreshWeekAgendaTable(cal);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 		refreshWeekViewByColumn(cal, 2);
+		refreshWeekAgendaTable(cal);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
 		refreshWeekViewByColumn(cal, 3);
+		refreshWeekAgendaTable(cal);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
 		refreshWeekViewByColumn(cal, 4);
+		refreshWeekAgendaTable(cal);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
 		refreshWeekViewByColumn(cal, 5);
+		refreshWeekAgendaTable(cal);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
 		refreshWeekViewByColumn(cal, 6);
+		refreshWeekAgendaTable(cal);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
 		refreshWeekViewByColumn(cal, 7);
+		refreshWeekAgendaTable(cal);
 		
 		// UPDATE AGENDA
 		
@@ -144,15 +153,14 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display appointments in agenda table in order of the days
 	}
 	
-
-	protected void refreshWeekViewByColumn(Calendar cal, int day)
+	private void refreshWeekViewByColumn(Calendar cal, int day)
 	{	
 		int tempY = cal.get(Calendar.YEAR);
 		int tempM = cal.get(Calendar.MONTH)+1;
 		int tempD = cal.get(Calendar.DATE);
-		System.out.println(tempY);
-		System.out.println(tempM);
-		System.out.println(tempD);
+		//System.out.println(tempY);
+		//System.out.println(tempM);
+		//System.out.println(tempD);
 		
 		List<Slot> myFree = slotController.getFree(doctor, 
 				LocalDate.of(tempY, tempM, tempD));
@@ -168,6 +176,22 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 				}
 			}
 			count = count.plusMinutes(30);
+		}
+	}
+	
+	private void refreshWeekAgendaTable(Calendar cal) {
+		int tempY = cal.get(Calendar.YEAR);
+		int tempM = cal.get(Calendar.MONTH)+1;
+		int tempD = cal.get(Calendar.DATE);
+		//System.out.println(tempY);
+		//System.out.println(tempM);
+		//System.out.println(tempD);
+		
+		List<Slot> agendaList = slotController.getAppointmentAgendaList(doctor, 
+				LocalDate.of(tempY, tempM, tempD));
+		for (Slot s : agendaList) {
+			weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd()});
+			// dayPanel.getDayTable().setValueAt(s, i, 1);
 		}
 	}
 	
