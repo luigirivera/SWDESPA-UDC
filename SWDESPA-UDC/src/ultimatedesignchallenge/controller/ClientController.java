@@ -1,16 +1,25 @@
 package ultimatedesignchallenge.controller;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import ultimatedesignchallenge.CalendarDB;
 import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.Recurring;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.model.Slot_Doc;
 import ultimatedesignchallenge.services.AppointmentService;
 import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.SlotService;
+import ultimatedesignchallenge.services.Slot_DocService;
 
 public class ClientController {
 	private Client client;
