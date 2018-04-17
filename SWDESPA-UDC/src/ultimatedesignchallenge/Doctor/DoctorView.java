@@ -78,8 +78,6 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
 		refreshWeekView();
-
-		
 	}
 	
 	@Override
