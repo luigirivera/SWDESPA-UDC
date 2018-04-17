@@ -25,4 +25,9 @@ public class SlotController {
 	{
 		return service.getAllDoctorAppointments(date);
 	}
+	
+	public List<Slot> getAppointmentAgendaList(Doctor doctor, LocalDate date)
+	{
+		return service.getAppointmentAgendaList(doctor, date);
+	}
 }

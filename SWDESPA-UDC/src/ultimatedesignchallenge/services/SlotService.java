@@ -169,6 +169,37 @@ public class SlotService {
 		return slots;
 	}
 	
+	public List<Slot> getAppointmentAgendaList(Doctor doctor, LocalDate date) {
+		List<Slot> slots = new ArrayList<Slot>();
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "SELECT * FROM " + Slot.TABLE + " INNER JOIN " + Appointment.TABLE 
+				+ " ON " + Slot.COL_APPOINTMENTID + " = " + Appointment.COL_APPOINTMENTID
+				+ " WHERE Appointment.DOCTORid = ?"
+				+ " AND " + " DATE(" + Slot.COL_START + ") = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setInt(1, doctor.getDoctorId());
+			ps.setDate(2, Date.valueOf(date));
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				slots.add(toSlot(rs));
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[SLOT] SELECT SUCCESS");	
+		}catch(SQLException e) {
+			System.out.println("[SLOT] SELECT FAILED");
+			e.printStackTrace();
+		}
+		
+		return slots;
+	}
+	
 	private Slot toSlot(ResultSet rs) throws SQLException{
 		Slot slot = new Slot();
 		

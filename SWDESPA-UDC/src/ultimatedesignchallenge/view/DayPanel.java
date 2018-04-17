@@ -62,10 +62,9 @@ public class DayPanel extends JPanel {
 		add(scrollDayTable);
 		add(scrollAgendaTable);
 		
-		scrollAgendaTable.setVisible(false);
-		
 		scrollDayTable.setBounds(0, 0, 660, 580);
-		scrollAgendaTable.setBounds(scrollDayTable.getBounds());
+		scrollAgendaTable.setBounds(0, 0, 660, 580);
+		//scrollAgendaTable.setBounds(scrollDayTable.getBounds());
 	}
 	
 	private void generateDayTable() {
@@ -101,6 +100,10 @@ public class DayPanel extends JPanel {
 	}
 	
 	private void generateAgendaTable() {
+		
+		modelAgendaTable.addColumn("Time");
+		modelAgendaTable.addColumn("Event/Task");
+		
 		modelAgendaTable.setColumnCount(2);
 		
 		agendaTable.setRowHeight(50);
@@ -117,7 +120,7 @@ public class DayPanel extends JPanel {
 		agendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		agendaTable.getTableHeader().setReorderingAllowed(false);
 		agendaTable.getTableHeader().setResizingAllowed(false);
-		agendaTable.setTableHeader(null);
+		//agendaTable.setTableHeader(null);
 		
 		agendaTable.setOpaque(false);
 		scrollAgendaTable.setOpaque(false);
