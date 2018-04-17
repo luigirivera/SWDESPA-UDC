@@ -213,9 +213,15 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		
 		List<Slot> agendaList = slotController.getAppointmentAgendaList(doctor, 
 				LocalDate.of(tempY, tempM, tempD));
+		List<Client> clientList = slotController.getAppointmentClientsList(doctor, 
+				LocalDate.of(tempY, tempM, tempD));
+		
 		for (Slot s : agendaList) {
-			weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd()});
-			// dayPanel.getDayTable().setValueAt(s, i, 1);
+			int i = 0;
+			Client c = clientList.get(i);
+			String temp = "Client: " + c.getLastname() + ", " + c.getFirstname();
+			weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp});
+			i++;
 		}
 	}
 	
