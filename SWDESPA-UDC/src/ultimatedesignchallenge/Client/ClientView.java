@@ -87,6 +87,7 @@ public class ClientView extends CalendarFramework{
 	
 	private void refreshDayView()
 	{
+		
 		//TODO:
 		//clear calendar rows
 		//use this -> clearAgenda(dayPanel.modelAgendaTable);

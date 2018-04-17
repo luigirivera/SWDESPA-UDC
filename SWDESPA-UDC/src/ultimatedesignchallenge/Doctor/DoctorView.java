@@ -46,6 +46,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		this.doctor = doctor;
 		this.controller = controller;
 		this.slotController = slotController;
+		slotService = new SlotService();
 		
 		constructorGen("Doctor");
 		init();
@@ -87,9 +88,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	
 	private void refreshDayView()
 	{
-		List<Slot> myFree = slotController.getFree(doctor, 
+		List<Slot> myFree = slotService.getFree(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
-		List<Slot> myTaken = slotController.getTaken(doctor, LocalDate.of(yearToday, monthToday+1, dayToday));
+		List<Slot> myTaken = slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 		for (int i = 0; i < 48; i++) {
 			dayPanel.getDayTable().setValueAt(null, i, 1);
@@ -109,9 +110,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		}
 		
 		clearAgenda(dayPanel.getModelAgendaTable());
-		List<Slot> agendaList = slotController.getAppointmentAgendaList(doctor, 
+		List<Slot> agendaList = slotService.getAppointmentAgendaList(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
-		List<Client> clientList = slotController.getAppointmentClientsList(doctor, 
+		List<Client> clientList = slotService.getAppointmentClientsList(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
 		
 		for (Slot s : agendaList) {
@@ -191,7 +192,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//System.out.println(tempM);
 		//System.out.println(tempD);
 		
-		List<Slot> myFree = slotController.getFree(doctor, 
+		List<Slot> myFree = slotService.getFree(doctor, 
 				LocalDate.of(tempY, tempM, tempD));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 		for (int i = 0; i < 48 ; i++) {
@@ -216,9 +217,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//System.out.println(tempM);
 		//System.out.println(tempD);
 		
-		List<Slot> agendaList = slotController.getAppointmentAgendaList(doctor, 
+		List<Slot> agendaList = slotService.getAppointmentAgendaList(doctor, 
 				LocalDate.of(tempY, tempM, tempD));
-		List<Client> clientList = slotController.getAppointmentClientsList(doctor, 
+		List<Client> clientList = slotService.getAppointmentClientsList(doctor, 
 				LocalDate.of(tempY, tempM, tempD));
 		
 		for (Slot s : agendaList) {

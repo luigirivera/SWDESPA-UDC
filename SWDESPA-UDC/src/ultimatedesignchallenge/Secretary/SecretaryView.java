@@ -22,6 +22,7 @@ import ultimatedesignchallenge.controller.SecretaryController;
 import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DayTableRenderer;
@@ -34,6 +35,7 @@ public class SecretaryView extends CalendarFramework{
 	private Secretary secretary;
 	private SecretaryController controller;
 	private SlotController slotController;
+	private SlotService slotService;
 	
 	public SecretaryView(Secretary secretary, SecretaryController controller, SlotController slotController) {
 		super("Central Calendar Census - " + secretary.getFirstname());
@@ -42,6 +44,7 @@ public class SecretaryView extends CalendarFramework{
 		this.secretary = secretary;
 		this.controller = controller;
 		this.slotController = slotController;
+		slotService = new SlotService();
 		
 		constructorGen("Clinic Secretary");
 		init();
@@ -101,7 +104,7 @@ public class SecretaryView extends CalendarFramework{
 	
 	private void refreshDayView()
 	{
-		List<Slot> myFree = slotController.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
+		List<Slot> myFree = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 		for (int i = 0; i < 48; i++) {
 			dayPanel.getDayTable().setValueAt(null, i, 1);
