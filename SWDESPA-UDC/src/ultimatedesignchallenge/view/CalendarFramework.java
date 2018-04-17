@@ -117,6 +117,47 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		//modelCalendarTable.setValueAt(csformatter.format(day,
 		//		esformatter.formatEvents(LegacyEventConverter.convert(model.getItemsOn(flags, LocalDate.of(yearToday, monthToday+1, day))))), row, column);
 	}
+
+	protected void refreshDayView()
+	{
+		//TODO:
+		//clear calendar rows
+		//use this -> clearAgenda(dayPanel.modelAgendaTable);
+		//check filter for which doctor/s
+		//get slots that the doctor have set available, all of them
+		//get all of my appointments in color
+		//get all other appointments in redacted
+		//display it in the dayTable
+		//display occupied slots in agenda table, colored and redacted
+		
+		//PS: not sure about this on the bottom
+		/*for (int row = 0 ; row < modelDayTable.getRowCount() ; row++) {
+			modelDayTable.setValueAt("", row, 1);
+			for (CalendarItem item : dayItems) {
+				LocalDateTime tmpStartTime = item.getStart();
+				LocalDateTime tmpEndTime = item.getEnd();
+				LocalDateTime tmpTableTime = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), (LocalTime)modelDayTable.getValueAt(row, 0));
+				if((tmpStartTime.equals(tmpTableTime) || tmpStartTime.isBefore(tmpTableTime)) &&
+						tmpEndTime.isAfter(tmpTableTime)) {
+					modelDayTable.setValueAt(item, row, 1);
+					break;
+				}
+			}
+		}*/
+	}
+	
+	protected void refreshWeekView()
+	{
+		//TODO:
+		//clear calendar rows
+		//use this -> clearAgenda(weekPanel.modelAgendaTable);
+		//check filter for which doctor/s
+		//get slots that the doctor have set available, all of them
+		//get all of my appointments in color
+		//get all other appointments in redacted
+		//display it in the weekTable
+		//display appointments in agenda table in order of the days, colored and redacted
+	}
 	
 	public void refreshAgenda() {
 		/*clearAgenda();
@@ -253,6 +294,16 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 	}
 	
 	// ------------OVERRIDE METHODS------------//
+	
+	@Override
+	public void update()
+	{
+		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
+		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
+		changeLabel();
+		refreshDayView();
+		refreshWeekView();
+	}
 	
 	// ------------LISTENERS------------//
 	
