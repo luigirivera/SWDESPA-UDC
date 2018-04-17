@@ -44,10 +44,11 @@ public class ClientView extends CalendarFramework{
 	private SlotService slotService;
 	private ClientController clientController;
 	private ClientService clientService;
+	private boolean filterFlag;
 	
 	public ClientView(Client client){
 		super("Client Calendar - " + client.getFirstname());
-		
+		filterFlag = false;
 //		this.model = model;
 //		this.controller = controller;
 		this.client = client;
@@ -300,7 +301,7 @@ public class ClientView extends CalendarFramework{
 				if(doctors.get(i).getFirstname().equals(strDoctor.split(", ")[1]) && doctors.get(i).getLastname().equals(strDoctor.split(", ")[0]))
 					doctor = doctors.get(i);
 			}
-			
+			filterFlag = true;
 			update();
 			
 		}
