@@ -101,20 +101,25 @@ public class SecretaryView extends CalendarFramework{
 	
 	private void refreshDayView()
 	{
-		List<Slot> myFree = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
-		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
-		for (int i = 0; i < 48; i++) {
-			dayPanel.getDayTable().setValueAt(null, i, 1);
-			for (Slot s : myFree) {
-				//System.out.println(s.getStart());
-				//System.out.println(count);
-				if (count.equals(s.getStart())){
-					//System.out.println("changed");
-					dayPanel.getDayTable().setValueAt(s, i, 1);
+		if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
+			System.out.println("ok!");
+			List<Slot> myFree = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
+			LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
+			for (int i = 0; i < 48; i++) {
+				dayPanel.getDayTable().setValueAt(null, i, 1);
+				for (Slot s : myFree) {
+					//System.out.println(s.getStart());
+					//System.out.println(count);
+					if (count.equals(s.getStart())){
+						//System.out.println("changed");
+						dayPanel.getDayTable().setValueAt(s, i, 1);
+					}
 				}
+				count = count.plusMinutes(30);
 			}
-			count = count.plusMinutes(30);
 		}
+		
+		
 		
 		//TODO:
 		//clear calendar rows
@@ -144,6 +149,8 @@ public class SecretaryView extends CalendarFramework{
 		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
 		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
+	
+	
 	
 	private void refreshWeekView()
 	{
