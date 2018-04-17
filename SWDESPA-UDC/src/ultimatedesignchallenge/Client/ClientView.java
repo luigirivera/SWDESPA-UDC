@@ -19,10 +19,14 @@ import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
+import ultimatedesignchallenge.controller.ClientController;
 import ultimatedesignchallenge.controller.SlotBuilder;
+import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.AppointmentService;
+import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
@@ -35,17 +39,24 @@ import ultimatedesignchallenge.view.WeekTableRenderer;
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
 	private Client client;
+	private Doctor doctor;
 	private DoctorService doctorService;
 	private SlotService slotService;
+	private ClientController clientController;
+	private ClientService clientService;
+	private boolean filterFlag;
 	
 	public ClientView(Client client){
 		super("Client Calendar - " + client.getFirstname());
-		
+		filterFlag = false;
 //		this.model = model;
 //		this.controller = controller;
 		this.client = client;
 		doctorService = new DoctorService();
 		slotService = new SlotService();
+		clientService = new ClientService();
+		clientController = new ClientController(client, clientService);
+		doctor = new Doctor();
 		
 		constructorGen("Client");
 		init();
@@ -236,10 +247,10 @@ public class ClientView extends CalendarFramework{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JPanel panel = new JPanel();
-			JRadioButton recurring = new JRadioButton("Recurring");
+			//JRadioButton recurring = new JRadioButton("Recurring");
 			JComboBox<String> recurrence = new JComboBox<String>();
 			
-			panel.add(recurring);
+			//panel.add(recurring);
 			panel.add(recurrence);
 			
 			recurrence.setVisible(false);
@@ -248,19 +259,31 @@ public class ClientView extends CalendarFramework{
 			recurrence.addItem("3 Weeks");
 			recurrence.addItem("4 Weeks");
 			
-			recurring.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					boolean toggle = recurring.isSelected();
-					
-					recurrence.setVisible(toggle);
-					recurrence.setEnabled(toggle);
-					
-				}
-				
-			});
+			List<Slot> slots = new ArrayList<Slot>();
+			int[] sRows = dayPanel.getDayTable().getSelectedRows();
+			
+			for(int i = 0; i < sRows.length; i++) {
+				slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+			}
+			
+//			recurring.addActionListener(new ActionListener() {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent arg0) {
+//					boolean toggle = recurring.isSelected();
+//					
+//					recurrence.setVisible(toggle);
+//					recurrence.setEnabled(toggle);
+//					
+//				}
+//				
+//			});
 			int result = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
+			
+			if(result == 0) {
+				clientController.transformToAppointment(slots, doctor);
+			}
+			
 			//TODO: set the appointment based on values
 		}
 		
@@ -270,7 +293,15 @@ public class ClientView extends CalendarFramework{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
-			doctorList.getDoctorList().getSelectedValuesList();
+			String strDoctor = doctorList.getDoctorList().getSelectedValue();
+			List<Doctor> doctors = new ArrayList<Doctor>();
+			doctors = doctorService.getAll();
+			
+			for(int i = 0; i < doctors.size(); i++) {
+				if(doctors.get(i).getFirstname().equals(strDoctor.split(", ")[1]) && doctors.get(i).getLastname().equals(strDoctor.split(", ")[0]))
+					doctor = doctors.get(i);
+			}
+			filterFlag = true;
 			update();
 			
 		}
@@ -364,6 +395,24 @@ public class ClientView extends CalendarFramework{
 	class cancelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
+			Appointment apt = new Appointment();
+			
+			List<Slot> slots = new ArrayList<Slot>();
+			int[] sRows = dayPanel.getDayTable().getSelectedRows();
+			
+			for(int i = 0; i < sRows.length; i++) {
+				slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+			}
+			
+			apt.setDoctor(doctor);
+			apt.setClient(client);
+			apt.setSlots(slots);
+			apt.setId(slotService.getAppointmentID(slots.get(0)));
+			
+			AppointmentService aptService = new AppointmentService();
+			aptService.deleteAppointment(apt);
+			
 			//TODO:
 			//get selected appointment/s
 			//delete those appointments from the DB
