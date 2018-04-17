@@ -223,12 +223,6 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			
 			Integer[] months = {1,2,3,4,5,6,7,8,9,10,11,12};
 			
-			LocalDateTime startDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
-					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem());
-			
-			LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
-					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem());
-			
 			month = new JComboBox<Integer>(months);
 			day = new JComboBox<Integer>();
 			year = new JComboBox<Integer>(yearsA);
@@ -251,6 +245,16 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			}
 			
 			int result = JOptionPane.showConfirmDialog(null, panel, "Update Slot", JOptionPane.OK_CANCEL_OPTION);
+			
+			if (result==JOptionPane.OK_OPTION) {
+				LocalDateTime startDateTime = LocalDateTime.of(LocalDate.of(year.getItemAt(year.getSelectedIndex()), month.getItemAt(month.getSelectedIndex()),
+						day.getItemAt(day.getSelectedIndex())), startTime.getItemAt(startTime.getSelectedIndex()));
+				
+				LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(year.getItemAt(year.getSelectedIndex()), month.getItemAt(month.getSelectedIndex()),
+						day.getItemAt(day.getSelectedIndex())), endTime.getItemAt(startTime.getSelectedIndex()));
+				
+				controller.updateFree(temp, startDateTime, endDateTime);
+			}
 		}
 		
 		private void setToday()
