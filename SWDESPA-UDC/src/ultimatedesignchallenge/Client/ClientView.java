@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -153,6 +154,25 @@ public class ClientView extends CalendarFramework{
 	
 	private void refreshWeekView()
 	{
+		clearAgenda(weekPanel.getModelAgendaTable());
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(yearToday, monthToday, dayToday);
+		cal.get(Calendar.WEEK_OF_YEAR);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		refreshWeekViewByColumn(cal, 1);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		refreshWeekViewByColumn(cal, 2);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+		refreshWeekViewByColumn(cal, 3);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+		refreshWeekViewByColumn(cal, 4);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+		refreshWeekViewByColumn(cal, 5);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+		refreshWeekViewByColumn(cal, 6);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+		refreshWeekViewByColumn(cal, 7);
 		//TODO:
 		//clear calendar rows
 		//use this -> clearAgenda(weekPanel.modelAgendaTable);
@@ -165,6 +185,40 @@ public class ClientView extends CalendarFramework{
 	
 		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
 		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
+	}
+	
+	private void refreshWeekViewByColumn(Calendar cal, int day)
+	{	
+		List<Doctor> doctors = doctorService.getAll();
+		List<Slot> slots = new ArrayList<Slot>();
+		
+		int tempY = cal.get(Calendar.YEAR);
+		int tempM = cal.get(Calendar.MONTH)+1;
+		int tempD = cal.get(Calendar.DATE);
+		
+		//System.out.println(tempY);
+		//System.out.println(tempM);
+		//System.out.println(tempD);
+		
+		for(int i = 0; i < doctors.size(); i++) {
+			slots.addAll(slotService.getFree(doctors.get(i), LocalDate.of(tempY, tempM, tempD)));
+		}
+		
+		slots.addAll(slotService.getAll(client.getId()));
+		
+		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
+		for (int i = 0; i < 48 ; i++) {
+			weekPanel.getWeekTable().setValueAt(null, i, day);
+			for (Slot s : slots) {
+				if (count.equals(s.getStart())) {
+					//System.out.println("changed!");
+					//System.out.println(weekPanel.getWeekTable().getValueAt(i, 0));
+							weekPanel.getWeekTable().setValueAt(s, i, day);
+							//System.out.println(weekPanel.getWeekTable().getValueAt(i, day));
+				}
+			}
+			count = count.plusMinutes(30);
+		}
 	}
 	
 	class updateAppointment implements ActionListener{

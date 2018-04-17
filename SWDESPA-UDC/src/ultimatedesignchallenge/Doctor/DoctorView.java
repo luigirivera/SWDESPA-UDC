@@ -182,6 +182,8 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
 	{	
+		List<Slot> slots = new ArrayList<Slot>();
+		
 		int tempY = cal.get(Calendar.YEAR);
 		int tempM = cal.get(Calendar.MONTH)+1;
 		int tempD = cal.get(Calendar.DATE);
@@ -189,24 +191,17 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//System.out.println(tempM);
 		//System.out.println(tempD);
 		
-		List<Slot> myFree = slotService.getFree(doctor, 
-				LocalDate.of(tempY, tempM, tempD));
-		List<Slot> myTaken = slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday));
+		slots.addAll(slotService.getFree(doctor, LocalDate.of(tempY, tempM, tempD)));
+		slots.addAll(slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday)));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 		for (int i = 0; i < 48 ; i++) {
 			weekPanel.getWeekTable().setValueAt(null, i, day);
-			for (Slot s : myFree) {
+			for (Slot s : slots) {
 				if (count.equals(s.getStart())) {
 					//System.out.println("changed!");
 					//System.out.println(weekPanel.getWeekTable().getValueAt(i, 0));
 							weekPanel.getWeekTable().setValueAt(s, i, day);
 							//System.out.println(weekPanel.getWeekTable().getValueAt(i, day));
-				}
-			}
-			for (Slot s : myTaken) {
-				
-				if (count.equals(s.getStart())){
-					weekPanel.getWeekTable().setValueAt(s, i, day);
 				}
 			}
 			count = count.plusMinutes(30);
