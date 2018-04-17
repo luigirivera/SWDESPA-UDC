@@ -19,7 +19,6 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.SecretaryController;
-import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.services.SlotService;
@@ -34,16 +33,14 @@ public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
 	private Secretary secretary;
 	private SecretaryController controller;
-	private SlotController slotController;
 	private SlotService slotService;
 	
-	public SecretaryView(Secretary secretary, SecretaryController controller, SlotController slotController) {
+	public SecretaryView(Secretary secretary, SecretaryController controller) {
 		super("Central Calendar Census - " + secretary.getFirstname());
 		
 //		this.model = model;
 		this.secretary = secretary;
 		this.controller = controller;
-		this.slotController = slotController;
 		slotService = new SlotService();
 		
 		constructorGen("Clinic Secretary");

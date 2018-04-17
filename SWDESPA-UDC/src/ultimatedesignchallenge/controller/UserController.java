@@ -28,7 +28,7 @@ public class UserController {
 		System.out.println(password);
 		
 		if((model=dsv.getDoctor(username, password))!=null) {
-			new DoctorView((Doctor)model, new DoctorController((Doctor)model, dsv), new SlotController(new SlotService()));
+			new DoctorView((Doctor)model, new DoctorController((Doctor)model, dsv));
 			return true;
 		}
 		if((model=csv.getClient(username, password))!=null) {
@@ -36,7 +36,7 @@ public class UserController {
 			return true;
 		}
 		if((model=ssv.getSecretary(username, password))!=null){
-			new SecretaryView((Secretary)model, new SecretaryController((Secretary)model, ssv), new SlotController(new SlotService()));
+			new SecretaryView((Secretary)model, new SecretaryController((Secretary)model, ssv));
 			return true;
 		}
 		return false;

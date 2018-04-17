@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.DoctorController;
-import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
@@ -36,16 +35,14 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	private static final long serialVersionUID = 1L;
 	private Doctor doctor;
 	private DoctorController controller;
-	private SlotController slotController;
 	private SlotService slotService;
 	
-	public DoctorView(Doctor doctor, DoctorController controller, SlotController slotController) {
+	public DoctorView(Doctor doctor, DoctorController controller) {
 		super("Doctor Calendar - " + doctor.getFirstname());
 		
 //		this.model = model;
 		this.doctor = doctor;
 		this.controller = controller;
-		this.slotController = slotController;
 		slotService = new SlotService();
 		
 		constructorGen("Doctor");
