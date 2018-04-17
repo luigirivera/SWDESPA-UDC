@@ -20,4 +20,9 @@ public class SlotController {
 	{
 		return service.getFree(doctor, date);
 	}
+	
+	public List<Slot> getAllDoctorAppointments(LocalDate date)
+	{
+		return service.getAllDoctorAppointments(date);
+	}
 }
