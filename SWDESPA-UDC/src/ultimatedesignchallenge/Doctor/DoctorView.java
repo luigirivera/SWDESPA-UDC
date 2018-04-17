@@ -199,6 +199,11 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			
 			Integer[] months = {1,2,3,4,5,6,7,8,9,10,11,12};
 			
+			LocalDateTime startDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem());
+			
+			LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem());
 			
 			month = new JComboBox<Integer>(months);
 			day = new JComboBox<Integer>();
