@@ -19,8 +19,10 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.SecretaryController;
+import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
@@ -101,22 +103,56 @@ public class SecretaryView extends CalendarFramework{
 	
 	private void refreshDayView()
 	{
-		if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
-			System.out.println("ok!");
-			List<Slot> myFree = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
-			LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
-			for (int i = 0; i < 48; i++) {
-				dayPanel.getDayTable().setValueAt(null, i, 1);
-				for (Slot s : myFree) {
-					//System.out.println(s.getStart());
-					//System.out.println(count);
-					if (count.equals(s.getStart())){
-						//System.out.println("changed");
-						dayPanel.getDayTable().setValueAt(s, i, 1);
+		try {
+			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
+				System.out.println("ok!");
+				List<Slot> allAppointments = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
+				LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
+				for (int i = 0; i < 48; i++) {
+					dayPanel.getDayTable().setValueAt(null, i, 1);
+					for (Slot s : allAppointments) {
+						//System.out.println(s.getStart());
+						//System.out.println(count);
+						if (count.equals(s.getStart())){
+							//System.out.println("changed");
+							dayPanel.getDayTable().setValueAt(s, i, 1);
+						}
+					}
+					count = count.plusMinutes(30);
+				}
+			}
+			
+			DoctorService service = new DoctorService();
+			List<Doctor> doctors = service.getAll();
+			for(Doctor d : doctors) {
+				String temp = d.getLastname() + ", " + d.getFirstname();
+				
+				if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
+					System.out.println("ok!");
+					List<Slot> indivAppointments = slotService.getAppointmentAgendaList(d, LocalDate.of(yearToday, monthToday+1, dayToday));
+					LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
+					for (int i = 0; i < 48; i++) {
+						dayPanel.getDayTable().setValueAt(null, i, 1);
+						for (Slot s : indivAppointments) {
+							//System.out.println(s.getStart());
+							//System.out.println(count);
+							if (count.equals(s.getStart())){
+								//System.out.println("changed");
+								dayPanel.getDayTable().setValueAt(s, i, 1);
+							}
+						}
+						count = count.plusMinutes(30);
 					}
 				}
-				count = count.plusMinutes(30);
+				
+				
+				
+				
 			}
+			
+			
+		} catch (Exception e) {
+			System.out.println("Nothing pressed yet!");
 		}
 		
 		
