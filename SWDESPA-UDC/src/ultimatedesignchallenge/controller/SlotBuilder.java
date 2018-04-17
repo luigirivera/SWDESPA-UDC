@@ -20,7 +20,7 @@ public class SlotBuilder {
 		while (startTime.isBefore(endTime)) {
 			Slot tempSlot = new Slot();
 			tempSlot.setStart(startTime);
-			tempSlot.setEnd(endTime);
+			tempSlot.setEnd(startTime.plusMinutes(30));
 			tempSlot.setIsRecurring(false);
 			slots.add(tempSlot);
 			startTime = startTime.plusMinutes(30);
@@ -33,7 +33,7 @@ public class SlotBuilder {
 		while (startTime.isBefore(endTime)) {
 			Slot tempSlot = new Slot();
 			tempSlot.setStart(startTime);
-			tempSlot.setEnd(endTime);
+			tempSlot.setEnd(startTime.plusMinutes(30));
 			tempSlot.setIsRecurring(true);
 			slots.add(tempSlot);
 			startTime = startTime.plusMinutes(30);
