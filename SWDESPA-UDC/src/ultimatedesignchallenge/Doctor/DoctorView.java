@@ -213,10 +213,14 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			//TODO: add created slot to database, set appointment ID based on appointment name
 						
 			try {
-				if(createPanel.getRecurring().isSelected() == true)
-					System.out.println("boy");
-				
-				else {
+				if(createPanel.getRecurring().isSelected() == true) {
+					controller.createFreeRecurring(LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem()), LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
+							(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem()), createPanel.getRecurrence().getSelectedIndex());
+					
+					
+					
+				}else {
 					controller.createFree(LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
 					(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getStartTime().getSelectedItem()), LocalDateTime.of(LocalDate.of((int)createPanel.getYear().getSelectedItem(), (int)createPanel.getMonth().getSelectedItem(),
 							(int)createPanel.getDay().getSelectedItem()), (LocalTime) createPanel.getEndTime().getSelectedItem()));

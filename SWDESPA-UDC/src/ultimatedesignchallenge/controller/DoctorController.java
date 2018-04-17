@@ -1,6 +1,7 @@
 package ultimatedesignchallenge.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import ultimatedesignchallenge.model.Doctor;
@@ -40,4 +41,35 @@ public class DoctorController {
 		}
 		return false; //change this
 	}
+	
+	public boolean createFreeRecurring(LocalDateTime start, LocalDateTime end, int option) {
+		
+		SlotBuilder builder = new SlotBuilder();
+		SlotService service = new SlotService();
+		List<Slot> slots = new ArrayList<Slot>();
+		
+//		System.out.println("\n\n\n Local Date Start "+start.toLocalDate());
+//		System.out.println("\n\n\n Local Date after a week"+start.toLocalDate().plusWeeks(1));
+//		System.out.println("\n Local Date End " +start.toLocalDate());
+		
+		for(int i = 0; i <= option + 1; i++) {
+			slots.addAll(builder.buildSlots(start, end));
+			start = start.plusWeeks(1);
+			end = end.plusWeeks(1);
+		}
+		
+		temp = new Slot_Doc();
+		sdocService = new Slot_DocService();
+		
+		for (Slot slotc : slots) {
+			System.out.println(slotc);
+			service.addSlotC(slotc);
+			temp.setSlotId(service.getId(slotc));
+			temp.setDoctorId(doctor.getDoctorId());
+			sdocService.addSlot_Doc(temp);
+		}
+		
+		return false; //i dont understand why the one above is false but ill do the same
+	}
+	
 }
