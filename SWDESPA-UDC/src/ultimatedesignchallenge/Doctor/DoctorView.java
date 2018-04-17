@@ -27,6 +27,10 @@ import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.CalendarObserver;
+import ultimatedesignchallenge.view.DayAgendaTableRenderer;
+import ultimatedesignchallenge.view.DayTableRenderer;
+import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
+import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
 	private static final long serialVersionUID = 1L;
@@ -126,6 +130,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//get slots that i have set available, all of them
 		//display it in the dayTable
 		//display occupied slots in agenda table
+		
+		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
+		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
 	private void refreshWeekView()
@@ -165,6 +172,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//get slots that i have set available, all of them
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days
+		
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)

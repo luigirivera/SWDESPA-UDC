@@ -19,7 +19,11 @@ import javax.swing.SwingUtilities;
 import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.view.CalendarFramework;
+import ultimatedesignchallenge.view.DayAgendaTableRenderer;
+import ultimatedesignchallenge.view.DayTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
+import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
+import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
@@ -108,6 +112,9 @@ public class ClientView extends CalendarFramework{
 				}
 			}
 		}*/
+		
+		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
+		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
 	private void refreshWeekView()
@@ -121,6 +128,9 @@ public class ClientView extends CalendarFramework{
 		//get all other appointments in redacted //Custom TableRenderer only for week can be used
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
+	
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	class updateAppointment implements ActionListener{

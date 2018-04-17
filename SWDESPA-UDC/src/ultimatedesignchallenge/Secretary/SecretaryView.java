@@ -23,7 +23,11 @@ import ultimatedesignchallenge.controller.SlotController;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.view.CalendarFramework;
+import ultimatedesignchallenge.view.DayAgendaTableRenderer;
+import ultimatedesignchallenge.view.DayTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
+import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
+import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
@@ -136,6 +140,9 @@ public class SecretaryView extends CalendarFramework{
 				}
 			}
 		}*/
+		
+		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
+		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
 	private void refreshWeekView()
@@ -148,6 +155,9 @@ public class SecretaryView extends CalendarFramework{
 		//get all appointments
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time //Custom TableRenderer only for week agenda can be used
+	
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	class updateAppointment implements ActionListener{
