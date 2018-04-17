@@ -109,11 +109,13 @@ public class SecretaryView extends CalendarFramework{
 		try {
 			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
 				System.out.println("ok!");
-				List<Slot> allAppointments = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
+				List<Slot> slots = new ArrayList<Slot>();
+				//slots.addAll(slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday))); this can be good for if we start filtering
+				slots.addAll(slotService.getAll());
 				LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 				for (int i = 0; i < 48; i++) {
 					dayPanel.getDayTable().setValueAt(null, i, 1);
-					for (Slot s : allAppointments) {
+					for (Slot s : slots) {
 						//System.out.println(s.getStart());
 						//System.out.println(count);
 						if (count.equals(s.getStart())){
@@ -139,9 +141,7 @@ public class SecretaryView extends CalendarFramework{
 					dayPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp3});
 					i++;
 				}
-			}
-			
-			else {
+			} else {
 				DoctorService service = new DoctorService();
 				List<Doctor> doctors = service.getAll();
 				for(Doctor d : doctors) {
@@ -149,11 +149,13 @@ public class SecretaryView extends CalendarFramework{
 					
 					if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
 						System.out.println("ok!");
-						List<Slot> indivAppointments = slotService.getAppointmentAgendaList(d, LocalDate.of(yearToday, monthToday+1, dayToday));
+						List<Slot> slots = new ArrayList<Slot>();
+						slots.addAll(slotService.getAppointmentAgendaList(d, LocalDate.of(yearToday, monthToday+1, dayToday)));
+						slots.addAll(slotService.getFree(d, LocalDate.of(yearToday, monthToday+1, dayToday)));
 						LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 						for (int i = 0; i < 48; i++) {
 							dayPanel.getDayTable().setValueAt(null, i, 1);
-							for (Slot s : indivAppointments) {
+							for (Slot s : slots) {
 								//System.out.println(s.getStart());
 								//System.out.println(count);
 								if (count.equals(s.getStart())){
@@ -277,11 +279,11 @@ public class SecretaryView extends CalendarFramework{
 		try {
 			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
 				//System.out.println("ok!");
-				List<Slot> allAppointments = slotService.getAllDoctorAppointments(LocalDate.of(tempY, tempM, tempD));
+				slots.addAll(slotService.getAll());
 				LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 				for (int i = 0; i < 48; i++) {
 					weekPanel.getWeekTable().setValueAt(null, i, day);
-					for (Slot s : allAppointments) {
+					for (Slot s : slots) {
 						//System.out.println(s.getStart());
 						//System.out.println(count);
 						if (count.equals(s.getStart())){
@@ -301,11 +303,12 @@ public class SecretaryView extends CalendarFramework{
 					
 					if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
 						//System.out.println("ok!");
-						List<Slot> indivAppointments = slotService.getAppointmentAgendaList(d, LocalDate.of(tempY, tempM, tempD));
+						slots.addAll(slotService.getAppointmentAgendaList(d, LocalDate.of(tempY, tempM, tempD)));
+						slots.addAll(slotService.getFree(d, LocalDate.of(tempY, tempM, tempD)));
 						LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 						for (int i = 0; i < 48; i++) {
 							weekPanel.getWeekTable().setValueAt(null, i, day);
-							for (Slot s : indivAppointments) {
+							for (Slot s : slots) {
 								//System.out.println(s.getStart());
 								//System.out.println(count);
 								if (count.equals(s.getStart())){
