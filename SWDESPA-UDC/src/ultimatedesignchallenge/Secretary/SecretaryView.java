@@ -317,20 +317,20 @@ public class SecretaryView extends CalendarFramework{
 		
 		try {
 			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
-				/* List<Slot> allAppointments = slotService.getAllDoctorAppointments(LocalDate.of(tempY, tempM, tempD));
-				LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
-				for (int i = 0; i < 48; i++) {
-					weekPanel.getWeekTable().setValueAt(null, i, day);
-					for (Slot s : allAppointments) {
-						//System.out.println(s.getStart());
-						//System.out.println(count);
-						if (count.equals(s.getStart())){
-							//System.out.println("changed");
-							weekPanel.getWeekTable().setValueAt(s, i, day);
-						}
-					}
-					count = count.plusMinutes(30);
-				} */
+				List<Slot> allAppointments = slotService.getAllDoctorAppointments(LocalDate.of(tempY, tempM, tempD));
+				List<Client> allClients = slotService.getAllDoctorAppointmentsClients(LocalDate.of(tempY, tempM, tempD));
+				List<Doctor> allDoctors = slotService.getAllDoctorAppointmentsDoctors(LocalDate.of(tempY, tempM, tempD));
+
+				int i = 0;
+				for (Slot s : allAppointments) {
+					Client c = allClients.get(i);
+					Doctor d = allDoctors.get(i);
+					String temp = "Doctor: " + d.getLastname() + ", " + d.getFirstname();
+					String temp2 = "Client: " + c.getLastname() + ", " + c.getFirstname();
+					String temp3 = temp + "; " + temp2;
+					weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp3});
+					i++;
+				}
 			}
 			
 			else {
@@ -344,9 +344,9 @@ public class SecretaryView extends CalendarFramework{
 								LocalDate.of(tempY, tempM, tempD));
 						List<Client> clientList = slotService.getAppointmentClientsList(d, 
 								LocalDate.of(tempY, tempM, tempD));
-						
+
+						int i = 0;
 						for (Slot s : agendaList) {
-							int i = 0;
 							Client c = clientList.get(i);
 							String temp2 = "Client: " + c.getLastname() + ", " + c.getFirstname();
 							weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp2});

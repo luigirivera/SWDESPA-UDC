@@ -111,9 +111,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 				LocalDate.of(yearToday, monthToday+1, dayToday));
 		List<Client> clientList = slotService.getAppointmentClientsList(doctor, 
 				LocalDate.of(yearToday, monthToday+1, dayToday));
-		
+
+		int i = 0;
 		for (Slot s : agendaList) {
-			int i = 0;
 			//System.out.println(s.getStart().getHour());
 			//System.out.println(s.getStart().getMinute());
 			//System.out.println(s.getStart().getSecond());
@@ -220,9 +220,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 				LocalDate.of(tempY, tempM, tempD));
 		List<Client> clientList = slotService.getAppointmentClientsList(doctor, 
 				LocalDate.of(tempY, tempM, tempD));
-		
+
+		int i = 0;
 		for (Slot s : agendaList) {
-			int i = 0;
 			Client c = clientList.get(i);
 			String temp = "Client: " + c.getLastname() + ", " + c.getFirstname();
 			weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp});

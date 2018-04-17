@@ -235,6 +235,68 @@ public class SlotService {
 		
 		return slots;
 	}
+
+	public List<Client> getAllDoctorAppointmentsClients(LocalDate date) {
+		List<Client> clients = new ArrayList<Client>();
+		
+		Connection cnt = CalendarDB.getConnection();
+
+		String query = "SELECT * FROM " + Slot.TABLE + " INNER JOIN " + Appointment.TABLE 
+				+ " ON " + Slot.COL_APPOINTMENTID + " = " + Appointment.COL_APPOINTMENTID
+				+ " INNER JOIN " + Client.TABLE + " ON " + Appointment.COL_CLIENTID + " = " + Client.COL_CLIENTID
+				+ " INNER JOIN " + User.TABLE + " ON " + Client.COL_USERID + " = " + User.COL_USERID
+				+ " WHERE DATE(" + Slot.COL_START + ") = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setDate(1, Date.valueOf(date));
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				clients.add(toClient(rs));
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[SLOT] SELECT SUCCESS");	
+		} catch(SQLException e) {
+			System.out.println("[SLOT] SELECT FAILED");
+			e.printStackTrace();
+		}
+		
+		return clients;
+	}
+	
+	public List<Doctor> getAllDoctorAppointmentsDoctors(LocalDate date) {
+		List<Doctor> doctors = new ArrayList<Doctor>();
+		
+		Connection cnt = CalendarDB.getConnection();
+
+		String query = "SELECT * FROM " + Slot.TABLE + " INNER JOIN " + Appointment.TABLE 
+				+ " ON " + Slot.COL_APPOINTMENTID + " = " + Appointment.COL_APPOINTMENTID
+				+ " INNER JOIN " + Doctor.TABLE + " ON " + Appointment.COL_DOCTORID + " = " + Doctor.COL_DOCTORID
+				+ " INNER JOIN " + User.TABLE + " ON " + Doctor.COL_USERID + " = " + User.COL_USERID
+				+ " WHERE DATE(" + Slot.COL_START + ") = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setDate(1, Date.valueOf(date));
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+				doctors.add(toDoctor(rs));
+			
+			ps.close();
+			rs.close();
+			
+			System.out.println("[SLOT] SELECT SUCCESS");	
+		} catch(SQLException e) {
+			System.out.println("[SLOT] SELECT FAILED");
+			e.printStackTrace();
+		}
+		
+		return doctors;
+	}
 	
 	public List<Slot> getAppointmentAgendaList(Doctor doctor, LocalDate date) {
 		List<Slot> slots = new ArrayList<Slot>();
@@ -308,6 +370,19 @@ public class SlotService {
 		client.setLastname(rs.getString(User.COL_LASTNAME));
 		
 		return client;
+	}
+	
+	private Doctor toDoctor(ResultSet rs) throws SQLException {
+		Doctor doctor = new Doctor();
+		
+		doctor.setId(rs.getInt(Doctor.COL_USERID));
+		doctor.setDoctorId(rs.getInt(Doctor.COL_DOCTORID));
+		doctor.setColor(rs.getString(Doctor.COL_COLOR));
+		doctor.setUsername(rs.getString(Doctor.COL_USERNAME));
+		doctor.setFirstname(rs.getString(Doctor.COL_FIRSTNAME));
+		doctor.setLastname(rs.getString(Doctor.COL_LASTNAME));
+		
+		return doctor;
 	}
 	
 	private Slot toSlot(ResultSet rs) throws SQLException{
