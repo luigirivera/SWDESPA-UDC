@@ -44,6 +44,7 @@ public class ClientView extends CalendarFramework{
 	private SlotService slotService;
 	private ClientController clientController;
 	private ClientService clientService;
+	private AppointmentService appointService;
 	private boolean filterFlag;
 	private ClientThread ct;
 	
@@ -56,6 +57,7 @@ public class ClientView extends CalendarFramework{
 		doctorService = new DoctorService();
 		slotService = new SlotService();
 		clientService = new ClientService();
+		appointService = new AppointmentService();
 		clientController = new ClientController(client, clientService);
 		doctor = new Doctor();
 		
@@ -95,6 +97,11 @@ public class ClientView extends CalendarFramework{
 		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
 		weekPanel.getAgendaTable().addMouseListener(new weekAgendaTableMouseListener());
 		cancel.addActionListener(new cancelListener());
+		
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 	}
 	
 	@Override
@@ -102,7 +109,6 @@ public class ClientView extends CalendarFramework{
 		//TODO:
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		changeLabel();
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
@@ -167,9 +173,6 @@ public class ClientView extends CalendarFramework{
 				}
 			}
 		}*/
-		
-		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
-		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
 	}
 	
 	private void refreshWeekView()
@@ -202,9 +205,6 @@ public class ClientView extends CalendarFramework{
 		//get all other appointments in redacted //Custom TableRenderer only for week can be used
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
-	
-		for(int i = 0; i<8; i++)
-			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
@@ -473,8 +473,14 @@ public class ClientView extends CalendarFramework{
 			{
 				setHorizontalAlignment(SwingConstants.LEFT);
 			}
-			else
+			else if (weekPanel.getWeekTable().getValueAt(row, column) instanceof Slot)
 			{
+				Slot slot = (Slot)weekPanel.getWeekTable().getValueAt(row, column);
+				System.out.println(slot.getId());
+				if(appointService.isAppointment(slot))
+					setBackground(Color.RED);
+				else
+					setBackground(Color.WHITE);
 //				if(table.getValueAt(row, column) == null)
 //					setBackground(Color.BLACK);
 //				else
@@ -482,13 +488,12 @@ public class ClientView extends CalendarFramework{
 				
 				/*	if(table.getValueAt(row, column) == null)
 				 * 		setBackground(Color.BLACK);
-				 * 	else if(slot is client's)
+				 * 	else if(there an appointment)
 				 * 		setBackground(color of the doctor)
-				 * 	else if(slot is not theirs)
-				 * 		setBackground(Color.GRAY)
 				 * 	else
 				 * 		setBackground(Color.WHITE)
 				 */
+				
 				//TODO:
 				/* if(this slot is not set by any doctor)
 				 * 	setBackground(Color.BLACK);
@@ -499,6 +504,8 @@ public class ClientView extends CalendarFramework{
 				 * 
 				 */
 			}
+			else
+				setBackground(Color.BLACK);
 			
 			setBorder(null);
 			setForeground(Color.black);
