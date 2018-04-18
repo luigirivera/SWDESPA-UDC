@@ -539,29 +539,47 @@ public class SlotService {
 
     }
 	
+	public boolean isFree(Slot slot) {
+		boolean result = false;
+		
+        //get connection
+        Connection cnt = CalendarDB.getConnection();
+
+        //create query
+        String query = "SELECT * FROM " + Slot.TABLE + " WHERE "
+        		+ Slot.COL_SLOTID + " = ? AND " + Slot.COL_APPOINTMENTID + " IS NULL";
+
+        try {
+            //create prepared statement
+            PreparedStatement ps = cnt.prepareStatement(query);
+
+            //prepare the values
+            ps.setInt(1, slot.getId());
+
+            //execute the update
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next())
+            		result = true;
+
+            //close resources
+            rs.close();
+            ps.close();
+
+            System.out.println("[SLOT] SELECT SUCCESS!");
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            System.out.println("[SLOT] SELECT FAILED!");
+            e.printStackTrace();
+        }
+        
+        return result;
+	}
+	
 	public static void main(String[] args) {
-		/*
-		DoctorService ds = new DoctorService();
-		SlotService ss = new SlotService();
-		SlotBuilder sb = new SlotBuilder();
-		LocalDate dtoday = LocalDate.now();
-		LocalTime start = LocalTime.of(1, 0);
-		LocalTime end = LocalTime.of(2, 0);
+		SlotService ssv = new SlotService();
 		Slot slot = new Slot();
-		slot.setStart(LocalDateTime.of(dtoday, start));
-		slot.setEnd(LocalDateTime.of(dtoday, end));
-		ss.addSlotC(slot);
-		System.out.println(":D");
-		
-		
-//		System.out.println(ss.getAll());
-//		System.out.println(ss.getFree(LocalDate.of(2018, 4, 14)));
-//		System.out.println(ss.getFree(ds.getDoctor(2), LocalDate.of(2018, 4, 14)));
- * 
-		SlotService ss = new SlotService();
-		Slot slot = new Slot();
-		slot.setId(45);
-		System.out.println(ss.getAppointmentID(slot));
-		*/
+		slot.setId(17);
+		System.out.println(ssv.isFree(slot));
 	}
 }
