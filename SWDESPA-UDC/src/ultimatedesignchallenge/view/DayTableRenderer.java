@@ -189,21 +189,21 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			String month = monthAndDay[0];
 			String day = monthAndDay[1];
 			
-			//jDoc is first doc
-			int jDoc = TimeToRowNumber(sTime);
+			String firstTime = String.valueOf(table.getValueAt(row, 0));
 			
-			while(jDoc < TimeToRowNumber(eTime)) {
-				String firstTime = String.valueOf(table.getValueAt(row, 0));
-				System.out.println(firstTime + " <-- firstTime sTime---> " + sTime);
-				System.out.println(firstTime.equals(sTime));
-				if(firstTime.equals(sTime)) {
-					setBackground(Color.GREEN);
-					//setBackground(Color.firstdoctor.getColor());
-				}
-				jDoc++;
-			}
+			
+			//getDoctor
+			if(firstTime.equals(sTime))
+				setBackground(Color.GREEN);
+			else
+				setBackground(Color.WHITE);
+			
+			//setBackground(Color.firstdoctor.getColor());
+
 			
 		}
+		else
+			setBackground(Color.WHITE);
 		
 		
 		setBorder(null);
