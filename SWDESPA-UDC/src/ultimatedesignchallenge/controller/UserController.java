@@ -33,22 +33,31 @@ public class UserController {
 		
 		if((user=dsv.getDoctor(username, password))!=null) {
 			DoctorModel model = new DoctorModel((Doctor)user);
-			DoctorView view = new DoctorView(model, new DoctorController(model));
+			DoctorController controller = new DoctorController(model);
+			DoctorView view = new DoctorView(model, controller);
 			model.addObserver(view);
+			controller.startThread();
+			
 			return true;
 		}
 		if((user=csv.getClient(username, password))!=null) {
 			//new ClientView((Client)model);
 			ClientModel model = new ClientModel((Client)user);
-			ClientView view = new ClientView(model, new ClientController(model));
+			ClientController controller = new ClientController(model);
+			ClientView view = new ClientView(model, controller);
 			model.addObserver(view);
+			controller.startThread();
+			
 			return true;
 		}
 		if((user=ssv.getSecretary(username, password))!=null){
 			//new SecretaryView((Secretary)model, new SecretaryController((Secretary)model, ssv));
 			SecretaryModel model = new SecretaryModel((Secretary)user);
-			SecretaryView view = new SecretaryView(model, new SecretaryController(model));
+			SecretaryController controller = new SecretaryController(model);
+			SecretaryView view = new SecretaryView(model, controller);
 			model.addObserver(view);
+			controller.startThread();
+			
 			return true;
 		}
 		return false;

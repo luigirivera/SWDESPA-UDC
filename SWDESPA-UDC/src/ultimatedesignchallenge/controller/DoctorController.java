@@ -11,18 +11,21 @@ import java.util.List;
 
 import ultimatedesignchallenge.CalendarDB;
 import ultimatedesignchallenge.Doctor.DoctorModel;
+import ultimatedesignchallenge.Doctor.DoctorThread;
 import ultimatedesignchallenge.model.Recurring;
 import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.model.Slot_Doc;
-import ultimatedesignchallenge.services.DoctorService;
-import ultimatedesignchallenge.services.SlotService;
-import ultimatedesignchallenge.services.Slot_DocService;
 
 public class DoctorController {
 	private DoctorModel model;
 	
 	public DoctorController(DoctorModel model) {
 		this.model = model;
+	}
+	
+	public void startThread() {
+		DoctorThread dt = new DoctorThread(model);
+		dt.start();
 	}
 	
 	public boolean createFree(LocalDateTime start, LocalDateTime end) {

@@ -3,6 +3,7 @@ package ultimatedesignchallenge.controller;
 import java.util.List;
 
 import ultimatedesignchallenge.Client.ClientModel;
+import ultimatedesignchallenge.Client.ClientThread;
 import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
@@ -12,6 +13,11 @@ public class ClientController {
 	
 	public ClientController(ClientModel model) {
 		this.model = model;
+	}
+	
+	public void startThread() {
+		ClientThread ct = new ClientThread(model);
+		ct.start();
 	}
 
 	public void transformToAppointment(List<Slot> slots, Doctor doctor) {

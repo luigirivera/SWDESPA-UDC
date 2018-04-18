@@ -577,9 +577,28 @@ public class SlotService {
 	}
 	
 	public static void main(String[] args) {
-		SlotService ssv = new SlotService();
+		/*
+		DoctorService ds = new DoctorService();
+		SlotService ss = new SlotService();
+		SlotBuilder sb = new SlotBuilder();
+		LocalDate dtoday = LocalDate.now();
+		LocalTime start = LocalTime.of(1, 0);
+		LocalTime end = LocalTime.of(2, 0);
 		Slot slot = new Slot();
-		slot.setId(17);
-		System.out.println(ssv.isFree(slot));
+		slot.setStart(LocalDateTime.of(dtoday, start));
+		slot.setEnd(LocalDateTime.of(dtoday, end));
+		ss.addSlotC(slot);
+		System.out.println(":D");
+		
+		
+//		System.out.println(ss.getAll());
+//		System.out.println(ss.getFree(LocalDate.of(2018, 4, 14)));
+//		System.out.println(ss.getFree(ds.getDoctor(2), LocalDate.of(2018, 4, 14)));
+ * 
+		SlotService ss = new SlotService();
+		Slot slot = new Slot();
+		slot.setId(45);
+		System.out.println(ss.getAppointmentID(slot));
+		*/
 	}
 }

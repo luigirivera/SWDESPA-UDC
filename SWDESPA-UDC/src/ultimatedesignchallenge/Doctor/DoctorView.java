@@ -27,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import ultimatedesignchallenge.Client.ClientThread;
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Slot;

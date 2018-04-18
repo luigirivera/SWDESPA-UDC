@@ -31,7 +31,7 @@ import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DoctorList;
 
-public class ClientView extends CalendarFramework{
+public class ClientView extends CalendarFramework {
 	private static final long serialVersionUID = 1L;
 	private ClientModel model;
 	private ClientController controller;
@@ -50,7 +50,6 @@ public class ClientView extends CalendarFramework{
 		init();
 		initListeners();
 		update(null, null);
-		
 	}
 	
 	private void init()
@@ -415,10 +414,13 @@ public class ClientView extends CalendarFramework{
 				
 				
 				//getDoctor
-//				if(firstTime.equals(sTime))
-//					setBackground(Color.GREEN);
-//				else
-//					setBackground(Color.WHITE);
+				if(firstTime.equals(sTime))
+					if(doctor.getId() == 1) {
+						System.out.println(doctor.getColor());
+						setBackground(Color.getColor(doctor.getColor()));
+					}
+				else
+					setBackground(Color.WHITE);
 				
 				/*	if(slot is client's)
 				 * 		setBackground(color of the doctor)
@@ -729,4 +731,5 @@ public class ClientView extends CalendarFramework{
 		toggleCreateView(false);
 		update(null, null);
 	}
+
 }
