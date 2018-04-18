@@ -2,6 +2,7 @@ package ultimatedesignchallenge.Secretary;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -800,7 +801,7 @@ public class SecretaryView extends CalendarFramework{
 			JPanel panel2 = new JPanel();
 			JTextField name = new JTextField();
 			panel2.add(name);
-			
+			name.setPreferredSize(new Dimension(200,30));
 			walkin.addActionListener(new ActionListener() {
 
 				@Override
@@ -814,14 +815,25 @@ public class SecretaryView extends CalendarFramework{
 				
 			});
 			int result = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
-			
-			if(result == JOptionPane.OK_OPTION == !name.getText().trim().isEmpty())
+
+			if(walkin.isSelected())
 			{
-				int result2 = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
+				int result2 = JOptionPane.showConfirmDialog(null, panel2, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
+				
+				if(result2 == JOptionPane.OK_OPTION)
+					if(!name.getText().trim().isEmpty())
+					{
+						//TODO: set the appointment based on values
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
+
+			}
+			else if (result == JOptionPane.OK_OPTION)
+			{
 				//TODO: set the appointment based on values
 			}
-			else
-				JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
+			
 		}
 		
 	}
