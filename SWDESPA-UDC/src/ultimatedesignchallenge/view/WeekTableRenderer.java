@@ -25,7 +25,7 @@ public class WeekTableRenderer extends DefaultTableCellRenderer {
 			else
 				setBackground(Color.GREEN);
 			//TODO:
-			/* if(this slot is not set by any doctor)
+			/* if(not his slot)
 			 * 	setBackground(Color.BLACK);
 			 * else if(this slot is unoccupied)
 			 * 	setBackground(Color.WHITE);

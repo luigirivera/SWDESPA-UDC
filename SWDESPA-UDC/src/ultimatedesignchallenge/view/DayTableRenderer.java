@@ -193,12 +193,10 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			
 			
 			//getDoctor
-			if(firstTime.equals(sTime))
-				setBackground(Color.GREEN);
-			else
-				setBackground(Color.WHITE);
-			
-			//setBackground(Color.firstdoctor.getColor());
+//			if(there is an appointment)
+//				setBackground(Color.firstdoctor.getColor());
+//			else
+//				setBackground(Color.WHITE);
 
 			
 		}
