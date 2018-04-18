@@ -16,7 +16,7 @@ public class WeekTableRenderer extends DefaultTableCellRenderer {
 		
 		if(column == 0)
 		{
-			setHorizontalAlignment(SwingConstants.RIGHT);
+			setHorizontalAlignment(SwingConstants.LEFT);
 		}
 		else
 		{

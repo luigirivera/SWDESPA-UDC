@@ -145,65 +145,6 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		}
 	}
 	
-	// ------------TABLE MODELS------------//
-	class DayTableCellRenderer extends DefaultTableCellRenderer{
-		/*private static final long serialVersionUID = 1L;
-		private ItemStringFormatter formatter;
-		
-		public DayTableCellRenderer() {
-			super();
-			formatter = new DayHTMLItemStringFormatter();
-		}
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-			// TODO Auto-generated method stub
-			Component cmp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			TableModel tmodel = table.getModel();
-			
-			if(tmodel.getValueAt(row, column) instanceof CalendarEvent) {
-				cmp.setBackground(Color.decode(CalendarEvent.DEFAULT_COLOR));
-			}
-			else if(tmodel.getValueAt(row, column) instanceof CalendarTask) {
-				cmp.setBackground(Color.decode(CalendarTask.DEFAULT_COLOR));
-			}
-			else {
-				cmp.setBackground(table.getBackground());
-			}
-			
-			return cmp;
-		}
-		
-		@Override
-		public void setValue(Object value) {
-			super.setValue(value);
-			if(value instanceof CalendarItem)
-				setText(formatter.format((CalendarItem)value));
-		}*/
-		
-		
-	}
-	
-	class AgendaTableCellRenderer extends DefaultTableCellRenderer{
-		/*private static final long serialVersionUID = 1L;
-		private ItemStringFormatter formatter;
-		
-		public AgendaTableCellRenderer() {
-			super();
-			formatter = new AgendaHTMLItemStringFormatter();
-		}
-		
-		@Override
-		public void setValue(Object value) {
-			super.setValue(value);
-			if(value instanceof CalendarItem)
-				setText(formatter.format((CalendarItem)value));
-		}*/
-		
-		
-	}
-	
 	protected void changeLabel()
 	{
 		String label = months[monthToday] + " " + dayToday + ", " + yearToday;
