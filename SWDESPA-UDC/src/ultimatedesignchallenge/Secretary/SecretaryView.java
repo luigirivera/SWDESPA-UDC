@@ -56,6 +56,14 @@ public class SecretaryView extends CalendarFramework{
 	
 	private void init() {
 		
+		topPanel.setCalendar(new JToggleButton("Calendar"));
+		topPanel.setAgenda(new JToggleButton("Agenda"));
+		topPanel.add(topPanel.getCalendar());
+		topPanel.add(topPanel.getAgenda());
+		topPanel.getCalendar().setBounds(780, 15, 80, 40);
+		topPanel.getAgenda().setBounds(850, 15, 70, 40);
+		topPanel.getButtonGroup().add(topPanel.getCalendar());
+		topPanel.getButtonGroup().add(topPanel.getAgenda());
 		
 		createPanel.setCreateName(new JTextField());
 		createPanel.add(createPanel.getCreateName());		
