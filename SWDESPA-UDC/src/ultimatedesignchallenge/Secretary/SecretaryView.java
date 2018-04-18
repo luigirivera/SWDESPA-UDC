@@ -35,8 +35,6 @@ import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
-import ultimatedesignchallenge.services.AppointmentService;
-import ultimatedesignchallenge.services.ClientService;
 //github.com/luigirivera/SWDESPA-UDC.git
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
@@ -959,7 +957,6 @@ public class SecretaryView extends CalendarFramework{
 			Appointment apt = new Appointment();
 			
 			List<Slot> slots = new ArrayList<Slot>();
-			ClientService clientService = new ClientService();
 			int[] sRows = dayPanel.getDayTable().getSelectedRows();
 			
 			for(int i = 0; i < sRows.length; i++) {
@@ -969,10 +966,9 @@ public class SecretaryView extends CalendarFramework{
 			apt.setDoctor(doctor);
 			apt.setSlots(slots);
 			apt.setId(model.getAppointmentId(slots.get(0)));
-			apt.setClient(clientService.getClient(clientService.getClientViaAptID(apt.getId())));
+			apt.setClient(model.getClient(model.getClientViaAptId(apt.getId())));
 			
-			AppointmentService aptService = new AppointmentService();
-			aptService.deleteAppointment(apt);
+			controller.deleteAppointment(apt);
 			
 			//TODO:
 			//get selected appointment/s
