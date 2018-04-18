@@ -72,6 +72,8 @@ public class AppointmentService {
 				+ " AND " + Slot.COL_APPOINTMENTID + " IS NULL";
 		
 		try {
+			cnt.setAutoCommit(false);
+			
 			PreparedStatement ps = cnt.prepareStatement(query);
 			
 			ps.setNull(1, Types.NULL);
@@ -95,40 +97,75 @@ public class AppointmentService {
 			for (Slot slot : appointment.getSlots()) {
 				ps = cnt.prepareStatement(query3);
 				
+				System.out.println(appointment.getId());
 				System.out.println(slot.getId());
 				ps.setInt(1, appointment.getId());
 				ps.setInt(2, slot.getId());
 				
+				int result = ps.executeUpdate();
+				
 				ps.close();
+				
+				if (result==0)
+					throw new SQLException("Slot does not exist");
 			}
 			
 			System.out.println("[APPOINTMENT] ADD SUCCESS");
 		}catch(SQLException e) {
 			System.out.println("[APPOINTMENT] ADD FAILED");
 			e.printStackTrace();
+			try {
+				cnt.rollback();
+			} catch (SQLException ex) {}
+		}finally {
+			try {
+				cnt.setAutoCommit(true);
+			} catch (SQLException ex) {}
 		}
 	}
 	
-	public void deleteAppointment(int id)
+	public void deleteAppointment(Appointment appointment)
 	{
 		Connection cnt = CalendarDB.getConnection();
 		
 		String query = "DELETE FROM " + Appointment.TABLE
 				+ " WHERE " + Appointment.COL_APPOINTMENTID + " = ?";
+		String query2 = "UPDATE " + Slot.TABLE
+				+ " SET " + Slot.COL_APPOINTMENTID + " = ? "
+				+ " WHERE " + Slot.COL_SLOTID + " = ? "
+				+ " AND " + Slot.COL_APPOINTMENTID + " IS NULL";
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
 			
-			ps.setInt(1, id);
+			ps.setInt(1, appointment.getId());
 			
 			ps.executeUpdate();
 			
 			ps.close();
+			
+			for (Slot slot : appointment.getSlots()) {
+				ps = cnt.prepareStatement(query2);
+				
+				System.out.println(appointment.getId());
+				System.out.println(slot.getId());
+				ps.setNull(1, Types.NULL);
+				ps.setInt(2, slot.getId());
+				
+				int result = ps.executeUpdate();
+				
+				ps.close();
+				
+				if (result==0)
+					throw new SQLException("Slot does not exist");
+			}
 			
 			System.out.println("[APPOINTMENT] DELETE SUCCESS");
 		}catch(SQLException e) {
 			System.out.println("[APPOINTMENT] DELETE FAILED");
 			e.printStackTrace();
 		}
+		
+		
 	}
 }

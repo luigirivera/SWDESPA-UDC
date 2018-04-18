@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -19,9 +21,12 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.SecretaryController;
-import ultimatedesignchallenge.controller.SlotController;
+import ultimatedesignchallenge.model.Client;
+import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.DoctorService;
+import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DayTableRenderer;
@@ -33,15 +38,15 @@ public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
 	private Secretary secretary;
 	private SecretaryController controller;
-	private SlotController slotController;
+	private SlotService slotService;
 	
-	public SecretaryView(Secretary secretary, SecretaryController controller, SlotController slotController) {
+	public SecretaryView(Secretary secretary, SecretaryController controller) {
 		super("Central Calendar Census - " + secretary.getFirstname());
 		
 //		this.model = model;
 		this.secretary = secretary;
 		this.controller = controller;
-		this.slotController = slotController;
+		slotService = new SlotService();
 		
 		constructorGen("Clinic Secretary");
 		init();
@@ -101,20 +106,93 @@ public class SecretaryView extends CalendarFramework{
 	
 	private void refreshDayView()
 	{
-		List<Slot> myFree = slotController.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
-		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
-		for (int i = 0; i < 48; i++) {
-			dayPanel.getDayTable().setValueAt(null, i, 1);
-			for (Slot s : myFree) {
-				//System.out.println(s.getStart());
-				//System.out.println(count);
-				if (count.equals(s.getStart())){
-					//System.out.println("changed");
-					dayPanel.getDayTable().setValueAt(s, i, 1);
+		try {
+			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
+				System.out.println("ok!");
+				List<Slot> slots = new ArrayList<Slot>();
+				//slots.addAll(slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday))); this can be good for if we start filtering
+				slots.addAll(slotService.getAll());
+				LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
+				for (int i = 0; i < 48; i++) {
+					dayPanel.getDayTable().setValueAt(null, i, 1);
+					for (Slot s : slots) {
+						//System.out.println(s.getStart());
+						//System.out.println(count);
+						if (count.equals(s.getStart())){
+							//System.out.println("changed");
+							dayPanel.getDayTable().setValueAt(s, i, 1);
+						}
+					}
+					count = count.plusMinutes(30);
 				}
+				
+				clearAgenda(dayPanel.getModelAgendaTable());
+				List<Slot> agendaList = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
+				List<Client> allClients = slotService.getAllDoctorAppointmentsClients(LocalDate.of(yearToday, monthToday+1, dayToday));
+				List<Doctor> allDoctors = slotService.getAllDoctorAppointmentsDoctors(LocalDate.of(yearToday, monthToday+1, dayToday));
+
+				int i = 0;
+				for (Slot s : agendaList) {
+					Client c = allClients.get(i);
+					Doctor d = allDoctors.get(i);
+					String temp = "Doctor: " + d.getLastname() + ", " + d.getFirstname();
+					String temp2 = "Client: " + c.getLastname() + ", " + c.getFirstname();
+					String temp3 = temp + "; " + temp2;
+					dayPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp3});
+					i++;
+				}
+			} else {
+				DoctorService service = new DoctorService();
+				List<Doctor> doctors = service.getAll();
+				for(Doctor d : doctors) {
+					String temp = d.getLastname() + ", " + d.getFirstname();
+					
+					if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
+						System.out.println("ok!");
+						List<Slot> slots = new ArrayList<Slot>();
+						slots.addAll(slotService.getAppointmentAgendaList(d, LocalDate.of(yearToday, monthToday+1, dayToday)));
+						slots.addAll(slotService.getFree(d, LocalDate.of(yearToday, monthToday+1, dayToday)));
+						LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
+						for (int i = 0; i < 48; i++) {
+							dayPanel.getDayTable().setValueAt(null, i, 1);
+							for (Slot s : slots) {
+								//System.out.println(s.getStart());
+								//System.out.println(count);
+								if (count.equals(s.getStart())){
+									//System.out.println("changed");
+									dayPanel.getDayTable().setValueAt(s, i, 1);
+								}
+							}
+							count = count.plusMinutes(30);
+						}
+						
+						clearAgenda(dayPanel.getModelAgendaTable());
+						List<Slot> agendaList = slotService.getAppointmentAgendaList(d, 
+								LocalDate.of(yearToday, monthToday+1, dayToday));
+						List<Client> clientList = slotService.getAppointmentClientsList(d, 
+								LocalDate.of(yearToday, monthToday+1, dayToday));
+
+						int i = 0;
+						for (Slot s : agendaList) {
+							//System.out.println(s.getStart().getHour());
+							//System.out.println(s.getStart().getMinute());
+							//System.out.println(s.getStart().getSecond());
+							
+							Client c = clientList.get(i);
+							
+							String temp2 = "Client: " + c.getLastname() + ", " + c.getFirstname();
+							dayPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp2});
+							i++;
+						}
+					}
+				}
+				
 			}
-			count = count.plusMinutes(30);
+			
+		} catch (Exception e) {
+			System.out.println("Nothing pressed yet!");
 		}
+		
 		
 		//TODO:
 		//clear calendar rows
@@ -147,17 +225,178 @@ public class SecretaryView extends CalendarFramework{
 	
 	private void refreshWeekView()
 	{
+		clearAgenda(weekPanel.getModelAgendaTable());
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(yearToday, monthToday, dayToday);
+		cal.get(Calendar.WEEK_OF_YEAR);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		refreshWeekViewByColumn(cal, 1);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		refreshWeekViewByColumn(cal, 2);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+		refreshWeekViewByColumn(cal, 3);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+		refreshWeekViewByColumn(cal, 4);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+		refreshWeekViewByColumn(cal, 5);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+		refreshWeekViewByColumn(cal, 6);
+		refreshWeekAgendaTable(cal);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+		refreshWeekViewByColumn(cal, 7);
+		refreshWeekAgendaTable(cal);
+		
+		// UPDATE AGENDA
+		
 		//TODO:
-		//clear calendar rows
-		//use this -> clearAgenda(weekPanel.modelAgendaTable);
-		//check filter for which doctor/s
-		//get time slots. color unoccupied slots white. color non-appointment slots (slots non of the doctors set) as gray //Custom TableRenderer only for week can be used
-		//get all appointments
+		//clear all rows
+		//use this -> clearAgenda(weekPanel.getModelAgendaTable());
+		//get slots that i have set available, all of them
 		//display it in the weekTable
-		//display appointments in agenda table in order of the days and time //Custom TableRenderer only for week agenda can be used
-	
+		//display appointments in agenda table in order of the days
+		
 		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
 		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
+	}
+	
+	private void refreshWeekViewByColumn(Calendar cal, int day)
+	{	
+		List<Slot> slots = new ArrayList<Slot>();
+		
+		int tempY = cal.get(Calendar.YEAR);
+		int tempM = cal.get(Calendar.MONTH)+1;
+		int tempD = cal.get(Calendar.DATE);
+		//System.out.println(tempY);
+		//System.out.println(tempM);
+		//System.out.println(tempD);
+		
+		try {
+			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
+				//System.out.println("ok!");
+				slots.addAll(slotService.getAll());
+				LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
+				for (int i = 0; i < 48; i++) {
+					weekPanel.getWeekTable().setValueAt(null, i, day);
+					for (Slot s : slots) {
+						//System.out.println(s.getStart());
+						//System.out.println(count);
+						if (count.equals(s.getStart())){
+							//System.out.println("changed");
+							weekPanel.getWeekTable().setValueAt(s, i, day);
+						}
+					}
+					count = count.plusMinutes(30);
+				}
+			}
+			
+			else {
+				DoctorService service = new DoctorService();
+				List<Doctor> doctors = service.getAll();
+				for(Doctor d : doctors) {
+					String temp = d.getLastname() + ", " + d.getFirstname();
+					
+					if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
+						//System.out.println("ok!");
+						slots.addAll(slotService.getAppointmentAgendaList(d, LocalDate.of(tempY, tempM, tempD)));
+						slots.addAll(slotService.getFree(d, LocalDate.of(tempY, tempM, tempD)));
+						LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
+						for (int i = 0; i < 48; i++) {
+							weekPanel.getWeekTable().setValueAt(null, i, day);
+							for (Slot s : slots) {
+								//System.out.println(s.getStart());
+								//System.out.println(count);
+								if (count.equals(s.getStart())){
+									//System.out.println("changed");
+									weekPanel.getWeekTable().setValueAt(s, i, day);
+								}
+							}
+							count = count.plusMinutes(30);
+						}
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Nothing pressed yet!");
+		}
+		
+		/* slots.addAll(slotService.getFree(doctor, LocalDate.of(tempY, tempM, tempD)));
+		slots.addAll(slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday)));
+		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
+		for (int i = 0; i < 48 ; i++) {
+			weekPanel.getWeekTable().setValueAt(null, i, day);
+			for (Slot s : slots) {
+				if (count.equals(s.getStart())) {
+					//System.out.println("changed!");
+					//System.out.println(weekPanel.getWeekTable().getValueAt(i, 0));
+							weekPanel.getWeekTable().setValueAt(s, i, day);
+							//System.out.println(weekPanel.getWeekTable().getValueAt(i, day));
+				}
+			}
+			count = count.plusMinutes(30);
+		} */
+		
+		
+	}
+	
+	private void refreshWeekAgendaTable(Calendar cal) {
+		int tempY = cal.get(Calendar.YEAR);
+		int tempM = cal.get(Calendar.MONTH)+1;
+		int tempD = cal.get(Calendar.DATE);
+		//System.out.println(tempY);
+		//System.out.println(tempM);
+		//System.out.println(tempD);
+		
+		try {
+			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
+				List<Slot> allAppointments = slotService.getAllDoctorAppointments(LocalDate.of(tempY, tempM, tempD));
+				List<Client> allClients = slotService.getAllDoctorAppointmentsClients(LocalDate.of(tempY, tempM, tempD));
+				List<Doctor> allDoctors = slotService.getAllDoctorAppointmentsDoctors(LocalDate.of(tempY, tempM, tempD));
+
+				int i = 0;
+				for (Slot s : allAppointments) {
+					Client c = allClients.get(i);
+					Doctor d = allDoctors.get(i);
+					String temp = "Doctor: " + d.getLastname() + ", " + d.getFirstname();
+					String temp2 = "Client: " + c.getLastname() + ", " + c.getFirstname();
+					String temp3 = temp + "; " + temp2;
+					weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp3});
+					i++;
+				}
+			}
+			
+			else {
+				DoctorService service = new DoctorService();
+				List<Doctor> doctors = service.getAll();
+				for(Doctor d : doctors) {
+					String temp = d.getLastname() + ", " + d.getFirstname();
+					
+					if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
+						List<Slot> agendaList = slotService.getAppointmentAgendaList(d, 
+								LocalDate.of(tempY, tempM, tempD));
+						List<Client> clientList = slotService.getAppointmentClientsList(d, 
+								LocalDate.of(tempY, tempM, tempD));
+
+						int i = 0;
+						for (Slot s : agendaList) {
+							Client c = clientList.get(i);
+							String temp2 = "Client: " + c.getLastname() + ", " + c.getFirstname();
+							weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp2});
+							i++;
+						}
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Nothing pressed yet!");
+		}
 	}
 	
 	class updateAppointment implements ActionListener{
