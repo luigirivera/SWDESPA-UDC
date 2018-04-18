@@ -184,6 +184,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		try {
 			topPanel.calendar.addActionListener(new dayToggleBtnListener());
 			topPanel.agenda.addActionListener(new agendaToggleBtnListener());
+		}catch(Exception e) {}
+		
+		try {
 			doctorList.addWindowListener(new doctorListWindowListener());
 			calendarPanel.doctors.addActionListener(new toggleDoctorListListener());
 		}catch(Exception e) {}

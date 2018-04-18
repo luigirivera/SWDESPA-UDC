@@ -1,5 +1,7 @@
 package ultimatedesignchallenge.Doctor;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -17,8 +19,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.model.Client;
@@ -235,6 +240,38 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			String temp = "Client: " + c.getLastname() + ", " + c.getFirstname();
 			weekPanel.getModelAgendaTable().addRow(new Object[]{s.getStart(), s.getEnd(), temp});
 			i++;
+		}
+	}
+	
+	class DayAgendaTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+				setHorizontalAlignment(SwingConstants.RIGHT);
+			
+			setBorder(null);
+			setForeground(Color.WHITE);
+			return this;
+		}
+	}
+	
+	class WeekAgendaTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+				setHorizontalAlignment(SwingConstants.RIGHT);
+			
+			setBorder(null);
+			setForeground(Color.WHITE);
+			return this;
 		}
 	}
 	
