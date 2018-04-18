@@ -866,6 +866,19 @@ public class SecretaryView extends CalendarFramework{
 				}
 				else
 				{
+					if(clientC.get(0).getFirstname().equalsIgnoreCase(clients.getSelectedItem().toString().split(", ")[1]))
+						clientController = new ClientController(clientC.get(0), clientService);
+					else
+						clientController = new ClientController(clientC.get(1), clientService); //super hard code nah gonna lie
+					
+					List<Slot> slots = new ArrayList<Slot>();
+					int[] sRows = dayPanel.getDayTable().getSelectedRows();
+					
+					for(int i = 0; i < sRows.length; i++) {
+						slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+					}
+					
+					clientController.transformToAppointment(slots, doctor);
 					//TODO: appointments
 				}
 					
