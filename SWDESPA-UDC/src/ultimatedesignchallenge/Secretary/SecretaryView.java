@@ -283,7 +283,8 @@ public class SecretaryView extends CalendarFramework{
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days
 		
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR APPOINTMENT
 		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	

@@ -199,7 +199,8 @@ public class ClientView extends CalendarFramework{
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
 	
-		weekPanel.getWeekTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR APPOINTMENT
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
