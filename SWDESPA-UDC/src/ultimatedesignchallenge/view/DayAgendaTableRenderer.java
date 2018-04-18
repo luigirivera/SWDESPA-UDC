@@ -34,7 +34,6 @@ public 	class DayAgendaTableRenderer extends DefaultTableCellRenderer {
 		
 		
 		setBorder(null);
-		setForeground(Color.black);
 		return this;
 	}
 }

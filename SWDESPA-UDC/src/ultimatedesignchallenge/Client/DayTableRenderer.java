@@ -1,4 +1,4 @@
-package ultimatedesignchallenge.view;
+package ultimatedesignchallenge.Client;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -173,9 +173,9 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			setBackground(Color.WHITE);
 		}
 		
-		if (table.getValueAt(row, 1) != null && column == 1)
+		if (table.getValueAt(row, column) != null && column == 1)
 		{
-			String sval = String.valueOf(table.getValueAt(row, 1));
+			String sval = String.valueOf(table.getValueAt(row, column));
 			
 			String tempTime = sval.substring(sval.indexOf("T")+1, sval.indexOf(" ")+37);
 			
@@ -193,10 +193,20 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			
 			
 			//getDoctor
-//			if(there is an appointment)
-//				setBackground(Color.firstdoctor.getColor());
+//			if(firstTime.equals(sTime))
+//				setBackground(Color.GREEN);
 //			else
 //				setBackground(Color.WHITE);
+			
+			/*	if(slot is client's)
+			 * 		setBackground(color of the doctor)
+			 * 	else if(slot is not theirs)
+			 * 		setBackground(Color.GRAY)
+			 * 	else
+			 * 		setBackground(Color.WHITE)
+			 */
+			
+			//setBackground(Color.firstdoctor.getColor());
 
 			
 		}

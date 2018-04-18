@@ -29,10 +29,8 @@ import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
-import ultimatedesignchallenge.view.DayTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
 import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
-import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
@@ -56,6 +54,14 @@ public class SecretaryView extends CalendarFramework{
 	
 	private void init() {
 		
+		topPanel.setCalendar(new JToggleButton("Calendar"));
+		topPanel.setAgenda(new JToggleButton("Agenda"));
+		topPanel.add(topPanel.getCalendar());
+		topPanel.add(topPanel.getAgenda());
+		topPanel.getCalendar().setBounds(780, 15, 80, 40);
+		topPanel.getAgenda().setBounds(850, 15, 70, 40);
+		topPanel.getButtonGroup().add(topPanel.getCalendar());
+		topPanel.getButtonGroup().add(topPanel.getAgenda());
 		
 		createPanel.setCreateName(new JTextField());
 		createPanel.add(createPanel.getCreateName());		
@@ -511,7 +517,7 @@ public class SecretaryView extends CalendarFramework{
 				 *else
 				 *	notifyClient.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(dayPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}	
 		}	
 	}

@@ -33,11 +33,7 @@ public class TopPanel extends JPanel {
 	{
 		titleLabel = new JLabel(topLabel);
 		viewLabel = new JLabel("");
-		
 		today = new JButton("Today");
-		
-		calendar = new JToggleButton("Calendar");
-		agenda = new JToggleButton("Agenda");
 		
 		viewType = new JComboBox<String>();
 		
@@ -52,8 +48,6 @@ public class TopPanel extends JPanel {
 		add(titleLabel);
 		add(today);
 		add(viewLabel);
-		add(calendar);
-		add(agenda);
 		add(viewType);
 		
 		viewType.addItem("Day");
@@ -66,8 +60,6 @@ public class TopPanel extends JPanel {
 		today.setBounds(210, 15, 100, 40);
 		viewLabel.setBounds(320, 10, 350, 50);
 		viewType.setBounds(660, 5, 100, 60);
-		calendar.setBounds(780, 15, 80, 40);
-		agenda.setBounds(850, 15, 70, 40);
 	}
 
 	public JLabel getViewLabel() {
@@ -77,5 +69,31 @@ public class TopPanel extends JPanel {
 	public void setViewLabel(JLabel viewLabel) {
 		this.viewLabel = viewLabel;
 	}
+
+	public JToggleButton getCalendar() {
+		return calendar;
+	}
+
+	public void setCalendar(JToggleButton calendar) {
+		this.calendar = calendar;
+	}
+
+	public JToggleButton getAgenda() {
+		return agenda;
+	}
+
+	public void setAgenda(JToggleButton agenda) {
+		this.agenda = agenda;
+	}
+
+	public ButtonGroup getButtonGroup() {
+		return buttonGroup;
+	}
+
+	public void setButtonGroup(ButtonGroup buttonGroup) {
+		this.buttonGroup = buttonGroup;
+	}
+	
+	
 
 }

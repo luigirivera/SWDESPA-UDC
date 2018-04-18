@@ -15,7 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
@@ -30,11 +29,7 @@ import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
-import ultimatedesignchallenge.view.DayAgendaTableRenderer;
-import ultimatedesignchallenge.view.DayTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
-import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
-import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
@@ -166,7 +161,6 @@ public class ClientView extends CalendarFramework{
 		}*/
 		
 		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
-		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
 	private void refreshWeekView()
@@ -200,8 +194,7 @@ public class ClientView extends CalendarFramework{
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
 	
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
+		weekPanel.getWeekTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
@@ -360,7 +353,7 @@ public class ClientView extends CalendarFramework{
 				 *	enable cancelAll
 				 *
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(dayPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}	
 		}
 	}
@@ -384,7 +377,7 @@ public class ClientView extends CalendarFramework{
 				 *else
 				 *	setAppointemnt.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(weekPanel.getWeekTable(), arg0.getX(), arg0.getY());
 			}
 		}
 	}
@@ -403,7 +396,7 @@ public class ClientView extends CalendarFramework{
 				 *	enable cancelAll
 				 *
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(weekPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}
 		}
 	}

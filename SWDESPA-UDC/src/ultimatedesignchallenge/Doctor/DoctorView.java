@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ultimatedesignchallenge.controller.DoctorController;
@@ -26,9 +27,7 @@ import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.CalendarObserver;
-import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DayTableRenderer;
-import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
 import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
@@ -52,6 +51,15 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	}
 	
 	private void init() {
+		topPanel.setCalendar(new JToggleButton("Calendar"));
+		topPanel.setAgenda(new JToggleButton("Agenda"));
+		topPanel.add(topPanel.getCalendar());
+		topPanel.add(topPanel.getAgenda());
+		topPanel.getCalendar().setBounds(780, 15, 80, 40);
+		topPanel.getAgenda().setBounds(850, 15, 70, 40);
+		topPanel.getButtonGroup().add(topPanel.getCalendar());
+		topPanel.getButtonGroup().add(topPanel.getAgenda());
+		
 		calendarPanel.setCreate(new JButton("Set Appointment Slot"));
 		calendarPanel.add(calendarPanel.getCreate());
 		calendarPanel.getCreate().setBounds(10, 10, 250, 40);
@@ -351,7 +359,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = dayPanel.getAgendaTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(dayPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	
@@ -362,7 +370,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			int row = weekPanel.getWeekTable().getSelectedRow();
 			int col = weekPanel.getWeekTable().getSelectedColumn();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(weekPanel.getWeekTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	
@@ -372,7 +380,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = weekPanel.getAgendaTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());	
+				popup.show(weekPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	

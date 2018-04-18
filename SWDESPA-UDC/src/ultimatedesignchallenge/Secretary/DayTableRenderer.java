@@ -1,4 +1,4 @@
-package ultimatedesignchallenge.view;
+package ultimatedesignchallenge.Secretary;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -171,11 +171,20 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			//TODO:
 			setHorizontalAlignment(SwingConstants.LEFT);
 			setBackground(Color.WHITE);
+			
+			/*	if(there is a doctor who has the slot)
+			 * 		if(>1 doctor share)
+			 * 			setBackground(Color.ORANGE);
+			 * 		else
+			 * 			setBackground(color of the doctor)
+			 * 	else
+			 * 		setBackground(Color.BLACK);
+			 */
 		}
 		
-		if (table.getValueAt(row, 1) != null && column == 1)
+		if (table.getValueAt(row, column) != null && column == 1)
 		{
-			String sval = String.valueOf(table.getValueAt(row, 1));
+			String sval = String.valueOf(table.getValueAt(row, column));
 			
 			String tempTime = sval.substring(sval.indexOf("T")+1, sval.indexOf(" ")+37);
 			
@@ -193,10 +202,20 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			
 			
 			//getDoctor
-//			if(there is an appointment)
-//				setBackground(Color.firstdoctor.getColor());
+//			if(firstTime.equals(sTime))
+//				setBackground(Color.GREEN);
 //			else
 //				setBackground(Color.WHITE);
+			
+			/*	if(table.getValueAt(row, column) == null)
+			 * 		setBackground(Color.BLACK);
+			 * 	if(there is appointment)
+			 * 		setBackground(color of the doctor)
+			 * 	else
+			 * 		setBackground(Color.WHITE)
+			 */
+			
+			//setBackground(Color.firstdoctor.getColor());
 
 			
 		}

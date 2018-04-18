@@ -1,4 +1,4 @@
-package ultimatedesignchallenge.view;
+package ultimatedesignchallenge.Client;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -20,12 +20,22 @@ public class WeekTableRenderer extends DefaultTableCellRenderer {
 		}
 		else
 		{
-			if(table.getValueAt(row, column) == null)
-				setBackground(Color.BLACK);
-			else
-				setBackground(Color.GREEN);
+//			if(table.getValueAt(row, column) == null)
+//				setBackground(Color.BLACK);
+//			else
+//				setBackground(Color.GREEN);
+			
+			/*	if(table.getValueAt(row, column) == null)
+			 * 		setBackground(Color.BLACK);
+			 * 	else if(slot is client's)
+			 * 		setBackground(color of the doctor)
+			 * 	else if(slot is not theirs)
+			 * 		setBackground(Color.GRAY)
+			 * 	else
+			 * 		setBackground(Color.WHITE)
+			 */
 			//TODO:
-			/* if(not his slot)
+			/* if(this slot is not set by any doctor)
 			 * 	setBackground(Color.BLACK);
 			 * else if(this slot is unoccupied)
 			 * 	setBackground(Color.WHITE);
