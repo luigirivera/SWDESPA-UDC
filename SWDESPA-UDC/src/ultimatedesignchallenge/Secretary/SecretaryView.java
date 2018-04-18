@@ -1,5 +1,7 @@
 package ultimatedesignchallenge.Secretary;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -7,6 +9,8 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -16,10 +20,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 
+import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SecretaryController;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
@@ -29,15 +37,15 @@ import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
-import ultimatedesignchallenge.view.DayTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
 import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
-import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
 	private Secretary secretary;
+	private Doctor doctor;
 	private SecretaryController controller;
+	private DoctorController doctorController;
 	private SlotService slotService;
 	
 	public SecretaryView(Secretary secretary, SecretaryController controller) {
@@ -407,11 +415,360 @@ public class SecretaryView extends CalendarFramework{
 		}
 	}
 	
+	class DayTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		private int TimeToRowNumber(String eTime) {
+
+	        switch (eTime) {
+
+	            case "0:30":
+	                return 1;
+
+	            case "1:00":
+	                return 2;
+
+	            case "1:30":
+	                return 3;
+
+	            case "2:00":
+	                return 4;
+
+	            case "2:30":
+	                return 5;
+
+	            case "3:00":
+	                return 6;
+
+	            case "3:30":
+	                return 7;
+
+	            case "4:00":
+	                return 8;
+
+	            case "4:30":
+	                return 9;
+
+	            case "5:00":
+	                return 10;
+
+	            case "5:30":
+	                return 11;
+
+	            case "6:00":
+	                return 12;
+
+	            case "6:30":
+	                return 13;
+
+	            case "7:00":
+	                return 14;
+
+	            case "7:30":
+	                return 15;
+
+	            case "8:00":
+	                return 16;
+
+	            case "8:30":
+	                return 17;
+
+	            case "9:00":
+	                return 18;
+
+	            case "9:30":
+	                return 19;
+
+	            case "10:00":
+	                return 20;
+
+	            case "10:30":
+	                return 21;
+
+	            case "11:00":
+	                return 22;
+
+	            case "11:30":
+	                return 23;
+
+	            case "12:00":
+	                return 24;
+
+	            case "12:30":
+	                return 25;
+
+	            case "13:00":
+	                return 26;
+
+	            case "13:30":
+	                return 27;
+
+	            case "14:00":
+	                return 28;
+
+	            case "14:30":
+	                return 29;
+
+	            case "15:00":
+	                return 30;
+
+	            case "15:30":
+	                return 31;
+
+	            case "16:00":
+	                return 32;
+
+	            case "16:30":
+	                return 33;
+
+	            case "17:00":
+	                return 34;
+
+	            case "17:30":
+	                return 35;
+
+	            case "18:00":
+	                return 36;
+
+	            case "18:30":
+	                return 37;
+
+	            case "19:00":
+	                return 38;
+
+	            case "19:30":
+	                return 39;
+
+	            case "20:00":
+	                return 40;
+
+	            case "20:30":
+	                return 41;
+
+	            case "21:00":
+	                return 42;
+
+	            case "21:30":
+	                return 43;
+
+	            case "22:00":
+	                return 44;
+
+	            case "22:30":
+	                return 45;
+
+	            case "23:00":
+	                return 46;
+
+	            case "23:30":
+	                return 47;
+
+	            //if time is 0:00    
+	            default:
+	                return 0;
+	        }
+	    }
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+			{
+				//TODO:
+				setHorizontalAlignment(SwingConstants.LEFT);
+				setBackground(Color.WHITE);
+				
+				/*	if(there is a doctor who has the slot)
+				 * 		if(>1 doctor share)
+				 * 			setBackground(Color.ORANGE);
+				 * 		else
+				 * 			setBackground(color of the doctor)
+				 * 	else
+				 * 		setBackground(Color.BLACK);
+				 */
+			}
+			
+			if (table.getValueAt(row, column) != null && column == 1)
+			{
+				String sval = String.valueOf(table.getValueAt(row, column));
+				
+				String tempTime = sval.substring(sval.indexOf("T")+1, sval.indexOf(" ")+37);
+				
+				String sTime = sval.substring(sval.indexOf("T") + 1, sval.indexOf(" ")+17);
+				String eTime = tempTime.substring(tempTime.indexOf("T")+1, tempTime.length());
+				
+				String TmonthAndDay = sval.substring(sval.indexOf("-")+1, sval.indexOf("T"));
+				String[] monthAndDay = TmonthAndDay.split("-");
+				
+				String year = sval.substring(sval.indexOf(" ") +1, sval.indexOf("-"));
+				String month = monthAndDay[0];
+				String day = monthAndDay[1];
+				
+				String firstTime = String.valueOf(table.getValueAt(row, 0));
+				
+				
+				//getDoctor
+//				if(firstTime.equals(sTime))
+//					setBackground(Color.GREEN);
+//				else
+//					setBackground(Color.WHITE);
+				
+				/*	if(table.getValueAt(row, column) == null)
+				 * 		setBackground(Color.BLACK);
+				 * 	if(there is appointment)
+				 * 		setBackground(Color.firstdoctor.getColor());
+				 * 	else
+				 * 		setBackground(Color.WHITE)
+				 */
+
+				
+			}
+			else
+				setBackground(Color.WHITE);
+			
+			
+			setBorder(null);
+			setForeground(Color.black);
+			return this;
+		}
+	}
+	
+	class WeekTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+			{
+				setHorizontalAlignment(SwingConstants.LEFT);
+			}
+			else
+			{
+//				if(table.getValueAt(row, column) == null)
+//					setBackground(Color.BLACK);
+//				else
+//					setBackground(Color.GREEN);
+				
+				/*	if(table.getValueAt(row, column) == null)
+				 * 		setBackground(Color.BLACK);
+				 * 	else if(there an appointment)
+				 * 		setBackground(color of the doctor)
+				 * 	else
+				 * 		setBackground(Color.WHITE)
+				 */
+				
+				//TODO:
+				/* if(this slot is not set by any doctor)
+				 * 	setBackground(Color.BLACK);
+				 * else if(this slot is unoccupied)
+				 * 	setBackground(Color.WHITE);
+				 * else
+				 * 	setBackground(color of doctor who has an appointment on this slot)
+				 * 
+				 */
+			}
+			
+			setBorder(null);
+			setForeground(Color.black);
+			return this;
+		}
+	}
+
+	
 	class updateAppointment implements ActionListener{
 
+		JComboBox<Integer> month, day, year;
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			Slot temp = new Slot();
+			temp = (Slot)dayPanel.getDayTable().getValueAt(dayPanel.getDayTable().getSelectedRow(), dayPanel.getDayTable().getSelectedColumn());
+			
+			JPanel panel = new JPanel();
+			JComboBox<LocalTime> startTime, endTime;
+			
+			startTime = new JComboBox<LocalTime>();
+			endTime = new JComboBox<LocalTime>();
+			
+			List<Integer> years = new ArrayList<Integer>();
+			
+			for(int i = 100; i >0; i--)
+				years.add(Year.now().minusYears(i).getValue());
+			
+			years.add(Year.now().getValue());
+			
+			for(int i = 1; i <=100; i++)
+				years.add(Year.now().plusYears(i).getValue());
+			
+			Integer[] yearsA = years.toArray(new Integer[years.size()]);
+			
+			Integer[] months = {1,2,3,4,5,6,7,8,9,10,11,12};
+			
+			month = new JComboBox<Integer>(months);
+			day = new JComboBox<Integer>();
+			year = new JComboBox<Integer>(yearsA);
+			
+			month.addActionListener(new checkDaysListener());
+			year.addActionListener(new checkDaysListener());
+			
+			panel.add(month);
+			panel.add(day);
+			panel.add(year);
+			panel.add(startTime);
+			panel.add(endTime);
+			
+			setToday();
+			LocalTime tmpTime = LocalTime.of(0, 0);
+			for(int i=0 ; i<48 ; i++) {
+				startTime.addItem(tmpTime);
+				endTime.addItem(tmpTime);
+				tmpTime = tmpTime.plusMinutes(30);
+			}
+			
+			int result = JOptionPane.showConfirmDialog(null, panel, "Update Slot", JOptionPane.OK_CANCEL_OPTION);
+			
+			if (result==JOptionPane.OK_OPTION) {
+				LocalDateTime startDateTime = LocalDateTime.of(LocalDate.of(year.getItemAt(year.getSelectedIndex()), month.getItemAt(month.getSelectedIndex()),
+						day.getItemAt(day.getSelectedIndex())), startTime.getItemAt(startTime.getSelectedIndex()));
+				
+				LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(year.getItemAt(year.getSelectedIndex()), month.getItemAt(month.getSelectedIndex()),
+						day.getItemAt(day.getSelectedIndex())), endTime.getItemAt(endTime.getSelectedIndex()));
+				
+				doctorController.updateFree(temp, startDateTime, endDateTime);
+			}
+			update();
+		}
+		
+		private void setToday()
+		{
+			LocalDateTime now = LocalDateTime.now();
+			month.setSelectedItem(now.getMonth().getValue());
+			year.setSelectedItem(now.getYear());
+			
+			day.removeAllItems();
+			
+			for(int i = 1; i <=now.getMonth().length(Year.isLeap(now.getYear())); i++)
+				day.addItem(i);
+			
+			day.setSelectedItem(now.getDayOfMonth());
+		}
+		
+		class checkDaysListener implements ActionListener{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int daysC = Month.of((int)month.getSelectedItem()).length(Year.isLeap((int)year.getSelectedItem()));
+				
+				day.removeAllItems();
+				
+				for(int i = 1; i<= daysC; i++)
+					day.addItem(i);
+								
+			}
 			
 		}
 		
@@ -467,7 +824,18 @@ public class SecretaryView extends CalendarFramework{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
-			doctorList.getDoctorList().getSelectedValuesList();
+			String strDoctor = doctorList.getDoctorList().getSelectedValue();
+			List<Doctor> doctors = new ArrayList<Doctor>();
+			DoctorService doctorService = new DoctorService();
+			doctors = doctorService.getAll();
+			
+			for(int i = 0; i < doctors.size(); i++) {
+				if(!strDoctor.equalsIgnoreCase("All") && doctors.get(i).getFirstname().equals(strDoctor.split(", ")[1]) && doctors.get(i).getLastname().equals(strDoctor.split(", ")[0]))
+					doctor = doctors.get(i);
+			}
+			
+			doctorController = new DoctorController(doctor, doctorService);
+			
 			update();
 			
 		}
@@ -519,7 +887,7 @@ public class SecretaryView extends CalendarFramework{
 				 *else
 				 *	notifyClient.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(dayPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}	
 		}	
 	}

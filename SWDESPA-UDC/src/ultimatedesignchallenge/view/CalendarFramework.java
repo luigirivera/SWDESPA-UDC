@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
@@ -185,6 +184,9 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		try {
 			topPanel.calendar.addActionListener(new dayToggleBtnListener());
 			topPanel.agenda.addActionListener(new agendaToggleBtnListener());
+		}catch(Exception e) {}
+		
+		try {
 			doctorList.addWindowListener(new doctorListWindowListener());
 			calendarPanel.doctors.addActionListener(new toggleDoctorListListener());
 		}catch(Exception e) {}

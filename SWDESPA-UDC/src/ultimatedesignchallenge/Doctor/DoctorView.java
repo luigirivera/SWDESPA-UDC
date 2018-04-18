@@ -1,5 +1,7 @@
 package ultimatedesignchallenge.Doctor;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -17,8 +19,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.model.Client;
@@ -27,9 +32,7 @@ import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.CalendarObserver;
-import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DayTableRenderer;
-import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
 import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
@@ -240,7 +243,39 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		}
 	}
 	
-	class updateSlot implements ActionListener{
+	class DayAgendaTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+				setHorizontalAlignment(SwingConstants.RIGHT);
+			
+			setBorder(null);
+			setForeground(Color.WHITE);
+			return this;
+		}
+	}
+	
+	class WeekAgendaTableRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+			
+			if(column == 0)
+				setHorizontalAlignment(SwingConstants.RIGHT);
+			
+			setBorder(null);
+			setForeground(Color.WHITE);
+			return this;
+		}
+	}
+	
+	public class updateSlot implements ActionListener{
 		JComboBox<Integer> month, day, year;
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -317,7 +352,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			day.setSelectedItem(now.getDayOfMonth());
 		}
 		
-		class checkDaysListener implements ActionListener{
+		public class checkDaysListener implements ActionListener{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -361,7 +396,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = dayPanel.getAgendaTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(dayPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	
@@ -372,7 +407,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			int row = weekPanel.getWeekTable().getSelectedRow();
 			int col = weekPanel.getWeekTable().getSelectedColumn();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(weekPanel.getWeekTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	
@@ -382,7 +417,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = weekPanel.getAgendaTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());	
+				popup.show(weekPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	

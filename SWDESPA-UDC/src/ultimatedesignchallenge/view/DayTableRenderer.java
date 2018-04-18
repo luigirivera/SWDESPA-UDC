@@ -173,9 +173,9 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			setBackground(Color.WHITE);
 		}
 		
-		if (table.getValueAt(row, column) != null && column == 1)
+		if (table.getValueAt(row, 1) != null && column == 1)
 		{
-			String sval = String.valueOf(table.getValueAt(row, column));
+			String sval = String.valueOf(table.getValueAt(row, 1));
 			
 			String tempTime = sval.substring(sval.indexOf("T")+1, sval.indexOf(" ")+37);
 			
@@ -189,21 +189,19 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			String month = monthAndDay[0];
 			String day = monthAndDay[1];
 			
-			//jDoc is first doc
-			int jDoc = TimeToRowNumber(sTime);
+			String firstTime = String.valueOf(table.getValueAt(row, 0));
 			
-			while(jDoc < TimeToRowNumber(eTime)) {
-				String firstTime = String.valueOf(table.getValueAt(row, 0));
-				System.out.println(firstTime + " <-- firstTime sTime---> " + sTime);
-				System.out.println(firstTime.equals(sTime));
-				if(firstTime.equals(sTime)) {
-					setBackground(Color.GREEN);
-					//setBackground(Color.firstdoctor.getColor());
-				}
-				jDoc++;
-			}
+			
+			//getDoctor
+//			if(there is an appointment)
+//				setBackground(Color.firstdoctor.getColor());
+//			else
+//				setBackground(Color.WHITE);
+
 			
 		}
+		else
+			setBackground(Color.WHITE);
 		
 		
 		setBorder(null);
