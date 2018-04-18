@@ -14,6 +14,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Observable;
 
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
@@ -27,14 +28,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SecretaryController;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
-import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
-import ultimatedesignchallenge.services.DoctorService;
-import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
@@ -42,24 +39,21 @@ import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
 
 public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
-	private Secretary secretary;
-	private Doctor doctor;
+	private SecretaryModel model;
 	private SecretaryController controller;
-	private DoctorController doctorController;
-	private SlotService slotService;
 	
-	public SecretaryView(Secretary secretary, SecretaryController controller) {
-		super("Central Calendar Census - " + secretary.getFirstname());
+	private Doctor doctor;
+	
+	public SecretaryView(SecretaryModel model, SecretaryController controller) {
+		super("Central Calendar Census - " + model.getSecretary().getFirstname());
 		
-//		this.model = model;
-		this.secretary = secretary;
+		this.model = model;
 		this.controller = controller;
-		slotService = new SlotService();
 		
 		constructorGen("Clinic Secretary");
 		init();
 		initListeners();
-		update();
+		update(null, null);
 	}
 	
 	private void init() {
@@ -109,7 +103,7 @@ public class SecretaryView extends CalendarFramework{
 	}
 	
 	@Override
-	public void update() {
+	public void update(Observable o, Object arg) {
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
@@ -119,7 +113,7 @@ public class SecretaryView extends CalendarFramework{
 		refreshWeekView();
 		
 	}
-	
+
 	private void refreshDayView()
 	{
 		try {
@@ -127,7 +121,7 @@ public class SecretaryView extends CalendarFramework{
 				System.out.println("ok!");
 				List<Slot> slots = new ArrayList<Slot>();
 				//slots.addAll(slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday))); this can be good for if we start filtering
-				slots.addAll(slotService.getAll());
+				slots.addAll(model.getAllSlots());
 				LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 				for (int i = 0; i < 48; i++) {
 					dayPanel.getDayTable().setValueAt(null, i, 1);
@@ -143,9 +137,9 @@ public class SecretaryView extends CalendarFramework{
 				}
 				
 				clearAgenda(dayPanel.getModelAgendaTable());
-				List<Slot> agendaList = slotService.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
-				List<Client> allClients = slotService.getAllDoctorAppointmentsClients(LocalDate.of(yearToday, monthToday+1, dayToday));
-				List<Doctor> allDoctors = slotService.getAllDoctorAppointmentsDoctors(LocalDate.of(yearToday, monthToday+1, dayToday));
+				List<Slot> agendaList = model.getAllDoctorAppointments(LocalDate.of(yearToday, monthToday+1, dayToday));
+				List<Client> allClients = model.getAllDoctorAppointmentsClients(LocalDate.of(yearToday, monthToday+1, dayToday));
+				List<Doctor> allDoctors = model.getAllDoctorAppointmentsDoctors(LocalDate.of(yearToday, monthToday+1, dayToday));
 
 				int i = 0;
 				for (Slot s : agendaList) {
@@ -158,16 +152,15 @@ public class SecretaryView extends CalendarFramework{
 					i++;
 				}
 			} else {
-				DoctorService service = new DoctorService();
-				List<Doctor> doctors = service.getAll();
+				List<Doctor> doctors = model.getAllDoctors();
 				for(Doctor d : doctors) {
 					String temp = d.getLastname() + ", " + d.getFirstname();
 					
 					if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
 						System.out.println("ok!");
 						List<Slot> slots = new ArrayList<Slot>();
-						slots.addAll(slotService.getAppointmentAgendaList(d, LocalDate.of(yearToday, monthToday+1, dayToday)));
-						slots.addAll(slotService.getFree(d, LocalDate.of(yearToday, monthToday+1, dayToday)));
+						slots.addAll(model.getAppointmentAgendaList(d, LocalDate.of(yearToday, monthToday+1, dayToday)));
+						slots.addAll(model.getFreeSlots(d, LocalDate.of(yearToday, monthToday+1, dayToday)));
 						LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 						for (int i = 0; i < 48; i++) {
 							dayPanel.getDayTable().setValueAt(null, i, 1);
@@ -183,9 +176,9 @@ public class SecretaryView extends CalendarFramework{
 						}
 						
 						clearAgenda(dayPanel.getModelAgendaTable());
-						List<Slot> agendaList = slotService.getAppointmentAgendaList(d, 
+						List<Slot> agendaList = model.getAppointmentAgendaList(d, 
 								LocalDate.of(yearToday, monthToday+1, dayToday));
-						List<Client> clientList = slotService.getAppointmentClientsList(d, 
+						List<Client> clientList = model.getAppointmentClientsList(d, 
 								LocalDate.of(yearToday, monthToday+1, dayToday));
 
 						int i = 0;
@@ -295,7 +288,7 @@ public class SecretaryView extends CalendarFramework{
 		try {
 			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
 				//System.out.println("ok!");
-				slots.addAll(slotService.getAll());
+				slots.addAll(model.getAllSlots());
 				LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 				for (int i = 0; i < 48; i++) {
 					weekPanel.getWeekTable().setValueAt(null, i, day);
@@ -312,15 +305,14 @@ public class SecretaryView extends CalendarFramework{
 			}
 			
 			else {
-				DoctorService service = new DoctorService();
-				List<Doctor> doctors = service.getAll();
+				List<Doctor> doctors = model.getAllDoctors();
 				for(Doctor d : doctors) {
 					String temp = d.getLastname() + ", " + d.getFirstname();
 					
 					if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
 						//System.out.println("ok!");
-						slots.addAll(slotService.getAppointmentAgendaList(d, LocalDate.of(tempY, tempM, tempD)));
-						slots.addAll(slotService.getFree(d, LocalDate.of(tempY, tempM, tempD)));
+						slots.addAll(model.getAppointmentAgendaList(d, LocalDate.of(tempY, tempM, tempD)));
+						slots.addAll(model.getFreeSlots(d, LocalDate.of(tempY, tempM, tempD)));
 						LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 						for (int i = 0; i < 48; i++) {
 							weekPanel.getWeekTable().setValueAt(null, i, day);
@@ -371,9 +363,9 @@ public class SecretaryView extends CalendarFramework{
 		
 		try {
 			if(doctorList.getDoctorList().getSelectedValue().equals("All")) {
-				List<Slot> allAppointments = slotService.getAllDoctorAppointments(LocalDate.of(tempY, tempM, tempD));
-				List<Client> allClients = slotService.getAllDoctorAppointmentsClients(LocalDate.of(tempY, tempM, tempD));
-				List<Doctor> allDoctors = slotService.getAllDoctorAppointmentsDoctors(LocalDate.of(tempY, tempM, tempD));
+				List<Slot> allAppointments = model.getAllDoctorAppointments(LocalDate.of(tempY, tempM, tempD));
+				List<Client> allClients = model.getAllDoctorAppointmentsClients(LocalDate.of(tempY, tempM, tempD));
+				List<Doctor> allDoctors = model.getAllDoctorAppointmentsDoctors(LocalDate.of(tempY, tempM, tempD));
 
 				int i = 0;
 				for (Slot s : allAppointments) {
@@ -388,15 +380,14 @@ public class SecretaryView extends CalendarFramework{
 			}
 			
 			else {
-				DoctorService service = new DoctorService();
-				List<Doctor> doctors = service.getAll();
+				List<Doctor> doctors = model.getAllDoctors();
 				for(Doctor d : doctors) {
 					String temp = d.getLastname() + ", " + d.getFirstname();
 					
 					if(doctorList.getDoctorList().getSelectedValue().equals(temp)) {
-						List<Slot> agendaList = slotService.getAppointmentAgendaList(d, 
+						List<Slot> agendaList = model.getAppointmentAgendaList(d, 
 								LocalDate.of(tempY, tempM, tempD));
-						List<Client> clientList = slotService.getAppointmentClientsList(d, 
+						List<Client> clientList = model.getAppointmentClientsList(d, 
 								LocalDate.of(tempY, tempM, tempD));
 
 						int i = 0;
@@ -738,9 +729,10 @@ public class SecretaryView extends CalendarFramework{
 				LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(year.getItemAt(year.getSelectedIndex()), month.getItemAt(month.getSelectedIndex()),
 						day.getItemAt(day.getSelectedIndex())), endTime.getItemAt(endTime.getSelectedIndex()));
 				
-				doctorController.updateFree(temp, startDateTime, endDateTime);
+				if(!doctorList.getDoctorList().getSelectedValue().equals("All"))
+					controller.updateFree(doctor, temp, startDateTime, endDateTime);
 			}
-			update();
+			update(null, null);
 		}
 		
 		private void setToday()
@@ -826,17 +818,14 @@ public class SecretaryView extends CalendarFramework{
 			super.mouseClicked(e);
 			String strDoctor = doctorList.getDoctorList().getSelectedValue();
 			List<Doctor> doctors = new ArrayList<Doctor>();
-			DoctorService doctorService = new DoctorService();
-			doctors = doctorService.getAll();
+			doctors = model.getAllDoctors();
 			
 			for(int i = 0; i < doctors.size(); i++) {
 				if(!strDoctor.equalsIgnoreCase("All") && doctors.get(i).getFirstname().equals(strDoctor.split(", ")[1]) && doctors.get(i).getLastname().equals(strDoctor.split(", ")[0]))
 					doctor = doctors.get(i);
 			}
 			
-			doctorController = new DoctorController(doctor, doctorService);
-			
-			update();
+			update(null, null);
 			
 		}
 	}
@@ -950,7 +939,7 @@ public class SecretaryView extends CalendarFramework{
 			//TODO:
 			//get selected appointment/s
 			//delete those appointments from the DB
-			update();
+			update(null, null);
 		}
 	}
 	
@@ -989,7 +978,7 @@ public class SecretaryView extends CalendarFramework{
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		toggleCreateView(false);
-		update();
+		update(null, null);
 	}
 
 	class saveCreateBtnListener implements ActionListener{

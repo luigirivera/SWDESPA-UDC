@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Observable;
 
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
@@ -24,44 +25,31 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import ultimatedesignchallenge.controller.ClientController;
-import ultimatedesignchallenge.controller.SlotBuilder;
 import ultimatedesignchallenge.model.Appointment;
-import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
-import ultimatedesignchallenge.services.AppointmentService;
-import ultimatedesignchallenge.services.ClientService;
-import ultimatedesignchallenge.services.DoctorService;
-import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DoctorList;
 
 public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
-	private Client client;
+	private ClientModel model;
+	private ClientController controller;
 	private Doctor doctor;
-	private DoctorService doctorService;
-	private SlotService slotService;
-	private ClientController clientController;
-	private ClientService clientService;
 	private boolean filterFlag;
 	
-	public ClientView(Client client){
-		super("Client Calendar - " + client.getFirstname());
+	public ClientView(ClientModel model, ClientController controller){
+		super("Client Calendar - " + model.getClient().getFirstname());
 		filterFlag = false;
 //		this.model = model;
 //		this.controller = controller;
-		this.client = client;
-		doctorService = new DoctorService();
-		slotService = new SlotService();
-		clientService = new ClientService();
-		clientController = new ClientController(client, clientService);
-		doctor = new Doctor();
+		this.model = model;
+		this.controller = controller;
 		
 		constructorGen("Client");
 		init();
 		initListeners();
-		update();
+		update(null, null);
 		
 	}
 	
@@ -94,8 +82,9 @@ public class ClientView extends CalendarFramework{
 		cancel.addActionListener(new cancelListener());
 	}
 	
+	
 	@Override
-	public void update() {
+	public void update(Observable o, Object arg) {
 		//TODO:
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
@@ -104,12 +93,11 @@ public class ClientView extends CalendarFramework{
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
 		refreshWeekView();
-		
 	}
-	
+
 	private void refreshDayView()
 	{
-		List<Doctor> doctors = doctorService.getAll();
+		List<Doctor> doctors = model.getAllDoctors();
 		List<Slot> slots = new ArrayList<Slot>();
 		
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
@@ -117,15 +105,15 @@ public class ClientView extends CalendarFramework{
 		if(filterFlag == false) {
 			for(int i = 0; i< doctors.size(); i++){
 			
-				slots.addAll(slotService.getFree(doctors.get(i), LocalDate.of(yearToday, monthToday+1, dayToday)));
+				slots.addAll(model.getFree(doctors.get(i), LocalDate.of(yearToday, monthToday+1, dayToday)));
 			
 			}
 			
-			slots.addAll(slotService.getAll(client.getId()));
+			slots.addAll(model.getAllSlots(model.getClient().getId()));
 			
 		}else{
-			slots.addAll(slotService.getFree(doctor, LocalDate.of(yearToday, monthToday+1, dayToday)));
-			slots.addAll(slotService.getAll(client.getId()));
+			slots.addAll(model.getFree(doctor, LocalDate.of(yearToday, monthToday+1, dayToday)));
+			slots.addAll(model.getAllSlots(model.getClient().getId()));
 		}
 		
 		for (int i = 0; i < 48; i++) {
@@ -204,7 +192,7 @@ public class ClientView extends CalendarFramework{
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
 	{	
-		List<Doctor> doctors = doctorService.getAll();
+		List<Doctor> doctors = model.getAllDoctors();
 		List<Slot> slots = new ArrayList<Slot>();
 		
 		int tempY = cal.get(Calendar.YEAR);
@@ -217,13 +205,13 @@ public class ClientView extends CalendarFramework{
 		
 		if(filterFlag == false) {
 			for(int i = 0; i < doctors.size(); i++) {
-				slots.addAll(slotService.getFree(doctors.get(i), LocalDate.of(tempY, tempM, tempD)));
+				slots.addAll(model.getFree(doctors.get(i), LocalDate.of(tempY, tempM, tempD)));
 			}
 			
-			slots.addAll(slotService.getAll(client.getId()));
+			slots.addAll(model.getAllSlots(model.getClient().getId()));
 		}else {
-			slots.addAll(slotService.getFree(doctor,  LocalDate.of(tempY, tempM, tempD)));
-			slots.addAll(slotService.getAll(client.getId()));
+			slots.addAll(model.getFree(doctor,  LocalDate.of(tempY, tempM, tempD)));
+			slots.addAll(model.getAllSlots(model.getClient().getId()));
 		}
 		
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
@@ -547,7 +535,7 @@ public class ClientView extends CalendarFramework{
 			int result = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
 			
 			if(result == 0) {
-				clientController.transformToAppointment(slots, doctor);
+				controller.transformToAppointment(slots, doctor);
 			}
 			
 			//TODO: set the appointment based on values
@@ -561,7 +549,7 @@ public class ClientView extends CalendarFramework{
 			super.mouseClicked(e);
 			String strDoctor = doctorList.getDoctorList().getSelectedValue();
 			List<Doctor> doctors = new ArrayList<Doctor>();
-			doctors = doctorService.getAll();
+			doctors = model.getAllDoctors();
 			
 			if(doctorList.getDoctorList().getSelectedValue().equalsIgnoreCase("all"))
 				filterFlag = false;
@@ -573,7 +561,7 @@ public class ClientView extends CalendarFramework{
 				}
 			}
 			
-			update();
+			update(null, null);
 			
 		}
 	}
@@ -677,17 +665,16 @@ public class ClientView extends CalendarFramework{
 			}
 			
 			apt.setDoctor(doctor);
-			apt.setClient(client);
+			apt.setClient(model.getClient());
 			apt.setSlots(slots);
-			apt.setId(slotService.getAppointmentID(slots.get(0)));
+			apt.setId(model.getAppointmentId(slots.get(0)));
 			
-			AppointmentService aptService = new AppointmentService();
-			aptService.deleteAppointment(apt);
+			model.deleteAppointment(apt);
 			
 			//TODO:
 			//get selected appointment/s
 			//delete those appointments from the DB
-			update();
+			update(null, null);
 		}
 	}
 
@@ -695,7 +682,7 @@ public class ClientView extends CalendarFramework{
 	class saveCreateBtnListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			SlotBuilder builder = new SlotBuilder();
+			//SlotBuilder builder = new SlotBuilder();
 			/*if(doctorsCBList.getSelectedItem() == "doctor1")
 				slot = builder.buildAppointment(startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString(), model.getFirstname());
 			else
@@ -740,6 +727,6 @@ public class ClientView extends CalendarFramework{
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		toggleCreateView(false);
-		update();
+		update(null, null);
 	}
 }

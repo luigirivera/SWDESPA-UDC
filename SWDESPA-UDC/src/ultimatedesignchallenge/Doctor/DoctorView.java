@@ -14,6 +14,8 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,32 +29,28 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.model.Client;
-import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
-import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.CalendarObserver;
 import ultimatedesignchallenge.view.DayTableRenderer;
 import ultimatedesignchallenge.view.WeekTableRenderer;
 
-public class DoctorView extends CalendarFramework implements CalendarObserver{
+public class DoctorView extends CalendarFramework {
 	private static final long serialVersionUID = 1L;
-	private Doctor doctor;
+	private DoctorModel model;
 	private DoctorController controller;
-	private SlotService slotService;
 	
-	public DoctorView(Doctor doctor, DoctorController controller) {
-		super("Doctor Calendar - " + doctor.getFirstname());
+	public DoctorView(DoctorModel model, DoctorController controller) {
+		super("Doctor Calendar - " + model.getDoctor().getFirstname());
 		
 //		this.model = model;
-		this.doctor = doctor;
+		this.model = model;
 		this.controller = controller;
-		slotService = new SlotService();
 		
 		constructorGen("Doctor");
 		init();
 		initListeners();
-		update();
+		update(null, null);
 	}
 	
 	private void init() {
@@ -85,7 +83,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	}
 	
 	@Override
-	public void update() {
+	public void update(Observable o, Object arg) {
 		//TODO:
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
@@ -95,12 +93,14 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		refreshDayView();
 		refreshWeekView();
 	}
-	
+
 	private void refreshDayView()
 	{
-		List<Slot> myFree = slotService.getFree(doctor, 
-				LocalDate.of(yearToday, monthToday+1, dayToday));
-		List<Slot> myTaken = slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday));
+		//List<Slot> myFree = slotService.getFree(doctor, 
+		//		LocalDate.of(yearToday, monthToday+1, dayToday));
+		List<Slot> myFree = model.getFree(LocalDate.of(yearToday, monthToday+1, dayToday));
+		//List<Slot> myTaken = slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday));
+		List<Slot> myTaken = model.getTaken(LocalDate.of(yearToday, monthToday+1, dayToday));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(yearToday, monthToday+1, dayToday), LocalTime.of(0, 0));
 		for (int i = 0; i < 48; i++) {
 			dayPanel.getDayTable().setValueAt(null, i, 1);
@@ -120,10 +120,12 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		}
 		
 		clearAgenda(dayPanel.getModelAgendaTable());
-		List<Slot> agendaList = slotService.getAppointmentAgendaList(doctor, 
-				LocalDate.of(yearToday, monthToday+1, dayToday));
-		List<Client> clientList = slotService.getAppointmentClientsList(doctor, 
-				LocalDate.of(yearToday, monthToday+1, dayToday));
+		//List<Slot> agendaList = slotService.getAppointmentAgendaList(doctor, 
+		//		LocalDate.of(yearToday, monthToday+1, dayToday));
+		List<Slot> agendaList = model.getAppointmentAgendaList(LocalDate.of(yearToday, monthToday+1, dayToday));
+		//List<Client> clientList = slotService.getAppointmentClientsList(doctor, 
+		//		LocalDate.of(yearToday, monthToday+1, dayToday));
+		List<Client> clientList = model.getAppointmentClientList(LocalDate.of(yearToday, monthToday+1, dayToday));
 
 		int i = 0;
 		for (Slot s : agendaList) {
@@ -204,8 +206,10 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//System.out.println(tempM);
 		//System.out.println(tempD);
 		
-		slots.addAll(slotService.getFree(doctor, LocalDate.of(tempY, tempM, tempD)));
-		slots.addAll(slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday)));
+		//slots.addAll(slotService.getFree(doctor, LocalDate.of(tempY, tempM, tempD)));
+		slots.addAll(model.getFree(LocalDate.of(tempY, tempM, tempD)));
+		//slots.addAll(slotService.getTakenDoctor(doctor, LocalDate.of(yearToday, monthToday+1, dayToday)));
+		slots.addAll(model.getTaken(LocalDate.of(yearToday, monthToday+1, dayToday)));
 		LocalDateTime count = LocalDateTime.of(LocalDate.of(tempY, tempM, tempD), LocalTime.of(0, 0));
 		for (int i = 0; i < 48 ; i++) {
 			weekPanel.getWeekTable().setValueAt(null, i, day);
@@ -229,10 +233,12 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//System.out.println(tempM);
 		//System.out.println(tempD);
 		
-		List<Slot> agendaList = slotService.getAppointmentAgendaList(doctor, 
-				LocalDate.of(tempY, tempM, tempD));
-		List<Client> clientList = slotService.getAppointmentClientsList(doctor, 
-				LocalDate.of(tempY, tempM, tempD));
+		//List<Slot> agendaList = slotService.getAppointmentAgendaList(doctor, 
+		//		LocalDate.of(tempY, tempM, tempD));
+		List<Slot> agendaList = model.getAppointmentAgendaList(LocalDate.of(tempY, tempM, tempD));
+		//List<Client> clientList = slotService.getAppointmentClientsList(doctor, 
+		//		LocalDate.of(tempY, tempM, tempD));
+		List<Client> clientList = model.getAppointmentClientList(LocalDate.of(tempY, tempM, tempD));
 
 		int i = 0;
 		for (Slot s : agendaList) {
@@ -335,7 +341,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 				
 				controller.updateFree(temp, startDateTime, endDateTime);
 			}
-			update();
+			update(null, null);
 		}
 		
 		private void setToday()
@@ -424,12 +430,11 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	class cancelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			slotService = new SlotService();
 			Slot temp = new Slot();
 			temp = (Slot)dayPanel.getDayTable().getValueAt(dayPanel.getDayTable().getSelectedRow(), dayPanel.getDayTable().getSelectedColumn());
 			
-			slotService.deleteSlot(temp.getId());
-			update();
+			model.deleteSlot(temp.getId());
+			update(null, null);
 		}
 	}
 	
@@ -456,7 +461,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			}
 			
 			toggleCreateView(false);
-			update();
+			update(null, null);
 		}
 	}
 }

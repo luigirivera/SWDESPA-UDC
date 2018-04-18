@@ -1,20 +1,24 @@
 package ultimatedesignchallenge.controller;
 
+import ultimatedesignchallenge.Client.ClientModel;
 import ultimatedesignchallenge.Client.ClientView;
+import ultimatedesignchallenge.Doctor.DoctorModel;
 import ultimatedesignchallenge.Doctor.DoctorView;
+import ultimatedesignchallenge.Secretary.SecretaryModel;
 import ultimatedesignchallenge.Secretary.SecretaryView;
-import ultimatedesignchallenge.model.*;
+import ultimatedesignchallenge.model.Client;
+import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.User;
 import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SecretaryService;
-import ultimatedesignchallenge.services.SlotService;
 
 public class UserController {
 	private DoctorService dsv;
 	private SecretaryService ssv;
 	private ClientService csv;
-	private User model;
+	private User user;
 	
 	public UserController (DoctorService dsv, SecretaryService ssv, ClientService csv) {
 		this.dsv = dsv;
@@ -27,16 +31,24 @@ public class UserController {
 		System.out.println(username);
 		System.out.println(password);
 		
-		if((model=dsv.getDoctor(username, password))!=null) {
-			new DoctorView((Doctor)model, new DoctorController((Doctor)model, dsv));
+		if((user=dsv.getDoctor(username, password))!=null) {
+			DoctorModel model = new DoctorModel((Doctor)user);
+			DoctorView view = new DoctorView(model, new DoctorController(model));
+			model.addObserver(view);
 			return true;
 		}
-		if((model=csv.getClient(username, password))!=null) {
-			new ClientView((Client)model);
+		if((user=csv.getClient(username, password))!=null) {
+			//new ClientView((Client)model);
+			ClientModel model = new ClientModel((Client)user);
+			ClientView view = new ClientView(model, new ClientController(model));
+			model.addObserver(view);
 			return true;
 		}
-		if((model=ssv.getSecretary(username, password))!=null){
-			new SecretaryView((Secretary)model, new SecretaryController((Secretary)model, ssv));
+		if((user=ssv.getSecretary(username, password))!=null){
+			//new SecretaryView((Secretary)model, new SecretaryController((Secretary)model, ssv));
+			SecretaryModel model = new SecretaryModel((Secretary)user);
+			SecretaryView view = new SecretaryView(model, new SecretaryController(model));
+			model.addObserver(view);
 			return true;
 		}
 		return false;

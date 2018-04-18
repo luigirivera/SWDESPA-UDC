@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -19,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 
 //NOTE: Remove comment at refreshTileEvents thanks - Louie
 
-public abstract class CalendarFramework extends JFrame implements CalendarObserver {
+public abstract class CalendarFramework extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
 	/**** Day Components ****/
 	protected int yearBound, monthBound, dayBound, yearToday, monthToday, dayToday;
@@ -230,7 +231,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 				try {
 					int day = validCells.getDayAtCell(row, col);
 					dayToday = day;
-					update();
+					update(null, null);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				}
@@ -364,7 +365,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			monthToday = monthBound;
 			yearToday = yearBound;
 			dayToday = dayBound;
-			update();
+			update(null, null);
 		}
 	}
 	
@@ -374,7 +375,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 			//TODO:
 			//get the recurring id of the selected slot
 			//delete all appointments using that id
-			update();
+			update(null, null);
 		}
 	}
 	

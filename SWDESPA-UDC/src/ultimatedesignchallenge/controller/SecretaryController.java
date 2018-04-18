@@ -1,17 +1,25 @@
 package ultimatedesignchallenge.controller;
 
-import ultimatedesignchallenge.model.Secretary;
-import ultimatedesignchallenge.services.SecretaryService;
+import java.time.LocalDateTime;
+
+import ultimatedesignchallenge.Doctor.DoctorModel;
+import ultimatedesignchallenge.Secretary.SecretaryModel;
+import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.model.Slot;
 
 public class SecretaryController {
 	/*private SecretaryService service;
 	private <add the object of the model> model;*/
 	
-	private Secretary secretary;
-	private SecretaryService ssv;
+	private SecretaryModel model;
 	
-	public SecretaryController(Secretary secretary, SecretaryService ssv) {
-		this.secretary = secretary;
-		this.ssv = ssv;
+	public SecretaryController(SecretaryModel model) {
+		this.model = model;
+	}
+	
+	public boolean updateFree(Doctor doctor, Slot oldSlot, LocalDateTime newStart, LocalDateTime newEnd) {
+		DoctorController dc = new DoctorController(new DoctorModel(doctor));
+		
+		return dc.updateFree(oldSlot, newStart, newEnd);
 	}
 }

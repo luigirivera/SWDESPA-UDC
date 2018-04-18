@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ultimatedesignchallenge.CalendarDB;
-import ultimatedesignchallenge.model.Appointment;
-import ultimatedesignchallenge.model.Doctor;
+import ultimatedesignchallenge.Doctor.DoctorModel;
 import ultimatedesignchallenge.model.Recurring;
 import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.model.Slot_Doc;
@@ -20,14 +19,10 @@ import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.services.Slot_DocService;
 
 public class DoctorController {
-	private Doctor doctor;
-	private DoctorService dsv;
-	private Slot_DocService sdocService;
-	private Slot_Doc temp;
+	private DoctorModel model;
 	
-	public DoctorController(Doctor doctor, DoctorService dsv) {
-		this.doctor = doctor;
-		this.dsv = dsv;
+	public DoctorController(DoctorModel model) {
+		this.model = model;
 	}
 	
 	public boolean createFree(LocalDateTime start, LocalDateTime end) {
@@ -35,20 +30,19 @@ public class DoctorController {
 		System.out.println(start);
 		System.out.println(end);
 		SlotBuilder builder = new SlotBuilder();
-		SlotService service = new SlotService();
+		
 		List<Slot> slots = builder.buildSlots(start, end);
-		temp = new Slot_Doc();
-		sdocService = new Slot_DocService();
+		Slot_Doc tempsd = new Slot_Doc();
 		
 		boolean result = false;
 		
 		for (Slot slotc : slots) {
 			System.out.println(slotc);
-			result = service.addSlotC(slotc);
+			result = model.addSlot(slotc);
 			if (result) {
-				temp.setSlotId(service.getId(slotc).getId());
-				temp.setDoctorId(doctor.getDoctorId());
-				sdocService.addSlot_Doc(temp);
+				tempsd.setSlotId(model.getId(slotc).getId());
+				tempsd.setDoctorId(model.getDoctor().getDoctorId());
+				model.addSlot_Doc(tempsd);
 			}
 		}
 		return result; //change this
@@ -57,7 +51,6 @@ public class DoctorController {
 	public boolean createFreeRecurring(LocalDateTime start, LocalDateTime end, int option) {
 		int tempo = 0;
 		SlotBuilder builder = new SlotBuilder();
-		SlotService service = new SlotService();
 		List<Slot> slots = new ArrayList<Slot>();
 		
 //		System.out.println("\n\n\n Local Date Start "+start.toLocalDate());
@@ -119,24 +112,22 @@ public class DoctorController {
 			end = end.plusWeeks(1);
 		}
 		
-		temp = new Slot_Doc();
-		sdocService = new Slot_DocService();
+		Slot_Doc tempsd = new Slot_Doc();
 		
 		for (Slot slotc : slots) {
 			System.out.println(slotc);
-			service.addSlotC(slotc, tempo);
-			temp.setSlotId(service.getId(slotc).getId());
-			temp.setDoctorId(doctor.getDoctorId());
-			sdocService.addSlot_Doc(temp);
+			model.addSlot(slotc, tempo);
+			tempsd.setSlotId(model.getId(slotc).getId());
+			tempsd.setDoctorId(model.getDoctor().getDoctorId());
+			model.addSlot_Doc(tempsd);
 		}
 		
 		return false; //i don't understand why the one above is false but ill do the same
 	}
 	
 	public boolean updateFree(Slot oldSlot, LocalDateTime newStart, LocalDateTime newEnd) {
-		SlotService ssv = new SlotService();
-		if (ssv.isFree(oldSlot) && this.createFree(newStart, newEnd)) {
-			ssv.deleteSlot(oldSlot.getId());
+		if (model.isFree(oldSlot) && this.createFree(newStart, newEnd)) {
+			model.deleteSlot(oldSlot.getId());
 			return true;
 		}
 		return false;

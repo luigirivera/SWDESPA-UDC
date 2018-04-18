@@ -1,49 +1,28 @@
 package ultimatedesignchallenge.controller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import ultimatedesignchallenge.CalendarDB;
+import ultimatedesignchallenge.Client.ClientModel;
 import ultimatedesignchallenge.model.Appointment;
-import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
-import ultimatedesignchallenge.model.Recurring;
 import ultimatedesignchallenge.model.Slot;
-import ultimatedesignchallenge.model.Slot_Doc;
-import ultimatedesignchallenge.services.AppointmentService;
-import ultimatedesignchallenge.services.ClientService;
-import ultimatedesignchallenge.services.SlotService;
-import ultimatedesignchallenge.services.Slot_DocService;
 
 public class ClientController {
-	private Client client;
-	private ClientService clientService;
-	private SlotService slotService;
+	private ClientModel model;
 	
-	private AppointmentService aptService;
-	
-	public ClientController(Client client, ClientService clientService) {
-		this.client = client;
-		this.clientService = clientService;
+	public ClientController(ClientModel model) {
+		this.model = model;
 	}
 
 	public void transformToAppointment(List<Slot> slots, Doctor doctor) {
-		slotService = new SlotService();
-		aptService = new AppointmentService();
 		
 		Appointment apt = new Appointment();
 		
-		apt.setClient(client);
+		apt.setClient(model.getClient());
 		apt.setDoctor(doctor);
 		apt.setSlots(slots);
 		
-		aptService.addAppointment(apt);
+		model.addAppointment(apt);
 	}
 	
 //	public static void main(String[] args) {
