@@ -30,10 +30,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 import ultimatedesignchallenge.Doctor.DoctorThread;
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SecretaryController;
+import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.AppointmentService;
+import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
@@ -814,7 +817,7 @@ public class SecretaryView extends CalendarFramework{
 			});
 			int result = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
 			
-			if(result == JOptionPane.OK_OPTION == !name.getText().trim().isEmpty())
+			if(result == JOptionPane.OK_OPTION && !name.getText().trim().isEmpty())
 			{
 				int result2 = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
 				//TODO: set the appointment based on values
@@ -952,6 +955,25 @@ public class SecretaryView extends CalendarFramework{
 	class cancelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
+			Appointment apt = new Appointment();
+			
+			List<Slot> slots = new ArrayList<Slot>();
+			ClientService clientService = new ClientService();
+			int[] sRows = dayPanel.getDayTable().getSelectedRows();
+			
+			for(int i = 0; i < sRows.length; i++) {
+				slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+			}
+			
+			apt.setDoctor(doctor);
+			apt.setSlots(slots);
+			apt.setId(slotService.getAppointmentID(slots.get(0)));
+			apt.setClient(clientService.getClient(clientService.getClientViaAptID(apt.getId())));
+			
+			AppointmentService aptService = new AppointmentService();
+			aptService.deleteAppointment(apt);
+			
 			//TODO:
 			//get selected appointment/s
 			//delete those appointments from the DB

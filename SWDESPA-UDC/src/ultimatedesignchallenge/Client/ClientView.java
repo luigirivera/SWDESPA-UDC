@@ -36,7 +36,7 @@ import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DoctorList;
 
-public class ClientView extends CalendarFramework implements Runnable{
+public class ClientView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
 	private Client client;
 	private Doctor doctor;
@@ -748,5 +748,7 @@ public class ClientView extends CalendarFramework implements Runnable{
 		toggleCreateView(false);
 		update();
 	}
+
+
 
 }
