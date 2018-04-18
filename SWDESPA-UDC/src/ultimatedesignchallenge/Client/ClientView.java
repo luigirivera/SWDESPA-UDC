@@ -95,6 +95,11 @@ public class ClientView extends CalendarFramework{
 		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
 		weekPanel.getAgendaTable().addMouseListener(new weekAgendaTableMouseListener());
 		cancel.addActionListener(new cancelListener());
+		
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 	}
 	
 	@Override
@@ -102,7 +107,6 @@ public class ClientView extends CalendarFramework{
 		//TODO:
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		changeLabel();
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
@@ -167,9 +171,6 @@ public class ClientView extends CalendarFramework{
 				}
 			}
 		}*/
-		
-		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
-		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
 	}
 	
 	private void refreshWeekView()
@@ -202,9 +203,6 @@ public class ClientView extends CalendarFramework{
 		//get all other appointments in redacted //Custom TableRenderer only for week can be used
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
-	
-		for(int i = 0; i<8; i++)
-			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)

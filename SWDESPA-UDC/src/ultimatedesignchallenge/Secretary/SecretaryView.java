@@ -52,6 +52,7 @@ public class SecretaryView extends CalendarFramework{
 	private DoctorController doctorController;
 	private ClientService clientService;
 	private SlotService slotService;
+	private AppointmentService appointService;
 	private SecretaryThread st;
 	
 	public SecretaryView(Secretary secretary, SecretaryController controller) {
@@ -62,6 +63,7 @@ public class SecretaryView extends CalendarFramework{
 		this.controller = controller;
 		slotService = new SlotService();
 		clientService = new ClientService();
+		appointService = new AppointmentService();
 		
 		constructorGen("Clinic Secretary");
 		init();
@@ -116,13 +118,20 @@ public class SecretaryView extends CalendarFramework{
 		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
 		weekPanel.getAgendaTable().addMouseListener(new weekAgendaTableMouseListener());
 		cancel.addActionListener(new cancelListener());
+		
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer());
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer());
+		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
+		
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer());
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	@Override
 	public void update() {
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		changeLabel();
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
@@ -244,9 +253,6 @@ public class SecretaryView extends CalendarFramework{
 				}
 			}
 		}*/
-		
-		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
-		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
 	private void refreshWeekView()
@@ -286,10 +292,6 @@ public class SecretaryView extends CalendarFramework{
 		//get slots that i have set available, all of them
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days
-		
-		for(int i = 0; i<8; i++)
-			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
@@ -657,8 +659,14 @@ public class SecretaryView extends CalendarFramework{
 			{
 				setHorizontalAlignment(SwingConstants.LEFT);
 			}
-			else
+			else if (weekPanel.getWeekTable().getValueAt(row, column) instanceof Slot)
 			{
+				Slot slot = (Slot)weekPanel.getWeekTable().getValueAt(row, column);
+				System.out.println(slot.getId());
+				if(appointService.isAppointment(slot))
+					setBackground(Color.RED);
+				else
+					setBackground(Color.WHITE);
 //				if(table.getValueAt(row, column) == null)
 //					setBackground(Color.BLACK);
 //				else
@@ -682,6 +690,8 @@ public class SecretaryView extends CalendarFramework{
 				 * 
 				 */
 			}
+			else
+				setBackground(Color.BLACK);
 			
 			setBorder(null);
 			setForeground(Color.black);
@@ -940,7 +950,7 @@ public class SecretaryView extends CalendarFramework{
 				 *else
 				 *	setAppointemnt.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(weekPanel.getWeekTable(), arg0.getX(), arg0.getY());
 			}
 		}
 	}
@@ -963,7 +973,7 @@ public class SecretaryView extends CalendarFramework{
 				 *else
 				 *	notifyClient.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(weekPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}	
 		}
 	}
