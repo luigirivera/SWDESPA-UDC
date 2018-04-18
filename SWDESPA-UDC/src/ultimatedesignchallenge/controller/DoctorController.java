@@ -124,13 +124,24 @@ public class DoctorController {
 		}
 		
 		Slot_Doc tempsd = new Slot_Doc();
+		boolean result = false;
 		
 		for (Slot slotc : slots) {
 			System.out.println(slotc);
-			model.addSlot(slotc, tempo);
-			tempsd.setSlotId(model.getId(slotc).getId());
-			tempsd.setDoctorId(model.getDoctor().getDoctorId());
-			model.addSlot_Doc(tempsd);
+			Slot tmpSlot;
+			if ((tmpSlot=model.getId(slotc))!=null) {
+				tempsd.setSlotId(tmpSlot.getId());
+				tempsd.setDoctorId(model.getDoctor().getDoctorId());
+				model.addSlot_Doc(tempsd);
+			}
+			else {
+				result = model.addSlot(slotc, tempo);
+				if (result) {
+					tempsd.setSlotId(model.getId(slotc).getId());
+					tempsd.setDoctorId(model.getDoctor().getDoctorId());
+					model.addSlot_Doc(tempsd);
+				}
+			}
 		}
 		
 		return false; //i don't understand why the one above is false but ill do the same
@@ -138,10 +149,13 @@ public class DoctorController {
 	
 	public boolean updateFree(Slot oldSlot, LocalDateTime newStart, LocalDateTime newEnd) {
 		if (model.isFree(oldSlot) && this.createFree(newStart, newEnd)) {
-			model.deleteSlot(oldSlot.getId());
+			model.deleteSlot_Doc(oldSlot.getId(), model.getDoctor().getDoctorId());
 			return true;
 		}
 		return false;
 	}
 	
+	public void freeSlot(int slotId) {
+		model.deleteSlot_Doc(slotId, model.getDoctor().getDoctorId());
+	}
 }

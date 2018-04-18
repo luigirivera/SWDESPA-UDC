@@ -433,7 +433,8 @@ public class DoctorView extends CalendarFramework {
 			Slot temp = new Slot();
 			temp = (Slot)dayPanel.getDayTable().getValueAt(dayPanel.getDayTable().getSelectedRow(), dayPanel.getDayTable().getSelectedColumn());
 			
-			model.deleteSlot(temp.getId());
+			controller.freeSlot(temp.getId());
+			//model.deleteSlot(temp.getId());
 			update(null, null);
 		}
 	}

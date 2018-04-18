@@ -86,13 +86,13 @@ public class SecretaryView extends CalendarFramework{
 		
 		setAppointment = new JMenuItem("Set Appointment");
 		//cancelAll = new JMenuItem("Cancel All Meetings");
-		notifyDoctor = new JMenuItem("Notify Doctor");
-		notifyClient = new JMenuItem("Notify Client");
-		
+//		notifyDoctor = new JMenuItem("Notify Doctor");
+//		notifyClient = new JMenuItem("Notify Client");
+//		
 		popup.add(setAppointment);
 		popup.add(update);
-		popup.add(notifyDoctor);
-		popup.add(notifyClient);
+//		popup.add(notifyDoctor);
+//		popup.add(notifyClient);
 		popup.add(cancel);
 		//popup.add(cancelAll);
 		

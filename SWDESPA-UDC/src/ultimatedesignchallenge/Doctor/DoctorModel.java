@@ -62,6 +62,10 @@ public class DoctorModel extends Observable {
 		sdsv.addSlot_Doc(docSlot);
 	}
 	
+	public void deleteSlot_Doc(int slotId, int doctorId) {
+		sdsv.deleteSlot_Doc(slotId, doctorId);
+	}
+	
 	public void deleteSlot(int slotId) {
 		ssv.deleteSlot(slotId);
 	}

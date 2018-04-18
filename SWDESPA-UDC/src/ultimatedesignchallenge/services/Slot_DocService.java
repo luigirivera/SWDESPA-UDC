@@ -60,6 +60,29 @@ public class Slot_DocService {
 		}
 	}
 	
+	public void deleteSlot_Doc(int slotId, int doctorId) {
+		
+		Connection cnt = CalendarDB.getConnection();
+		
+		String query = "DELETE FROM " + Slot_Doc.TABLE + " WHERE "
+				+ Slot_Doc.COL_SLOTID + " = ? AND "
+				+ Slot_Doc.COL_DOCTORID + " = ?";
+		
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			ps.setInt(1, slotId);
+			ps.setInt(2, doctorId);
+			ps.executeUpdate();
+			
+			ps.close();
+			// cnt.close();
+			System.out.println("Success!");
+		} catch(SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error!");
+		}
+	}
+	
 	private Slot_Doc toSlot_Doc(ResultSet rs) throws SQLException{
 		Slot_Doc docSlot = new Slot_Doc();
 		
