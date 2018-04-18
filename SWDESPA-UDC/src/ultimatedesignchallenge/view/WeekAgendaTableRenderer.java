@@ -18,13 +18,13 @@ public 	class WeekAgendaTableRenderer extends DefaultTableCellRenderer {
 		{
 			//TODO:
 			setHorizontalAlignment(SwingConstants.RIGHT);
-			//setForeground(color of doctor who alloted this slot). mixture if both
+			//setForeground(color of doctor who alloted this slot)
 		}
 		
 		else if(column == 1)
 		{
 			//TODO:
-			//setForeground(color of doctor who alloted this slot). mixture if both
+			//setForeground(color of doctor who alloted this slot)
 		}
 		
 		else
