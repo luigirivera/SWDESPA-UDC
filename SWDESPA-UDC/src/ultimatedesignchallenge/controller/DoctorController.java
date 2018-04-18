@@ -41,11 +41,19 @@ public class DoctorController {
 		
 		for (Slot slotc : slots) {
 			System.out.println(slotc);
-			result = model.addSlot(slotc);
-			if (result) {
-				tempsd.setSlotId(model.getId(slotc).getId());
+			Slot tmpSlot;
+			if ((tmpSlot=model.getId(slotc))!=null) {
+				tempsd.setSlotId(tmpSlot.getId());
 				tempsd.setDoctorId(model.getDoctor().getDoctorId());
 				model.addSlot_Doc(tempsd);
+			}
+			else {
+				result = model.addSlot(slotc);
+				if (result) {
+					tempsd.setSlotId(model.getId(slotc).getId());
+					tempsd.setDoctorId(model.getDoctor().getDoctorId());
+					model.addSlot_Doc(tempsd);
+				}
 			}
 		}
 		return result; //change this
