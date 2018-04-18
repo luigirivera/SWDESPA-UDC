@@ -135,7 +135,7 @@ public class DoctorController {
 	
 	public boolean updateFree(Slot oldSlot, LocalDateTime newStart, LocalDateTime newEnd) {
 		SlotService ssv = new SlotService();
-		if (this.createFree(newStart, newEnd)) {
+		if (ssv.isFree(oldSlot) && this.createFree(newStart, newEnd)) {
 			ssv.deleteSlot(oldSlot.getId());
 			return true;
 		}
