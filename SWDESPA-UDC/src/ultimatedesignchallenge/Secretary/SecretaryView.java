@@ -240,7 +240,8 @@ public class SecretaryView extends CalendarFramework{
 			}
 		}*/
 		
-		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
 		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
@@ -784,30 +785,29 @@ public class SecretaryView extends CalendarFramework{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JPanel panel = new JPanel();
-			JRadioButton recurring = new JRadioButton("Recurring");
-			JComboBox<String> recurrence = new JComboBox<String>();
+			JRadioButton walkin = new JRadioButton("Walk In?");
+			JComboBox<String> clients = new JComboBox<String>();
 			
-			panel.add(recurring);
-			panel.add(recurrence);
+			panel.add(walkin);
+			panel.add(clients);
+			List<Client> clientsC = clientService.getAll();
 			
-			recurrence.setVisible(false);
-			recurrence.addItem("1 Week");
-			recurrence.addItem("2 Weeks");
-			recurrence.addItem("3 Weeks");
-			recurrence.addItem("4 Weeks");
+			for(Client c : clientsC)
+				clients.addItem(c.getLastname() + ", " + c.getFirstname());
+			clients.setVisible(true);
 			
 			JPanel panel2 = new JPanel();
 			JTextField name = new JTextField();
 			panel2.add(name);
 			
-			recurring.addActionListener(new ActionListener() {
+			walkin.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					boolean toggle = recurring.isSelected();
+					boolean toggle = !walkin.isSelected();
 					
-					recurrence.setVisible(toggle);
-					recurrence.setEnabled(toggle);
+					clients.setVisible(toggle);
+					clients.setEnabled(toggle);
 					
 				}
 				

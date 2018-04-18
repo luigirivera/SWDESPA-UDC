@@ -59,7 +59,7 @@ public abstract class CalendarFramework extends JFrame implements CalendarObserv
 		commonInit();
 		calendarPanel.generateCalendar(validCells);
 		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
-		
+
 		setResizable(false);
 		setVisible(true);	
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -164,8 +164,8 @@ public class ClientView extends CalendarFramework{
 				}
 			}
 		}*/
-		
-		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
 	}
 	
 	private void refreshWeekView()
@@ -399,14 +399,12 @@ public class ClientView extends CalendarFramework{
 				int row, int column) {
 			
 			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
-			
 			if(column == 0)
 			{
 				//TODO:
 				setHorizontalAlignment(SwingConstants.LEFT);
 				setBackground(Color.WHITE);
 			}
-			
 			if (table.getValueAt(row, column) != null && column == 1)
 			{
 				String sval = String.valueOf(table.getValueAt(row, column));
@@ -460,7 +458,6 @@ public class ClientView extends CalendarFramework{
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
 				int row, int column) {
 			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
-			
 			if(column == 0)
 			{
 				setHorizontalAlignment(SwingConstants.LEFT);
