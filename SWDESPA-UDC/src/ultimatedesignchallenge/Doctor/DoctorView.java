@@ -152,7 +152,8 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display it in the dayTable
 		//display occupied slots in agenda table
 		
-		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
 		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
@@ -194,8 +195,8 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days
 		
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
+		for(int i = 0; i<8; i++)
+			weekPanel.getAgendaTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)

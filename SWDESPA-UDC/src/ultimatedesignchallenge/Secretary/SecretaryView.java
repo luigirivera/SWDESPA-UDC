@@ -2,6 +2,7 @@ package ultimatedesignchallenge.Secretary;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -50,6 +51,7 @@ public class SecretaryView extends CalendarFramework{
 	private Doctor doctor;
 	private SecretaryController controller;
 	private DoctorController doctorController;
+	private ClientService clientService;
 	private SlotService slotService;
 	private SecretaryThread st;
 	
@@ -60,6 +62,7 @@ public class SecretaryView extends CalendarFramework{
 		this.secretary = secretary;
 		this.controller = controller;
 		slotService = new SlotService();
+		clientService = new ClientService();
 		
 		constructorGen("Clinic Secretary");
 		init();
@@ -787,43 +790,56 @@ public class SecretaryView extends CalendarFramework{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JPanel panel = new JPanel();
-			JRadioButton recurring = new JRadioButton("Recurring");
-			JComboBox<String> recurrence = new JComboBox<String>();
+			JRadioButton walkin = new JRadioButton("Walk In?");
+			JComboBox<String> clients = new JComboBox<String>();
 			
-			panel.add(recurring);
-			panel.add(recurrence);
+			panel.add(walkin);
+			panel.add(clients);
 			
-			recurrence.setVisible(false);
-			recurrence.addItem("1 Week");
-			recurrence.addItem("2 Weeks");
-			recurrence.addItem("3 Weeks");
-			recurrence.addItem("4 Weeks");
+			clients.setVisible(true);
 			
 			JPanel panel2 = new JPanel();
 			JTextField name = new JTextField();
+			name.setPreferredSize(new Dimension(200,30));
 			panel2.add(name);
+			List<Client> clientC = clientService.getAll();
 			
-			recurring.addActionListener(new ActionListener() {
+			for(Client c : clientC)
+				clients.addItem(c.getLastname() + ", " + c.getFirstname());
+			
+			walkin.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					boolean toggle = recurring.isSelected();
+					boolean toggle = !walkin.isSelected();
 					
-					recurrence.setVisible(toggle);
-					recurrence.setEnabled(toggle);
+					clients.setVisible(toggle);
+					clients.setEnabled(toggle);
 					
 				}
 				
 			});
 			int result = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
 			
-			if(result == JOptionPane.OK_OPTION && !name.getText().trim().isEmpty())
+			if(result == JOptionPane.OK_OPTION)
 			{
-				int result2 = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
-				//TODO: set the appointment based on values
+				if(walkin.isSelected())
+				{
+					int result2 = JOptionPane.showConfirmDialog(null, panel2, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
+					if(!name.getText().trim().isEmpty())
+					{
+						//TODO: Appointments
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					//TODO: appointments
+				}
+					
 			}
-			else
-				JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
+			
 		}
 		
 	}
