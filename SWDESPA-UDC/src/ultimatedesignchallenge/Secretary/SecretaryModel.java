@@ -88,4 +88,8 @@ public class SecretaryModel extends Observable {
 	public void deleteAppointment(Appointment apt) {
 		asv.deleteAppointment(apt);
 	}
+	
+	public boolean isAppointment(Slot slot) {
+		return asv.isAppointment(slot);
+	}
 }

@@ -27,14 +27,12 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import ultimatedesignchallenge.Client.ClientThread;
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.CalendarObserver;
 import ultimatedesignchallenge.view.DayTableRenderer;
-import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
 import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class DoctorView extends CalendarFramework {
@@ -82,6 +80,13 @@ public class DoctorView extends CalendarFramework {
 		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
 		weekPanel.getAgendaTable().addMouseListener(new weekAgendaTableMouseListener());
 		cancel.addActionListener(new cancelListener());
+		
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
+		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	@Override
@@ -89,7 +94,6 @@ public class DoctorView extends CalendarFramework {
 		//TODO:
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		changeLabel();
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
@@ -150,10 +154,6 @@ public class DoctorView extends CalendarFramework {
 		//get slots that i have set available, all of them
 		//display it in the dayTable
 		//display occupied slots in agenda table
-		
-		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
-		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
-		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
 	private void refreshWeekView()
@@ -193,10 +193,6 @@ public class DoctorView extends CalendarFramework {
 		//get slots that i have set available, all of them
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days
-		
-		for(int i = 0; i<8; i++)
-			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)

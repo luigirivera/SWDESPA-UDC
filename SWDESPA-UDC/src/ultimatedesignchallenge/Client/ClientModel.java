@@ -59,5 +59,13 @@ public class ClientModel extends Observable {
 	public void deleteAppointment(Appointment appointment) {
 		asv.deleteAppointment(appointment);
 	}
+	
+	public List<Appointment> getAllAppointments(){
+		return asv.getAll();
+	}
+	
+	public List<Slot> getAllAppointmentsJoinedSlots(){
+		return ssv.getAllAppointmentsJoinedSlots();
+	}
 
 }

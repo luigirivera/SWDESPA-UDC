@@ -79,6 +79,11 @@ public class ClientView extends CalendarFramework{
 		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
 		weekPanel.getAgendaTable().addMouseListener(new weekAgendaTableMouseListener());
 		cancel.addActionListener(new cancelListener());
+		
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 	}
 	
 	
@@ -87,7 +92,6 @@ public class ClientView extends CalendarFramework{
 		//TODO:
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		changeLabel();
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
@@ -151,9 +155,6 @@ public class ClientView extends CalendarFramework{
 				}
 			}
 		}*/
-		
-		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer()); // FOR TIME
-		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer()); // FOR APPOINTMENT
 	}
 	
 	private void refreshWeekView()
@@ -186,9 +187,6 @@ public class ClientView extends CalendarFramework{
 		//get all other appointments in redacted //Custom TableRenderer only for week can be used
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
-	
-		for(int i = 0; i<8; i++)
-			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
@@ -457,32 +455,41 @@ public class ClientView extends CalendarFramework{
 			{
 				setHorizontalAlignment(SwingConstants.LEFT);
 			}
-			else
-			{
-//				if(table.getValueAt(row, column) == null)
-//					setBackground(Color.BLACK);
-//				else
-//					setBackground(Color.GREEN);
+			else {
 				
-				/*	if(table.getValueAt(row, column) == null)
-				 * 		setBackground(Color.BLACK);
-				 * 	else if(slot is client's)
-				 * 		setBackground(color of the doctor)
-				 * 	else if(slot is not theirs)
-				 * 		setBackground(Color.GRAY)
-				 * 	else
-				 * 		setBackground(Color.WHITE)
-				 */
-				//TODO:
-				/* if(this slot is not set by any doctor)
-				 * 	setBackground(Color.BLACK);
-				 * else if(this slot is unoccupied)
-				 * 	setBackground(Color.WHITE);
-				 * else
-				 * 	setBackground(color of doctor who has an appointment on this slot)
-				 * 
-				 */
+				if(table.getValueAt(row, column) == null) {
+			  		setBackground(Color.BLACK);
+				}
+				
+				else {
+					String temp = String.valueOf(table.getValueAt(row,  column));
+					if(temp.contains(" ")) {
+				        temp = temp.substring(0, temp.indexOf(" ")); 
+				        System.out.println(temp);
+				    }
+					
+					List<Appointment> appointments = model.getAllAppointments();
+					List<Slot> slots = model.getAllAppointmentsJoinedSlots();
+					
+					for(Slot s : slots) {
+						if(Integer.parseInt(temp) == s.getId()) {
+							System.out.println("APPOINTMENT");
+						  	setBackground(Color.RED);
+							break;
+						}
+						else {
+							System.out.println("FREE SLOT");
+					  		setBackground(Color.WHITE);
+						}
+					}
+				}
+				
+				
 			}
+			
+			
+			
+			
 			
 			setBorder(null);
 			setForeground(Color.black);

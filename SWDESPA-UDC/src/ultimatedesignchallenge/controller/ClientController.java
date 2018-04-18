@@ -25,6 +25,7 @@ public class ClientController {
 		Appointment apt = new Appointment();
 		
 		apt.setClient(model.getClient());
+		System.out.println(model.getClient().getId()+ " INSIDE TRANSFORM");
 		apt.setDoctor(doctor);
 		apt.setSlots(slots);
 		

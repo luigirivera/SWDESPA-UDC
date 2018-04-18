@@ -75,7 +75,8 @@ public class AppointmentService {
 			cnt.setAutoCommit(false);
 			
 			PreparedStatement ps = cnt.prepareStatement(query);
-			
+			System.out.println(appointment.getDoctor().getDoctorId() + " I LOVE AIKO");
+			System.out.println(appointment.getClient().getClientId() + " I HATE AIKO");
 			ps.setNull(1, Types.NULL);
 			ps.setInt(2, appointment.getDoctor().getDoctorId());
 			ps.setInt(3, appointment.getClient().getClientId());

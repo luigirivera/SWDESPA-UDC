@@ -34,6 +34,7 @@ import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.UserService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
@@ -102,13 +103,20 @@ public class SecretaryView extends CalendarFramework{
 		weekPanel.getWeekTable().addMouseListener(new weekTableMouseListener());
 		weekPanel.getAgendaTable().addMouseListener(new weekAgendaTableMouseListener());
 		cancel.addActionListener(new cancelListener());
+		
+		dayPanel.getDayTable().getColumnModel().getColumn(0).setCellRenderer(new DayTableRenderer());
+		dayPanel.getDayTable().getColumnModel().getColumn(1).setCellRenderer(new DayTableRenderer());
+		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
+		
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer());
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	@Override
 	public void update(Observable o, Object arg) {
 		//grab necessary data
 		calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-		weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
 		changeLabel();
 //		TODO: FULFILL THE STEPS
 		refreshDayView();
@@ -229,9 +237,6 @@ public class SecretaryView extends CalendarFramework{
 				}
 			}
 		}*/
-		
-		dayPanel.getDayTable().setDefaultRenderer(dayPanel.getDayTable().getColumnClass(0), new DayTableRenderer());
-		dayPanel.getAgendaTable().setDefaultRenderer(dayPanel.getAgendaTable().getColumnClass(0), new DayAgendaTableRenderer());
 	}
 	
 	private void refreshWeekView()
@@ -271,10 +276,6 @@ public class SecretaryView extends CalendarFramework{
 		//get slots that i have set available, all of them
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days
-		
-		for(int i = 0; i<8; i++)
-			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
@@ -640,8 +641,14 @@ public class SecretaryView extends CalendarFramework{
 			{
 				setHorizontalAlignment(SwingConstants.LEFT);
 			}
-			else
+			else if (weekPanel.getWeekTable().getValueAt(row, column) instanceof Slot)
 			{
+				Slot slot = (Slot)weekPanel.getWeekTable().getValueAt(row, column);
+				System.out.println(slot.getId());
+				if(model.isAppointment(slot))
+					setBackground(Color.RED);
+				else
+					setBackground(Color.WHITE);
 //				if(table.getValueAt(row, column) == null)
 //					setBackground(Color.BLACK);
 //				else
@@ -665,6 +672,8 @@ public class SecretaryView extends CalendarFramework{
 				 * 
 				 */
 			}
+			else
+				setBackground(Color.BLACK);
 			
 			setBorder(null);
 			setForeground(Color.black);
@@ -813,12 +822,45 @@ public class SecretaryView extends CalendarFramework{
 					if(!name.getText().trim().isEmpty())
 					{
 						//TODO: Appointments
+						Client walkIn = new Client();
+						walkIn.setFirstname(name.getText());
+						walkIn.setLastname("WalkIn");
+						
+						UserService userService = new UserService();
+						walkIn.setClientId(userService.addGuest(walkIn));
+						System.out.println(walkIn.getId() + "Henlo");
+						
+						List<Slot> slots = new ArrayList<Slot>();
+						int[] sRows = dayPanel.getDayTable().getSelectedRows();
+						
+						for(int i = 0; i < sRows.length; i++) {
+							slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+						}
+						
+						//clientController = new ClientController(walkIn, clientService);
+						controller.transformToAppointment(walkIn, slots, doctor);
+						
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				else
 				{
+					Client tempClient;
+					
+					if(clientC.get(0).getFirstname().equalsIgnoreCase(clients.getSelectedItem().toString().split(", ")[1]))
+						tempClient = clientC.get(0);
+					else
+						tempClient = clientC.get(1);
+					
+					List<Slot> slots = new ArrayList<Slot>();
+					int[] sRows = dayPanel.getDayTable().getSelectedRows();
+					
+					for(int i = 0; i < sRows.length; i++) {
+						slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+					}
+					
+					controller.transformToAppointment(tempClient, slots, doctor);
 					//TODO: appointments
 				}
 					
@@ -921,7 +963,7 @@ public class SecretaryView extends CalendarFramework{
 				 *else
 				 *	setAppointemnt.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(weekPanel.getWeekTable(), arg0.getX(), arg0.getY());
 			}
 		}
 	}
@@ -944,7 +986,7 @@ public class SecretaryView extends CalendarFramework{
 				 *else
 				 *	notifyClient.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(weekPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}	
 		}
 	}

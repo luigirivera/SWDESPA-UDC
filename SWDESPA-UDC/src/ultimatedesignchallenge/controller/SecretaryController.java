@@ -1,11 +1,14 @@
 package ultimatedesignchallenge.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import ultimatedesignchallenge.Client.ClientModel;
 import ultimatedesignchallenge.Doctor.DoctorModel;
 import ultimatedesignchallenge.Secretary.SecretaryModel;
 import ultimatedesignchallenge.Secretary.SecretaryThread;
 import ultimatedesignchallenge.model.Appointment;
+import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
 
@@ -22,6 +25,11 @@ public class SecretaryController {
 	public void startThread() {
 		SecretaryThread st = new SecretaryThread(model);
 		st.start();
+	}
+	
+	public void transformToAppointment(Client client, List<Slot> slots, Doctor doctor) {
+		ClientController cc = new ClientController(new ClientModel(client));
+		cc.transformToAppointment(slots, doctor);
 	}
 	
 	public void deleteAppointment(Appointment apt) {
