@@ -420,11 +420,8 @@ public class ClientView extends CalendarFramework{
 			        System.out.println(temp);
 			    }
 				
-				AppointmentService service = new AppointmentService();
-				SlotService service2 = new SlotService();
-				
-				List<Appointment> appointments = service.getAll();
-				List<Slot> slots = service2.getAllAppointmentsJoinedSlots();
+				List<Appointment> appointments = model.getAllAppointments();
+				List<Slot> slots = model.getAllAppointmentsJoinedSlots();
 				
 				for(Slot s : slots) {
 					if(Integer.parseInt(temp) == s.getId()) {
