@@ -29,10 +29,8 @@ import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
-import ultimatedesignchallenge.view.DayTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
 import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
-import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class SecretaryView extends CalendarFramework{
 	private static final long serialVersionUID = 1L;
