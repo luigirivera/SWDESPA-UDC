@@ -145,26 +145,14 @@ public class WeekPanel extends JPanel {
 	
 	public void refreshWeekTable(int monthToday, int dayToday, int yearToday)
 	{
-		Calendar cal = Calendar.getInstance();
-		cal.set(yearToday, monthToday, dayToday);
-		cal.get(Calendar.WEEK_OF_YEAR);
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-		
 		modelWeekTable.setColumnCount(1);
-		modelWeekTable.addColumn(Month.of(cal.get(Calendar.MONTH)+1) + " " + cal.get(Calendar.DATE));
-
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-		modelWeekTable.addColumn(Month.of(cal.get(Calendar.MONTH)+1) + " " + cal.get(Calendar.DATE));
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-		modelWeekTable.addColumn(Month.of(cal.get(Calendar.MONTH)+1) + " " + cal.get(Calendar.DATE));
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-		modelWeekTable.addColumn(Month.of(cal.get(Calendar.MONTH)+1) + " " + cal.get(Calendar.DATE));
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-		modelWeekTable.addColumn(Month.of(cal.get(Calendar.MONTH)+1) + " " + cal.get(Calendar.DATE));
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-		modelWeekTable.addColumn(Month.of(cal.get(Calendar.MONTH)+1) + " " + cal.get(Calendar.DATE));
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-		modelWeekTable.addColumn(Month.of(cal.get(Calendar.MONTH)+1) + " " + cal.get(Calendar.DATE));
+		modelWeekTable.addColumn("Sunday");
+		modelWeekTable.addColumn("Monday");
+		modelWeekTable.addColumn("Tuesday");
+		modelWeekTable.addColumn("Wednesday");
+		modelWeekTable.addColumn("Thursday");
+		modelWeekTable.addColumn("Friday");
+		modelWeekTable.addColumn("Saturday");
 		
 		for(int i = 1; i < 8; i++)
 		{
