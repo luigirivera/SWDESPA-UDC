@@ -749,16 +749,4 @@ public class ClientView extends CalendarFramework implements Runnable{
 		update();
 	}
 
-	@Override
-	public void run() {
-		//TODO:
-				//grab necessary data
-				calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
-				weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
-				changeLabel();
-//				TODO: FULFILL THE STEPS
-				refreshDayView();
-				refreshWeekView();
-		
-	}
 }
