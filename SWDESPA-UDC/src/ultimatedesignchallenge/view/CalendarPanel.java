@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Insets;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -18,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework.CellDataHolder;
 
 public class CalendarPanel extends JPanel{
@@ -30,6 +32,7 @@ public class CalendarPanel extends JPanel{
 	DefaultTableModel modelCalendarTable;
 	JLabel monthLabel;
 	JToggleButton doctors;
+	private SlotService ssv;
 	private CalendarFramework framework;
 	
 	public CalendarPanel(CalendarFramework framework)
@@ -37,6 +40,7 @@ public class CalendarPanel extends JPanel{
 		super(null);
 		
 		this.framework = framework;
+		this.ssv = new SlotService();
 		instantiate();
 		initialize();
 	}
@@ -168,11 +172,10 @@ public class CalendarPanel extends JPanel{
 				Calendar cal = Calendar.getInstance();
 				cal.set(framework.yearToday, framework.monthToday, (int)table.getValueAt(row, column));
 				
-				//TODO:
-				//if(this day has no slots allocated OR slots are full)
-				//	setBackground(Color.RED);
-				//else
-				// setBackground(Color.GREEN);
+				if(ssv.getFree(LocalDate.of(framework.yearToday, framework.monthToday+1, (int)table.getValueAt(row, column))).size() == 0)
+					setBackground(Color.RED);
+				else
+				 setBackground(Color.GREEN);
 			}
 			
 			setBorder(null);

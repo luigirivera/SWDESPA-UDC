@@ -78,6 +78,34 @@ public class ClientService {
 		return result;
 	}
 	
+	public int getClientViaAptID(int id) {
+			int result = -1;
+			
+			Connection cnt = CalendarDB.getConnection();
+			
+			String query = "SELECT " + User.COL_USERID + ", " + Client.COL_CLIENTID + ", username, firstname, lastname  FROM ((" +Slot.TABLE + " inner join " + Appointment.TABLE + " on " + Slot.COL_APPOINTMENTID + " = " + Appointment.COL_APPOINTMENTID+ ") inner join "
+				    + Client.TABLE + " on " + Client.COL_CLIENTID + " = " + Appointment.COL_CLIENTID + ") inner join " + User.TABLE + " on " + User.COL_USERID + " = " + Client.COL_USERID + " where " + Appointment.COL_APPOINTMENTID + " = ?";
+			
+
+				try {
+					PreparedStatement ps = cnt.prepareStatement(query);
+					
+					ps.setInt(1, id);
+					ResultSet rs = ps.executeQuery();
+					
+					if (rs.next())
+						result = rs.getInt(2);
+					
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			return result;
+	}
+	
 	public Client getClient(int id) { // assuming this id is userid
 		Client result = null;
 		

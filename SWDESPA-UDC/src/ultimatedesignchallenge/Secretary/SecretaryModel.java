@@ -8,16 +8,19 @@ import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 
 public class SecretaryModel extends Observable {
 	private Secretary secretary;
+	private ClientService csv;
 	private DoctorService dsv;
 	private SlotService ssv;
 
 	public SecretaryModel(Secretary secretary) {
 		this.secretary = secretary;
+		this.csv = new ClientService();
 		this.dsv = new DoctorService();
 		this.ssv = new SlotService();
 	}
@@ -60,5 +63,13 @@ public class SecretaryModel extends Observable {
 	
 	public List<Doctor> getAllDoctors() {
 		return dsv.getAll();
+	}
+	
+	public List<Client> getAllClients(){
+		return csv.getAll();
+	}
+	
+	public int getAppointmentId(Slot slot) {
+		return ssv.getAppointmentID(slot);
 	}
 }

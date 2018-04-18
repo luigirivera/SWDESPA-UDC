@@ -124,6 +124,31 @@ public class AppointmentService {
 		}
 	}
 	
+	public boolean isAppointment(Slot slot) {
+		boolean flag = false;
+		Connection cnt = CalendarDB.getConnection();
+		String query = "SELECT " + Slot.COL_APPOINTMENTID + " FROM " + Slot.TABLE + " where " + Slot.COL_SLOTID + " = ?";
+		ResultSet rs;
+		try {
+			PreparedStatement ps = cnt.prepareStatement(query);
+			
+			ps.setInt(1,  slot.getId());
+			
+			rs = ps.executeQuery();
+			
+			if(rs.next())
+				flag = true;
+			
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return flag;
+	}
+	
 	public void deleteAppointment(Appointment appointment)
 	{
 		Connection cnt = CalendarDB.getConnection();

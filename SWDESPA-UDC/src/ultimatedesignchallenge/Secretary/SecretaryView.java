@@ -2,6 +2,7 @@ package ultimatedesignchallenge.Secretary;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -30,9 +31,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 //github.com/luigirivera/SWDESPA-UDC.git
 import ultimatedesignchallenge.controller.SecretaryController;
+import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.AppointmentService;
+import ultimatedesignchallenge.services.ClientService;
+//github.com/luigirivera/SWDESPA-UDC.git
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
@@ -772,43 +777,56 @@ public class SecretaryView extends CalendarFramework{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JPanel panel = new JPanel();
-			JRadioButton recurring = new JRadioButton("Recurring");
-			JComboBox<String> recurrence = new JComboBox<String>();
+			JRadioButton walkin = new JRadioButton("Walk In?");
+			JComboBox<String> clients = new JComboBox<String>();
 			
-			panel.add(recurring);
-			panel.add(recurrence);
+			panel.add(walkin);
+			panel.add(clients);
 			
-			recurrence.setVisible(false);
-			recurrence.addItem("1 Week");
-			recurrence.addItem("2 Weeks");
-			recurrence.addItem("3 Weeks");
-			recurrence.addItem("4 Weeks");
+			clients.setVisible(true);
 			
 			JPanel panel2 = new JPanel();
 			JTextField name = new JTextField();
+			name.setPreferredSize(new Dimension(200,30));
 			panel2.add(name);
+			List<Client> clientC = model.getAllClients();
 			
-			recurring.addActionListener(new ActionListener() {
+			for(Client c : clientC)
+				clients.addItem(c.getLastname() + ", " + c.getFirstname());
+			
+			walkin.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					boolean toggle = recurring.isSelected();
+					boolean toggle = !walkin.isSelected();
 					
-					recurrence.setVisible(toggle);
-					recurrence.setEnabled(toggle);
+					clients.setVisible(toggle);
+					clients.setEnabled(toggle);
 					
 				}
 				
 			});
 			int result = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
 			
-			if(result == JOptionPane.OK_OPTION == !name.getText().trim().isEmpty())
+			if(result == JOptionPane.OK_OPTION)
 			{
-				int result2 = JOptionPane.showConfirmDialog(null, panel, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
-				//TODO: set the appointment based on values
+				if(walkin.isSelected())
+				{
+					int result2 = JOptionPane.showConfirmDialog(null, panel2, "Set Appointment", JOptionPane.OK_CANCEL_OPTION);
+					if(!name.getText().trim().isEmpty())
+					{
+						//TODO: Appointments
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					//TODO: appointments
+				}
+					
 			}
-			else
-				JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
+			
 		}
 		
 	}
@@ -937,6 +955,25 @@ public class SecretaryView extends CalendarFramework{
 	class cancelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
+			Appointment apt = new Appointment();
+			
+			List<Slot> slots = new ArrayList<Slot>();
+			ClientService clientService = new ClientService();
+			int[] sRows = dayPanel.getDayTable().getSelectedRows();
+			
+			for(int i = 0; i < sRows.length; i++) {
+				slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+			}
+			
+			apt.setDoctor(doctor);
+			apt.setSlots(slots);
+			apt.setId(model.getAppointmentId(slots.get(0)));
+			apt.setClient(clientService.getClient(clientService.getClientViaAptID(apt.getId())));
+			
+			AppointmentService aptService = new AppointmentService();
+			aptService.deleteAppointment(apt);
+			
 			//TODO:
 			//get selected appointment/s
 			//delete those appointments from the DB
