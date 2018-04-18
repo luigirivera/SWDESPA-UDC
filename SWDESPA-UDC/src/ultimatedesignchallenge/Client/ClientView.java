@@ -430,27 +430,29 @@ public class ClientView extends CalendarFramework{
 				
 				String firstTime = String.valueOf(table.getValueAt(row, 0));
 				
+				String temp = String.valueOf(table.getValueAt(row, 1));
+				if(temp.contains(" ")) {
+			        temp = temp.substring(0, temp.indexOf(" ")); 
+			        System.out.println(temp);
+			    }
 				
-				//getDoctor
-				if(firstTime.equals(sTime))
-					if(doctor.getId() == 1) {
-						System.out.println(doctor.getColor());
-						setBackground(Color.getColor(doctor.getColor()));
+				AppointmentService service = new AppointmentService();
+				SlotService service2 = new SlotService();
+				
+				List<Appointment> appointments = service.getAll();
+				List<Slot> slots = service2.getAllAppointmentsJoinedSlots();
+				
+				for(Slot s : slots) {
+					if(Integer.parseInt(temp) == s.getId()) {
+						System.out.println("APPOINTMENT");
+					  	setBackground(Color.RED);
+						break;
 					}
-				else
-					setBackground(Color.WHITE);
-				
-				/*	if(slot is client's)
-				 * 		setBackground(color of the doctor)
-				 * 	else if(slot is not theirs)
-				 * 		setBackground(Color.GRAY)
-				 * 	else
-				 * 		setBackground(Color.WHITE)
-				 */
-				
-				//setBackground(Color.firstdoctor.getColor());
-
-				
+					else {
+						System.out.println("FREE SLOT");
+				  		setBackground(Color.WHITE);
+					}
+				}
 			}
 			else
 				setBackground(Color.WHITE);
