@@ -52,6 +52,7 @@ public class SecretaryView extends CalendarFramework{
 		
 		this.model = model;
 		this.controller = controller;
+		this.doctor = new Doctor();
 		
 		constructorGen("Clinic Secretary");
 		init();
