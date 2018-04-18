@@ -28,7 +28,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import ultimatedesignchallenge.Doctor.DoctorThread;
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SecretaryController;
 import ultimatedesignchallenge.model.Appointment;
@@ -98,7 +97,7 @@ public class SecretaryView extends CalendarFramework{
 		calendarPanel.getDoctors().setBounds(10, 10, 250, 40);
 		
 		setAppointment = new JMenuItem("Set Appointment");
-		cancelAll = new JMenuItem("Cancel All Meetings");
+		//cancelAll = new JMenuItem("Cancel All Meetings");
 		notifyDoctor = new JMenuItem("Notify Doctor");
 		notifyClient = new JMenuItem("Notify Client");
 		
@@ -107,7 +106,7 @@ public class SecretaryView extends CalendarFramework{
 		popup.add(notifyDoctor);
 		popup.add(notifyClient);
 		popup.add(cancel);
-		popup.add(cancelAll);
+		//popup.add(cancelAll);
 		
 		update.addActionListener(new updateAppointment());
 		setAppointment.addActionListener(new setAppointment());
@@ -288,7 +287,8 @@ public class SecretaryView extends CalendarFramework{
 		//display it in the weekTable
 		//display appointments in agenda table in order of the days
 		
-		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekTableRenderer());
+		for(int i = 0; i<8; i++)
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	

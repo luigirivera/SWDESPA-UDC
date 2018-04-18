@@ -80,12 +80,12 @@ public class ClientView extends CalendarFramework{
 		calendarPanel.getDoctors().setBounds(10, 10, 250, 40);
 		
 		setAppointment = new JMenuItem("Set Appointment");
-		cancelAll = new JMenuItem("Cancel All Meetings");
+		//cancelAll = new JMenuItem("Cancel All Meetings");
 		
 		popup.add(setAppointment);
 		popup.add(update);
 		popup.add(cancel);
-		popup.add(cancelAll);
+		//popup.add(cancelAll);
 		
 		update.addActionListener(new updateAppointment());
 		setAppointment.addActionListener(new setAppointment());
@@ -204,7 +204,7 @@ public class ClientView extends CalendarFramework{
 		//display appointments in agenda table in order of the days and time, colored and redacted //Custom TableRenderer only for week agenda can be used
 	
 		for(int i = 0; i<8; i++)
-			weekPanel.getAgendaTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)

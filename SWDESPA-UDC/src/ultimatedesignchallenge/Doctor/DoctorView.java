@@ -34,6 +34,7 @@ import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.CalendarObserver;
 import ultimatedesignchallenge.view.DayTableRenderer;
+import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
 import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
@@ -196,7 +197,8 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		//display appointments in agenda table in order of the days
 		
 		for(int i = 0; i<8; i++)
-			weekPanel.getAgendaTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
+			weekPanel.getWeekTable().getColumnModel().getColumn(i).setCellRenderer(new WeekTableRenderer()); // FOR TIME
+		weekPanel.getAgendaTable().setDefaultRenderer(weekPanel.getAgendaTable().getColumnClass(0), new WeekAgendaTableRenderer());
 	}
 	
 	private void refreshWeekViewByColumn(Calendar cal, int day)
