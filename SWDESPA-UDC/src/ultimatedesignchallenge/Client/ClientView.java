@@ -473,39 +473,44 @@ public class ClientView extends CalendarFramework{
 			{
 				setHorizontalAlignment(SwingConstants.LEFT);
 			}
-			else if (weekPanel.getWeekTable().getValueAt(row, column) instanceof Slot)
-			{
-				Slot slot = (Slot)weekPanel.getWeekTable().getValueAt(row, column);
-				System.out.println(slot.getId());
-				if(appointService.isAppointment(slot))
-					setBackground(Color.RED);
-				else
-					setBackground(Color.WHITE);
-//				if(table.getValueAt(row, column) == null)
-//					setBackground(Color.BLACK);
-//				else
-//					setBackground(Color.GREEN);
+			else {
 				
-				/*	if(table.getValueAt(row, column) == null)
-				 * 		setBackground(Color.BLACK);
-				 * 	else if(there an appointment)
-				 * 		setBackground(color of the doctor)
-				 * 	else
-				 * 		setBackground(Color.WHITE)
-				 */
+				if(table.getValueAt(row, column) == null) {
+			  		setBackground(Color.BLACK);
+				}
 				
-				//TODO:
-				/* if(this slot is not set by any doctor)
-				 * 	setBackground(Color.BLACK);
-				 * else if(this slot is unoccupied)
-				 * 	setBackground(Color.WHITE);
-				 * else
-				 * 	setBackground(color of doctor who has an appointment on this slot)
-				 * 
-				 */
+				else {
+					String temp = String.valueOf(table.getValueAt(row,  column));
+					if(temp.contains(" ")) {
+				        temp = temp.substring(0, temp.indexOf(" ")); 
+				        System.out.println(temp);
+				    }
+					
+					AppointmentService service = new AppointmentService();
+					SlotService service2 = new SlotService();
+					
+					List<Appointment> appointments = service.getAll();
+					List<Slot> slots = service2.getAllAppointmentsJoinedSlots();
+					
+					for(Slot s : slots) {
+						if(Integer.parseInt(temp) == s.getId()) {
+							System.out.println("APPOINTMENT");
+						  	setBackground(Color.RED);
+							break;
+						}
+						else {
+							System.out.println("FREE SLOT");
+					  		setBackground(Color.WHITE);
+						}
+					}
+				}
+				
+				
 			}
-			else
-				setBackground(Color.BLACK);
+			
+			
+			
+			
 			
 			setBorder(null);
 			setForeground(Color.black);
