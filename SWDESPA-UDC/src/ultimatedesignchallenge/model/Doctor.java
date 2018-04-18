@@ -36,4 +36,12 @@ public class Doctor extends User {
 		this.slots = slots;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) 
+				|| (obj instanceof Doctor && ((Doctor)obj).getId()==this.id);
+	}
+	
+	
+
 }
