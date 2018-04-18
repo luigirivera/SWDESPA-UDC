@@ -173,9 +173,9 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			setBackground(Color.WHITE);
 		}
 		
-		if (table.getValueAt(row, column) != null && column == 1)
+		if (table.getValueAt(row, 1) != null && column == 1)
 		{
-			String sval = String.valueOf(table.getValueAt(row, column));
+			String sval = String.valueOf(table.getValueAt(row, 1));
 			
 			String tempTime = sval.substring(sval.indexOf("T")+1, sval.indexOf(" ")+37);
 			

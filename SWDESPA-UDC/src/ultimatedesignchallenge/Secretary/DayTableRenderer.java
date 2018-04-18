@@ -210,12 +210,10 @@ public 	class DayTableRenderer extends DefaultTableCellRenderer {
 			/*	if(table.getValueAt(row, column) == null)
 			 * 		setBackground(Color.BLACK);
 			 * 	if(there is appointment)
-			 * 		setBackground(color of the doctor)
+			 * 		setBackground(Color.firstdoctor.getColor());
 			 * 	else
 			 * 		setBackground(Color.WHITE)
 			 */
-			
-			//setBackground(Color.firstdoctor.getColor());
 
 			
 		}
