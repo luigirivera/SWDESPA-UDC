@@ -360,7 +360,7 @@ public class ClientView extends CalendarFramework{
 				 *	enable cancelAll
 				 *
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(dayPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}	
 		}
 	}
@@ -384,7 +384,7 @@ public class ClientView extends CalendarFramework{
 				 *else
 				 *	setAppointemnt.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(weekPanel.getWeekTable(), arg0.getX(), arg0.getY());
 			}
 		}
 	}
@@ -403,7 +403,7 @@ public class ClientView extends CalendarFramework{
 				 *	enable cancelAll
 				 *
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+					popup.show(weekPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}
 		}
 	}

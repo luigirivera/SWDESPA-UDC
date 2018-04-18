@@ -519,7 +519,7 @@ public class SecretaryView extends CalendarFramework{
 				 *else
 				 *	notifyClient.setEnabled(true);
 				 */
-					popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(dayPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 			}	
 		}	
 	}

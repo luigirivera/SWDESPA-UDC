@@ -20,6 +20,10 @@ public class WeekTableRenderer extends DefaultTableCellRenderer {
 		}
 		else
 		{
+			if(table.getValueAt(row, column) == null)
+				setBackground(Color.BLACK);
+			else
+				setBackground(Color.GREEN);
 			//TODO:
 			/* if(this slot is not set by any doctor)
 			 * 	setBackground(Color.BLACK);

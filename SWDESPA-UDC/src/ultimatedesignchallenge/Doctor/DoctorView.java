@@ -361,7 +361,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = dayPanel.getAgendaTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(dayPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	
@@ -372,7 +372,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			int row = weekPanel.getWeekTable().getSelectedRow();
 			int col = weekPanel.getWeekTable().getSelectedColumn();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());
+				popup.show(weekPanel.getWeekTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	
@@ -382,7 +382,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		public void mouseClicked(MouseEvent arg0) {
 			int row = weekPanel.getAgendaTable().getSelectedRow();
 			if(SwingUtilities.isRightMouseButton(arg0) /*&& if this slot is free*/)
-				popup.show(dayPanel.getDayTable(), arg0.getX(), arg0.getY());	
+				popup.show(weekPanel.getAgendaTable(), arg0.getX(), arg0.getY());
 		}
 	}
 	
