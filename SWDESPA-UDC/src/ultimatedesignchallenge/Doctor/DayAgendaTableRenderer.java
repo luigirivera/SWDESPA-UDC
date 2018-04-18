@@ -1,4 +1,4 @@
-package ultimatedesignchallenge.view;
+package ultimatedesignchallenge.Doctor;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -7,7 +7,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public 	class WeekAgendaTableRenderer extends DefaultTableCellRenderer {
+public 	class DayAgendaTableRenderer extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 1L;
 	
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused,
@@ -15,25 +15,10 @@ public 	class WeekAgendaTableRenderer extends DefaultTableCellRenderer {
 		super.getTableCellRendererComponent(table, value, selected, focused, row, column);
 		
 		if(column == 0)
-		{
-			//TODO:
 			setHorizontalAlignment(SwingConstants.RIGHT);
-			//setForeground(color of doctor who alloted this slot)
-		}
-		
-		else if(column == 1)
-		{
-			//TODO:
-			//setForeground(color of doctor who alloted this slot)
-		}
-		
-		else
-		{
-			//setForeground(color of doctor who has an appointment on this slot)
-		}
-		
 		
 		setBorder(null);
+		setForeground(Color.WHITE);
 		return this;
 	}
 }

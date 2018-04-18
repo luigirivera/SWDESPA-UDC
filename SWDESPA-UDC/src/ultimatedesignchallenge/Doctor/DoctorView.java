@@ -27,9 +27,7 @@ import ultimatedesignchallenge.model.Slot;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.CalendarObserver;
-import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DayTableRenderer;
-import ultimatedesignchallenge.view.WeekAgendaTableRenderer;
 import ultimatedesignchallenge.view.WeekTableRenderer;
 
 public class DoctorView extends CalendarFramework implements CalendarObserver{
