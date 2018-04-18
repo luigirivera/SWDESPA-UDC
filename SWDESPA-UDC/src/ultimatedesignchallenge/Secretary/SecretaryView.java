@@ -29,10 +29,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SecretaryController;
+import ultimatedesignchallenge.model.Appointment;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
 import ultimatedesignchallenge.model.Secretary;
 import ultimatedesignchallenge.model.Slot;
+import ultimatedesignchallenge.services.AppointmentService;
+import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
@@ -47,6 +50,7 @@ public class SecretaryView extends CalendarFramework{
 	private SecretaryController controller;
 	private DoctorController doctorController;
 	private SlotService slotService;
+	private ClientService clientService;
 	
 	public SecretaryView(Secretary secretary, SecretaryController controller) {
 		super("Central Calendar Census - " + secretary.getFirstname());
@@ -55,6 +59,7 @@ public class SecretaryView extends CalendarFramework{
 		this.secretary = secretary;
 		this.controller = controller;
 		slotService = new SlotService();
+		clientService = new ClientService();
 		
 		constructorGen("Clinic Secretary");
 		init();
@@ -945,13 +950,30 @@ public class SecretaryView extends CalendarFramework{
 	}
 	
 	class cancelListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//TODO:
-			//get selected appointment/s
-			//delete those appointments from the DB
-			update();
-		}
+			public void actionPerformed(ActionEvent e) {
+				
+				Appointment apt = new Appointment();
+				
+				List<Slot> slots = new ArrayList<Slot>();
+				int[] sRows = dayPanel.getDayTable().getSelectedRows();
+				
+				for(int i = 0; i < sRows.length; i++) {
+					slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+				}
+				
+				apt.setDoctor(doctor);
+				apt.setSlots(slots);
+				apt.setId(slotService.getAppointmentID(slots.get(0)));
+				apt.setClient(clientService.getClient(clientService.getClientViaAptId(apt.getId())));
+				
+				AppointmentService aptService = new AppointmentService();
+				aptService.deleteAppointment(apt);
+				
+				//TODO:
+				//get selected appointment/s
+				//delete those appointments from the DB
+				update();
+			}
 	}
 	
 	private void setAppointment() {
