@@ -28,6 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import ultimatedesignchallenge.controller.ClientController;
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SecretaryController;
 import ultimatedesignchallenge.model.Appointment;
@@ -39,6 +40,7 @@ import ultimatedesignchallenge.services.AppointmentService;
 import ultimatedesignchallenge.services.ClientService;
 import ultimatedesignchallenge.services.DoctorService;
 import ultimatedesignchallenge.services.SlotService;
+import ultimatedesignchallenge.services.UserService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DayAgendaTableRenderer;
 import ultimatedesignchallenge.view.DoctorList;
@@ -50,6 +52,7 @@ public class SecretaryView extends CalendarFramework{
 	private Doctor doctor;
 	private SecretaryController controller;
 	private DoctorController doctorController;
+	private ClientController clientController;
 	private ClientService clientService;
 	private SlotService slotService;
 	private SecretaryThread st;
@@ -829,6 +832,24 @@ public class SecretaryView extends CalendarFramework{
 					if(!name.getText().trim().isEmpty())
 					{
 						//TODO: Appointments
+						Client walkIn = new Client();
+						walkIn.setFirstname(name.getText());
+						walkIn.setLastname("WalkIn");
+						
+						UserService userService = new UserService();
+						walkIn.setClientId(userService.addGuest(walkIn));
+						System.out.println(walkIn.getId() + "Henlo");
+						clientController = new ClientController(walkIn, clientService);
+						
+						List<Slot> slots = new ArrayList<Slot>();
+						int[] sRows = dayPanel.getDayTable().getSelectedRows();
+						
+						for(int i = 0; i < sRows.length; i++) {
+							slots.add((Slot)dayPanel.getModelDayTable().getValueAt(sRows[i], 1));
+						}
+						
+						clientController.transformToAppointment(slots, doctor);
+						
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Empty name", "Error", JOptionPane.ERROR_MESSAGE);
@@ -975,7 +996,6 @@ public class SecretaryView extends CalendarFramework{
 			Appointment apt = new Appointment();
 			
 			List<Slot> slots = new ArrayList<Slot>();
-			ClientService clientService = new ClientService();
 			int[] sRows = dayPanel.getDayTable().getSelectedRows();
 			
 			for(int i = 0; i < sRows.length; i++) {

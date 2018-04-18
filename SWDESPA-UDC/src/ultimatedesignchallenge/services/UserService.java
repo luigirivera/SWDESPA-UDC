@@ -38,7 +38,7 @@ public class UserService {
 		
 		return users;
 	}*/
-public boolean addGuest(Client client) {
+	public int addGuest(Client client) {
 		
 		Connection cnt = CalendarDB.getConnection();
 		int tempo = -1;
@@ -46,6 +46,8 @@ public boolean addGuest(Client client) {
 		String query = "INSERT INTO " + User.TABLE + " VALUES (?, ?, ?, ?, ?)";
 		String query2 = "SELECT LAST_INSERT_ID() FROM " + User.TABLE;
 		String query3 = "INSERT INTO " + Client.TABLE + " VALUES(?, ?)";
+		String query4 = "SELECT LAST_INSERT_ID() FROM " + Client.TABLE;
+		
 		
 		try {
 			PreparedStatement ps = cnt.prepareStatement(query);
@@ -72,6 +74,14 @@ public boolean addGuest(Client client) {
 			ps.setNull(1, Types.NULL);
 			ps.setInt(2, tempo);
 			
+			ps.executeUpdate();
+			
+			ps = cnt.prepareStatement(query4);
+			
+			rs = ps.executeQuery();
+			
+			if(rs.next())
+				tempo = rs.getInt(1);
 
 			ps.close();
 			
@@ -79,8 +89,8 @@ public boolean addGuest(Client client) {
 		} catch(SQLException e) {
 			e.printStackTrace();
 			System.out.println("Error!");
-			return false;
+			
 		}
-		return true;
+		return tempo;
 	}
 }

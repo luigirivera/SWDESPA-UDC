@@ -40,6 +40,7 @@ public class ClientController {
 		Appointment apt = new Appointment();
 		
 		apt.setClient(client);
+		System.out.println(client.getId()+ " INSIDE TRANSFORM");
 		apt.setDoctor(doctor);
 		apt.setSlots(slots);
 		
