@@ -238,7 +238,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		}
 	}
 	
-	class updateSlot implements ActionListener{
+	public class updateSlot implements ActionListener{
 		JComboBox<Integer> month, day, year;
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -315,7 +315,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 			day.setSelectedItem(now.getDayOfMonth());
 		}
 		
-		class checkDaysListener implements ActionListener{
+		public class checkDaysListener implements ActionListener{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
