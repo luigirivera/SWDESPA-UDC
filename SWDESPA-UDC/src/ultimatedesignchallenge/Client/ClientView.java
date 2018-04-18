@@ -36,7 +36,7 @@ import ultimatedesignchallenge.services.SlotService;
 import ultimatedesignchallenge.view.CalendarFramework;
 import ultimatedesignchallenge.view.DoctorList;
 
-public class ClientView extends CalendarFramework{
+public class ClientView extends CalendarFramework implements Runnable{
 	private static final long serialVersionUID = 1L;
 	private Client client;
 	private Doctor doctor;
@@ -45,6 +45,7 @@ public class ClientView extends CalendarFramework{
 	private ClientController clientController;
 	private ClientService clientService;
 	private boolean filterFlag;
+	private ClientThread ct;
 	
 	public ClientView(Client client){
 		super("Client Calendar - " + client.getFirstname());
@@ -63,6 +64,8 @@ public class ClientView extends CalendarFramework{
 		initListeners();
 		update();
 		
+		ct = new ClientThread(this);
+		ct.start();
 	}
 	
 	private void init()
@@ -107,7 +110,7 @@ public class ClientView extends CalendarFramework{
 		
 	}
 	
-	private void refreshDayView()
+	public void refreshDayView()
 	{
 		List<Doctor> doctors = doctorService.getAll();
 		List<Slot> slots = new ArrayList<Slot>();
@@ -427,10 +430,13 @@ public class ClientView extends CalendarFramework{
 				
 				
 				//getDoctor
-//				if(firstTime.equals(sTime))
-//					setBackground(Color.GREEN);
-//				else
-//					setBackground(Color.WHITE);
+				if(firstTime.equals(sTime))
+					if(doctor.getId() == 1) {
+						System.out.println(doctor.getColor());
+						setBackground(Color.getColor(doctor.getColor()));
+					}
+				else
+					setBackground(Color.WHITE);
 				
 				/*	if(slot is client's)
 				 * 		setBackground(color of the doctor)
@@ -741,5 +747,18 @@ public class ClientView extends CalendarFramework{
 		}
 		toggleCreateView(false);
 		update();
+	}
+
+	@Override
+	public void run() {
+		//TODO:
+				//grab necessary data
+				calendarPanel.refreshCalendar(monthToday, yearToday, yearBound, validCells);
+				weekPanel.refreshWeekTable(monthToday, dayToday, yearToday);
+				changeLabel();
+//				TODO: FULFILL THE STEPS
+				refreshDayView();
+				refreshWeekView();
+		
 	}
 }

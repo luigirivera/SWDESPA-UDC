@@ -27,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import ultimatedesignchallenge.Doctor.DoctorThread;
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.controller.SecretaryController;
 import ultimatedesignchallenge.model.Client;
@@ -47,6 +48,7 @@ public class SecretaryView extends CalendarFramework{
 	private SecretaryController controller;
 	private DoctorController doctorController;
 	private SlotService slotService;
+	private SecretaryThread st;
 	
 	public SecretaryView(Secretary secretary, SecretaryController controller) {
 		super("Central Calendar Census - " + secretary.getFirstname());
@@ -60,6 +62,9 @@ public class SecretaryView extends CalendarFramework{
 		init();
 		initListeners();
 		update();
+		
+		st = new SecretaryThread(this);
+		st.start();
 	}
 	
 	private void init() {

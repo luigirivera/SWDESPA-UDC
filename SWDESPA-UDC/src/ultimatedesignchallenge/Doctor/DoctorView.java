@@ -25,6 +25,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import ultimatedesignchallenge.Client.ClientThread;
 import ultimatedesignchallenge.controller.DoctorController;
 import ultimatedesignchallenge.model.Client;
 import ultimatedesignchallenge.model.Doctor;
@@ -40,6 +41,7 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 	private Doctor doctor;
 	private DoctorController controller;
 	private SlotService slotService;
+	private DoctorThread dt;
 	
 	public DoctorView(Doctor doctor, DoctorController controller) {
 		super("Doctor Calendar - " + doctor.getFirstname());
@@ -53,6 +55,9 @@ public class DoctorView extends CalendarFramework implements CalendarObserver{
 		init();
 		initListeners();
 		update();
+		
+		dt = new DoctorThread(this);
+		dt.start();
 	}
 	
 	private void init() {
